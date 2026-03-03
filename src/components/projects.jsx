@@ -54,7 +54,13 @@ const projects = [
     title: "Social Media Posters",
     subtitle: "Black Friday · Porac · Consumer Week · Aero · Travel · Repair",
     desc: "High-impact social media posters spanning product ads, tourism campaigns, event promotions, personal branding, and lifestyle photography composites.",
-    tags: ["Photoshop", "Illustrator", "Social Ads", "Typography", "Compositing"],
+    tags: [
+      "Photoshop",
+      "Illustrator",
+      "Social Ads",
+      "Typography",
+      "Compositing",
+    ],
     color: "#d4420a",
     image: socialPostersImg,
     documentStyle: true,
@@ -102,6 +108,7 @@ function Lightbox({ img, title, onClose }) {
         <motion.button
           onClick={onClose}
           whileHover={{ scale: 1.1 }}
+          data-cursor-hover
           style={{
             position: "absolute",
             top: "1rem",
@@ -114,11 +121,11 @@ function Lightbox({ img, title, onClose }) {
             border: "1px solid rgba(255,255,255,0.2)",
             color: "#fff",
             fontSize: "1rem",
-            cursor: "none",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             backdropFilter: "blur(10px)",
+            fontFamily: "'DM Sans', sans-serif",
           }}
         >
           ✕
@@ -131,8 +138,9 @@ function Lightbox({ img, title, onClose }) {
             right: 0,
             zIndex: 5,
             padding: "2.5rem 1.8rem 1.4rem",
-            background: "linear-gradient(to top, rgba(0,0,0,0.92), transparent)",
-            fontFamily: "'Bebas Neue', cursive",
+            background:
+              "linear-gradient(to top, rgba(0,0,0,0.92), transparent)",
+            fontFamily: "'Bebas Neue', sans-serif",
             fontSize: "1.3rem",
             letterSpacing: "0.1em",
             color: "#fff",
@@ -167,30 +175,68 @@ function Lightbox({ img, title, onClose }) {
   );
 }
 
-/* ─────────────────── Per-card entrance effect definitions ─────────────────── */
+/* ─────────────────── Per-card entrance effects ─────────────────── */
 const enterEffects = {
-  // Card 1 — slides in from the left with a gentle tilt, smoothly lands
   slideLeft: {
-    hidden: { opacity: 0, x: -110, rotateZ: -2.5, filter: "blur(10px)", scale: 0.96 },
-    show: { opacity: 1, x: 0, rotateZ: 0, filter: "blur(0px)", scale: 1 },
+    hidden: {
+      opacity: 0,
+      x: -110,
+      rotateZ: -2.5,
+      filter: "blur(10px)",
+      scale: 0.96,
+    },
+    show: {
+      opacity: 1,
+      x: 0,
+      rotateZ: 0,
+      filter: "blur(0px)",
+      scale: 1,
+    },
     transition: { duration: 0.95, ease: [0.16, 1, 0.3, 1] },
   },
-  // Card 2 — full 360° Y-axis spin, blooms into place
   flipY: {
-    hidden: { opacity: 0, rotateY: 180, scale: 0.86, filter: "blur(14px)" },
-    show: { opacity: 1, rotateY: 360, scale: 1, filter: "blur(0px)" },
+    hidden: {
+      opacity: 0,
+      rotateY: 180,
+      scale: 0.86,
+      filter: "blur(14px)",
+    },
+    show: {
+      opacity: 1,
+      rotateY: 360,
+      scale: 1,
+      filter: "blur(0px)",
+    },
     transition: { duration: 1.2, ease: [0.22, 1, 0.36, 1] },
   },
-  // Card 3 — rises from below with a 3D perspective tilt, settles upright
   riseUp: {
-    hidden: { opacity: 0, y: 90, rotateX: 26, filter: "blur(8px)", scale: 0.94 },
-    show: { opacity: 1, y: 0, rotateX: 0, filter: "blur(0px)", scale: 1 },
+    hidden: {
+      opacity: 0,
+      y: 90,
+      rotateX: 26,
+      filter: "blur(8px)",
+      scale: 0.94,
+    },
+    show: {
+      opacity: 1,
+      y: 0,
+      rotateX: 0,
+      filter: "blur(0px)",
+      scale: 1,
+    },
     transition: { duration: 1.0, ease: [0.16, 1, 0.3, 1] },
   },
-  // Card 4 — zooms in from a distance with a brightness bloom
   zoomFade: {
-    hidden: { opacity: 0, scale: 0.68, filter: "blur(22px) brightness(1.5)" },
-    show: { opacity: 1, scale: 1, filter: "blur(0px) brightness(1)" },
+    hidden: {
+      opacity: 0,
+      scale: 0.68,
+      filter: "blur(22px) brightness(1.5)",
+    },
+    show: {
+      opacity: 1,
+      scale: 1,
+      filter: "blur(0px) brightness(1)",
+    },
     transition: { duration: 1.1, ease: [0.22, 1, 0.36, 1] },
   },
 };
@@ -235,10 +281,9 @@ function DocumentCard({ p, i }) {
               ? `0 20px 80px ${p.color}22`
               : "0 4px 30px rgba(0,0,0,0.3)",
             transition: "border-color 0.35s, box-shadow 0.35s",
-            cursor: "none",
           }}
         >
-          {/* ── Document header bar ── */}
+          {/* Document header bar */}
           <div
             style={{
               background: "#f8f8f6",
@@ -252,7 +297,7 @@ function DocumentCard({ p, i }) {
             <div>
               <div
                 style={{
-                  fontFamily: "'Syne', sans-serif",
+                  fontFamily: "'DM Sans', sans-serif",
                   fontWeight: 800,
                   fontSize: "clamp(1rem, 2vw, 1.25rem)",
                   color: "#1a1a1a",
@@ -263,7 +308,13 @@ function DocumentCard({ p, i }) {
                 {p.subtitle && (
                   <>
                     <span style={{ color: "#999", fontWeight: 400 }}> — </span>
-                    <span style={{ fontWeight: 400, color: "#555", fontSize: "0.9em" }}>
+                    <span
+                      style={{
+                        fontWeight: 400,
+                        color: "#555",
+                        fontSize: "0.9em",
+                      }}
+                    >
                       {p.subtitle}
                     </span>
                   </>
@@ -271,6 +322,7 @@ function DocumentCard({ p, i }) {
               </div>
               <div
                 style={{
+                  fontFamily: "'DM Sans', sans-serif",
                   fontSize: "0.72rem",
                   color: "#888",
                   marginTop: "0.2rem",
@@ -280,9 +332,16 @@ function DocumentCard({ p, i }) {
                 {p.client || "Client Project"}
               </div>
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.6rem",
+              }}
+            >
               <span
                 style={{
+                  fontFamily: "'DM Sans', sans-serif",
                   fontSize: "0.62rem",
                   letterSpacing: "0.18em",
                   textTransform: "uppercase",
@@ -298,7 +357,9 @@ function DocumentCard({ p, i }) {
               <motion.button
                 onClick={() => setLightbox(true)}
                 whileHover={{ background: p.color, color: "#fff" }}
+                data-cursor-hover
                 style={{
+                  fontFamily: "'DM Sans', sans-serif",
                   fontSize: "0.65rem",
                   letterSpacing: "0.14em",
                   textTransform: "uppercase",
@@ -307,7 +368,6 @@ function DocumentCard({ p, i }) {
                   border: `1px solid ${p.color}55`,
                   padding: "0.3rem 1rem",
                   borderRadius: "2px",
-                  cursor: "none",
                   transition: "all 0.25s",
                 }}
               >
@@ -316,27 +376,37 @@ function DocumentCard({ p, i }) {
             </div>
           </div>
 
-          {/* ── Integrated image + info layout ── */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 280px", minHeight: 320 }}>
+          {/* Integrated image + info layout */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 280px",
+              minHeight: 320,
+            }}
+          >
             {/* Image panel */}
             <div
               onClick={() => setLightbox(true)}
+              data-cursor-hover
               style={{
                 background: "#ededeb",
                 padding: "1.5rem 2rem 0",
-                cursor: "none",
                 position: "relative",
                 overflow: "hidden",
               }}
             >
               <motion.div
                 animate={{ y: hovered ? -6 : 0 }}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                transition={{
+                  duration: 0.5,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
                 style={{
                   background: "#fff",
                   borderRadius: "8px 8px 0 0",
                   overflow: "hidden",
-                  boxShadow: "0 -4px 24px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.05)",
+                  boxShadow:
+                    "0 -4px 24px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.05)",
                 }}
               >
                 <img
@@ -346,9 +416,11 @@ function DocumentCard({ p, i }) {
                     display: "block",
                     width: "100%",
                     maxHeight:
-                      p.cat === "Social Media" ? "420px"
-                      : p.cat === "UI/UX" ? "380px"
-                      : "300px",
+                      p.cat === "Social Media"
+                        ? "420px"
+                        : p.cat === "UI/UX"
+                          ? "380px"
+                          : "300px",
                     objectFit: "cover",
                     objectPosition: "top center",
                     background: "#fff",
@@ -375,7 +447,11 @@ function DocumentCard({ p, i }) {
               <motion.div
                 initial={{ scaleY: 0 }}
                 animate={{ scaleY: 1 }}
-                transition={{ duration: 0.7, delay: i * 0.1 + 0.5, ease: [0.16, 1, 0.3, 1] }}
+                transition={{
+                  duration: 0.7,
+                  delay: i * 0.1 + 0.5,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
                 style={{
                   width: 2,
                   height: 40,
@@ -387,6 +463,7 @@ function DocumentCard({ p, i }) {
               <div>
                 <div
                   style={{
+                    fontFamily: "'DM Sans', sans-serif",
                     fontSize: "0.6rem",
                     letterSpacing: "0.22em",
                     textTransform: "uppercase",
@@ -396,13 +473,27 @@ function DocumentCard({ p, i }) {
                 >
                   About
                 </div>
-                <p style={{ fontSize: "0.78rem", color: "#555", lineHeight: 1.75 }}>
+                <p
+                  style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: "0.78rem",
+                    color: "#555",
+                    lineHeight: 1.75,
+                  }}
+                >
                   {p.desc.slice(0, 100)}…
                 </p>
               </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.35rem",
+                }}
+              >
                 <div
                   style={{
+                    fontFamily: "'DM Sans', sans-serif",
                     fontSize: "0.6rem",
                     letterSpacing: "0.2em",
                     textTransform: "uppercase",
@@ -416,6 +507,7 @@ function DocumentCard({ p, i }) {
                   <span
                     key={tag}
                     style={{
+                      fontFamily: "'DM Sans', sans-serif",
                       fontSize: "0.65rem",
                       letterSpacing: "0.08em",
                       color: "#666",
@@ -433,7 +525,7 @@ function DocumentCard({ p, i }) {
             </motion.div>
           </div>
 
-          {/* ── Footer row ── */}
+          {/* Footer row */}
           <div
             style={{
               background: "#f8f8f6",
@@ -449,6 +541,7 @@ function DocumentCard({ p, i }) {
               <span
                 key={tag}
                 style={{
+                  fontFamily: "'DM Sans', sans-serif",
                   fontSize: "0.65rem",
                   letterSpacing: "0.1em",
                   color: "#888",
@@ -463,6 +556,7 @@ function DocumentCard({ p, i }) {
             ))}
             <div
               style={{
+                fontFamily: "'DM Sans', sans-serif",
                 marginLeft: "auto",
                 fontSize: "0.68rem",
                 color: p.color,
@@ -478,7 +572,11 @@ function DocumentCard({ p, i }) {
 
       <AnimatePresence>
         {lightbox && (
-          <Lightbox img={p.image} title={p.title} onClose={() => setLightbox(false)} />
+          <Lightbox
+            img={p.image}
+            title={p.title}
+            onClose={() => setLightbox(false)}
+          />
         )}
       </AnimatePresence>
     </>
@@ -499,7 +597,11 @@ function ProjectCard({ p, i }) {
         initial={{ opacity: 0, scale: 0.92, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9 }}
-        transition={{ duration: 0.45, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
+        transition={{
+          duration: 0.45,
+          delay: i * 0.06,
+          ease: [0.22, 1, 0.36, 1],
+        }}
         whileHover={{ y: -7 }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
@@ -509,11 +611,15 @@ function ProjectCard({ p, i }) {
           borderRadius: "8px",
           overflow: "hidden",
           transition: "border-color 0.3s, box-shadow 0.3s",
-          cursor: "none",
           boxShadow: hovered ? `0 16px 60px ${p.color}28` : "none",
         }}
       >
-        <div style={{ height: 3, background: `linear-gradient(to right, ${p.color}, ${p.color}88)` }} />
+        <div
+          style={{
+            height: 3,
+            background: `linear-gradient(to right, ${p.color}, ${p.color}88)`,
+          }}
+        />
         <div style={{ padding: "1.8rem" }}>
           <div
             style={{
@@ -525,9 +631,14 @@ function ProjectCard({ p, i }) {
           >
             <div
               style={{
-                width: 40, height: 40, borderRadius: "50%",
-                background: p.color + "22", border: `1px solid ${p.color}44`,
-                display: "flex", alignItems: "center", justifyContent: "center",
+                width: 40,
+                height: 40,
+                borderRadius: "50%",
+                background: p.color + "22",
+                border: `1px solid ${p.color}44`,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
                 fontSize: "1.1rem",
               }}
             >
@@ -535,27 +646,58 @@ function ProjectCard({ p, i }) {
             </div>
             <span
               style={{
-                fontSize: "0.65rem", letterSpacing: "0.15em", textTransform: "uppercase",
-                color: p.color, background: p.color + "18", padding: "0.25rem 0.7rem", borderRadius: "2px",
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: "0.65rem",
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                color: p.color,
+                background: p.color + "18",
+                padding: "0.25rem 0.7rem",
+                borderRadius: "2px",
               }}
             >
               {p.cat}
             </span>
           </div>
-          <h3 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: "1.05rem", marginBottom: "0.65rem" }}>
+          <h3
+            style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontWeight: 700,
+              fontSize: "1.05rem",
+              marginBottom: "0.65rem",
+            }}
+          >
             {p.title}
           </h3>
-          <p style={{ color: "var(--muted)", fontSize: "0.83rem", lineHeight: 1.8, marginBottom: "1.3rem" }}>
+          <p
+            style={{
+              fontFamily: "'DM Sans', sans-serif",
+              color: "var(--muted)",
+              fontSize: "0.83rem",
+              lineHeight: 1.8,
+              marginBottom: "1.3rem",
+            }}
+          >
             {p.desc}
           </p>
-          <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
+          <div
+            style={{
+              display: "flex",
+              gap: "0.4rem",
+              flexWrap: "wrap",
+            }}
+          >
             {p.tags.map((tag) => (
               <span
                 key={tag}
                 style={{
-                  fontSize: "0.65rem", letterSpacing: "0.1em",
-                  color: "var(--muted)", border: "1px solid var(--border)",
-                  padding: "0.2rem 0.6rem", borderRadius: "2px",
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: "0.65rem",
+                  letterSpacing: "0.1em",
+                  color: "var(--muted)",
+                  border: "1px solid var(--border)",
+                  padding: "0.2rem 0.6rem",
+                  borderRadius: "2px",
                 }}
               >
                 {tag}
@@ -567,7 +709,11 @@ function ProjectCard({ p, i }) {
 
       <AnimatePresence>
         {lightbox && (
-          <Lightbox img={p.image} title={p.title} onClose={() => setLightbox(false)} />
+          <Lightbox
+            img={p.image}
+            title={p.title}
+            onClose={() => setLightbox(false)}
+          />
         )}
       </AnimatePresence>
     </>
@@ -595,7 +741,7 @@ export default function Projects() {
           position: "absolute",
           top: "3rem",
           right: "2rem",
-          fontFamily: "'Bebas Neue', cursive",
+          fontFamily: "'Bebas Neue', sans-serif",
           fontSize: "clamp(5rem, 16vw, 14rem)",
           color: "#ffffff03",
           letterSpacing: "0.05em",
@@ -607,9 +753,21 @@ export default function Projects() {
         WORK
       </div>
 
-      <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative", zIndex: 1 }}>
+      <div
+        style={{
+          maxWidth: 1200,
+          margin: "0 auto",
+          position: "relative",
+          zIndex: 1,
+        }}
+      >
         <ScrollReveal direction="up" delay={0}>
-          <div className="section-label">Selected Work</div>
+          <div
+            className="section-label"
+            style={{ fontFamily: "'DM Sans', sans-serif" }}
+          >
+            Selected Work
+          </div>
           <div
             style={{
               display: "flex",
@@ -622,20 +780,28 @@ export default function Projects() {
           >
             <h2
               style={{
-                fontFamily: "'Bebas Neue', cursive",
+                fontFamily: "'Bebas Neue', sans-serif",
                 fontSize: "clamp(2.5rem, 5vw, 4rem)",
                 letterSpacing: "0.04em",
               }}
             >
               My Projects
             </h2>
-            <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+            <div
+              style={{
+                display: "flex",
+                gap: "0.5rem",
+                flexWrap: "wrap",
+              }}
+            >
               {categories.map((cat) => (
                 <motion.button
                   key={cat}
                   onClick={() => setActive(cat)}
                   whileTap={{ scale: 0.96 }}
+                  data-cursor-hover
                   style={{
+                    fontFamily: "'DM Sans', sans-serif",
                     padding: "0.45rem 1.1rem",
                     border: `1px solid ${active === cat ? "var(--gold)" : "var(--border)"}`,
                     background: active === cat ? "var(--gold)" : "transparent",
@@ -644,7 +810,6 @@ export default function Projects() {
                     letterSpacing: "0.12em",
                     textTransform: "uppercase",
                     borderRadius: "2px",
-                    cursor: "none",
                     transition: "all 0.25s",
                   }}
                 >

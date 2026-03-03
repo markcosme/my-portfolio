@@ -53,7 +53,13 @@ export default function Contact() {
         }}
       >
         <ScrollReveal direction="up" delay={0}>
-          <div className="section-label" style={{ justifyContent: "center" }}>
+          <div
+            className="section-label"
+            style={{
+              justifyContent: "center",
+              fontFamily: "'DM Sans', sans-serif",
+            }}
+          >
             Get In Touch
           </div>
         </ScrollReveal>
@@ -61,7 +67,7 @@ export default function Contact() {
         <ScrollReveal direction="scale" delay={0.1}>
           <h2
             style={{
-              fontFamily: "'Bebas Neue', cursive",
+              fontFamily: "'Bebas Neue', sans-serif",
               fontSize: "clamp(3rem, 8vw, 7rem)",
               letterSpacing: "0.04em",
               lineHeight: 1,
@@ -74,6 +80,7 @@ export default function Contact() {
           </h2>
           <p
             style={{
+              fontFamily: "'DM Sans', sans-serif",
               color: "var(--muted)",
               maxWidth: 500,
               margin: "0 auto 4rem",
@@ -86,7 +93,6 @@ export default function Contact() {
           </p>
         </ScrollReveal>
 
-        {/* Contact cards */}
         <ScrollStagger
           delay={0.15}
           stagger={0.12}
@@ -108,6 +114,7 @@ export default function Contact() {
                 boxShadow: "0 12px 40px rgba(201,149,42,0.12)",
               }}
               transition={{ duration: 0.25 }}
+              data-cursor-hover
               style={{
                 display: "block",
                 padding: "2rem 1.5rem",
@@ -115,7 +122,6 @@ export default function Contact() {
                 border: "1px solid var(--border)",
                 borderRadius: "6px",
                 textDecoration: "none",
-                cursor: c.href ? "none" : "default",
                 transition:
                   "border-color 0.3s, box-shadow 0.3s, transform 0.3s",
               }}
@@ -125,6 +131,7 @@ export default function Contact() {
               </div>
               <div
                 style={{
+                  fontFamily: "'DM Sans', sans-serif",
                   fontSize: "0.65rem",
                   letterSpacing: "0.2em",
                   textTransform: "uppercase",
@@ -136,6 +143,7 @@ export default function Contact() {
               </div>
               <div
                 style={{
+                  fontFamily: "'DM Sans', sans-serif",
                   fontSize: "0.85rem",
                   color: "var(--white)",
                   wordBreak: "break-all",
@@ -147,7 +155,6 @@ export default function Contact() {
           ))}
         </ScrollStagger>
 
-        {/* Footer */}
         <ScrollReveal direction="up" delay={0.4}>
           <div
             style={{
@@ -163,7 +170,7 @@ export default function Contact() {
           >
             <div
               style={{
-                fontFamily: "'Bebas Neue', cursive",
+                fontFamily: "'Bebas Neue', sans-serif",
                 fontSize: "1.5rem",
                 letterSpacing: "0.1em",
                 color: "var(--gold)",
@@ -171,11 +178,18 @@ export default function Contact() {
             >
               Ron Medina
             </div>
-            <div style={{ color: "var(--muted)", fontSize: "0.75rem" }}>
+            <div
+              style={{
+                fontFamily: "'DM Sans', sans-serif",
+                color: "var(--muted)",
+                fontSize: "0.75rem",
+              }}
+            >
               © 2026 Ron Medina · All Rights Reserved
             </div>
             <div
               style={{
+                fontFamily: "'DM Sans', sans-serif",
                 fontSize: "0.75rem",
                 color: "var(--muted)",
                 letterSpacing: "0.05em",

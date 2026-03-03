@@ -35,7 +35,6 @@ const skillGroups = [
   },
 ];
 
-// Using devicons CDN — colorful, reliable PNGs on dark backgrounds
 const tools = [
   {
     name: "Photoshop",
@@ -125,14 +124,20 @@ function SkillBar({ name, level, delay }) {
           marginBottom: "0.4rem",
         }}
       >
-        <span style={{ fontSize: "0.82rem", color: "var(--white)" }}>
+        <span
+          style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: "0.82rem",
+            color: "var(--white)",
+          }}
+        >
           {name}
         </span>
         <span
           style={{
             fontSize: "0.75rem",
             color: "var(--gold)",
-            fontFamily: "'Bebas Neue', cursive",
+            fontFamily: "'Bebas Neue', sans-serif",
             letterSpacing: "0.1em",
           }}
         >
@@ -151,7 +156,11 @@ function SkillBar({ name, level, delay }) {
           initial={{ width: 0 }}
           whileInView={{ width: `${level}%` }}
           viewport={{ once: true }}
-          transition={{ duration: 1.2, delay, ease: [0.22, 1, 0.36, 1] }}
+          transition={{
+            duration: 1.2,
+            delay,
+            ease: [0.22, 1, 0.36, 1],
+          }}
           style={{
             height: "100%",
             background:
@@ -182,6 +191,7 @@ function ToolChip({ tool, index }) {
         boxShadow: `0 6px 28px ${tool.color}33`,
         y: -3,
       }}
+      data-cursor-hover
       style={{
         display: "flex",
         alignItems: "center",
@@ -190,12 +200,10 @@ function ToolChip({ tool, index }) {
         border: "1px solid var(--border)",
         borderRadius: "10px",
         background: "var(--card-bg)",
-        cursor: "none",
         transition: "border-color 0.3s, box-shadow 0.3s",
         userSelect: "none",
       }}
     >
-      {/* Clean white icon box */}
       <div
         style={{
           width: 32,
@@ -224,12 +232,13 @@ function ToolChip({ tool, index }) {
           onError={(e) => {
             e.target.style.display = "none";
             e.target.parentNode.style.background = tool.color;
-            e.target.parentNode.innerHTML = `<span style="font-size:0.8rem;font-weight:800;color:#fff;line-height:1">${tool.name[0]}</span>`;
+            e.target.parentNode.innerHTML = `<span style="font-size:0.8rem;font-weight:800;color:#fff;line-height:1;font-family:'DM Sans',sans-serif">${tool.name[0]}</span>`;
           }}
         />
       </div>
       <span
         style={{
+          fontFamily: "'DM Sans', sans-serif",
           fontSize: "0.78rem",
           letterSpacing: "0.05em",
           color: "var(--white)",
@@ -260,7 +269,11 @@ function RevealOnScroll({ children, delay = 0, direction = "up" }) {
       y: 0,
       x: 0,
       scale: 1,
-      transition: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] },
+      transition: {
+        duration: 0.7,
+        delay,
+        ease: [0.22, 1, 0.36, 1],
+      },
     },
   };
 
@@ -300,7 +313,7 @@ export default function Skills() {
       >
         <div
           style={{
-            fontFamily: "'Bebas Neue', cursive",
+            fontFamily: "'Bebas Neue', sans-serif",
             fontSize: "clamp(5rem, 16vw, 14rem)",
             color: "#ffffff03",
             lineHeight: 1,
@@ -320,10 +333,15 @@ export default function Skills() {
       >
         {/* Header */}
         <RevealOnScroll delay={0}>
-          <div className="section-label">Expertise</div>
+          <div
+            className="section-label"
+            style={{ fontFamily: "'DM Sans', sans-serif" }}
+          >
+            Expertise
+          </div>
           <h2
             style={{
-              fontFamily: "'Bebas Neue', cursive",
+              fontFamily: "'Bebas Neue', sans-serif",
               fontSize: "clamp(2.5rem, 5vw, 4rem)",
               letterSpacing: "0.04em",
               marginBottom: "4rem",
@@ -363,7 +381,7 @@ export default function Skills() {
               >
                 <div
                   style={{
-                    fontFamily: "'Bebas Neue', cursive",
+                    fontFamily: "'Bebas Neue', sans-serif",
                     fontSize: "1.2rem",
                     color: "var(--gold)",
                     letterSpacing: "0.1em",
@@ -391,6 +409,7 @@ export default function Skills() {
         <RevealOnScroll delay={0.1}>
           <div
             style={{
+              fontFamily: "'DM Sans', sans-serif",
               fontSize: "0.7rem",
               letterSpacing: "0.25em",
               textTransform: "uppercase",

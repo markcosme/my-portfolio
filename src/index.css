@@ -1,6 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;700;800&display=swap");
 
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+/* --- Reset & Base --- */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 :root {
   --black: #0c0b09;
@@ -14,50 +21,73 @@
   --border: #2a2518;
 }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   background: var(--black);
   color: var(--white);
-  font-family: 'DM Sans', sans-serif;
+  font-family: "DM Sans", sans-serif;
   font-weight: 300;
   overflow-x: hidden;
-  cursor: none;
+  cursor: none; /* Desktop default: hide standard cursor */
 }
 
-/* Custom cursor */
+/* --- Custom Cursor (Desktop Only) --- */
 .cursor {
-  width: 12px; height: 12px;
+  width: 12px;
+  height: 12px;
   background: var(--gold);
   border-radius: 50%;
   position: fixed;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   pointer-events: none;
   z-index: 9999;
   transition: transform 0.15s ease;
   mix-blend-mode: difference;
 }
+
 .cursor-follower {
-  width: 36px; height: 36px;
+  width: 36px;
+  height: 36px;
   border: 1px solid var(--gold);
   border-radius: 50%;
   position: fixed;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   pointer-events: none;
   z-index: 9998;
-  transition: transform 0.4s ease, width 0.3s, height 0.3s;
+  transition:
+    transform 0.4s ease,
+    width 0.3s,
+    height 0.3s;
   opacity: 0.5;
 }
 
-a { color: inherit; text-decoration: none; }
-button { cursor: none; }
+/* --- UI Elements --- */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button {
+  cursor: none;
+}
 
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: var(--black); }
-::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--black);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--gold);
+  border-radius: 2px;
+}
 
 .section-label {
-  font-family: 'DM Sans', sans-serif;
+  font-family: "DM Sans", sans-serif;
   font-size: 0.7rem;
   letter-spacing: 0.3em;
   text-transform: uppercase;
@@ -67,9 +97,60 @@ button { cursor: none; }
   align-items: center;
   gap: 0.75rem;
 }
+
 .section-label::before {
-  content: '';
+  content: "";
   display: inline-block;
-  width: 24px; height: 1px;
+  width: 24px;
+  height: 1px;
   background: var(--gold);
+}
+
+/* --- Responsive Fixes --- */
+
+/* Tablet and Mobile (under 768px) */
+@media (max-width: 768px) {
+  body {
+    cursor: auto; /* Restore standard cursor for touch/mobile */
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* Hide custom cursor elements on touch devices */
+  .cursor,
+  .cursor-follower {
+    display: none;
+  }
+
+  button,
+  a {
+    cursor: pointer; /* Restore standard pointer for mobile */
+  }
+
+  html {
+    font-size: 14px; /* Global scale-down for mobile readability */
+  }
+
+  .section-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+  }
+
+  /* Hide thin scrollbar on mobile for cleaner look */
+  ::-webkit-scrollbar {
+    width: 0px;
+  }
+}
+
+/* Small Phones (under 480px) */
+@media (max-width: 480px) {
+  .section-label::before {
+    width: 16px; /* Save horizontal space */
+  }
+
+  /* Prevent any padding/margin issues from creating horizontal scroll */
+  body {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }

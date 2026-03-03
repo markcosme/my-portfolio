@@ -9,21 +9,18 @@ import { useRef, useEffect, useState } from "react";
 
 /* ═══════════════════════════════════════════════
    CORE: ScrollReveal — cinematic entrance effects
-   direction: "up" | "down" | "left" | "right" | 
-              "scale" | "fade" | "glitch" | "split" | "flip"
 ═══════════════════════════════════════════════ */
 export function ScrollReveal({
   children,
   delay = 0,
   direction = "up",
-  distance = 60,
-  duration = 0.8,
+  distance = 80,
+  duration = 1.0,
   style = {},
 }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, amount: 0.1 });
 
-  /* Glitch effect — flickers in with noise */
   if (direction === "glitch") {
     return (
       <GlitchReveal ref={ref} inView={inView} delay={delay} style={style}>
@@ -32,7 +29,6 @@ export function ScrollReveal({
     );
   }
 
-  /* Split — word splits open from center */
   if (direction === "split") {
     return (
       <SplitReveal ref={ref} inView={inView} delay={delay} style={style}>
@@ -41,7 +37,6 @@ export function ScrollReveal({
     );
   }
 
-  /* Flip — 3D card flip */
   if (direction === "flip") {
     return (
       <FlipReveal ref={ref} inView={inView} delay={delay} style={style}>
@@ -50,13 +45,30 @@ export function ScrollReveal({
     );
   }
 
+  if (direction === "cinematic") {
+    return (
+      <CinematicReveal ref={ref} inView={inView} delay={delay} style={style}>
+        {children}
+      </CinematicReveal>
+    );
+  }
+
+  if (direction === "shatter") {
+    return (
+      <ShatterReveal ref={ref} inView={inView} delay={delay} style={style}>
+        {children}
+      </ShatterReveal>
+    );
+  }
+
   const hidden = {
     opacity: 0,
     y: direction === "up" ? distance : direction === "down" ? -distance : 0,
     x: direction === "left" ? distance : direction === "right" ? -distance : 0,
-    scale: direction === "scale" ? 0.85 : 1,
-    rotateX: direction === "up" || direction === "down" ? 12 : 0,
-    filter: "blur(6px)",
+    scale: direction === "scale" ? 0.75 : 0.97,
+    rotateX: direction === "up" || direction === "down" ? 15 : 0,
+    rotateY: direction === "left" || direction === "right" ? 10 : 0,
+    filter: "blur(10px)",
   };
 
   const show = {
@@ -65,6 +77,7 @@ export function ScrollReveal({
     x: 0,
     scale: 1,
     rotateX: 0,
+    rotateY: 0,
     filter: "blur(0px)",
     transition: {
       duration,
@@ -79,7 +92,7 @@ export function ScrollReveal({
       initial="hidden"
       animate={inView ? "show" : "hidden"}
       variants={{ hidden, show }}
-      style={{ perspective: 800, ...style }}
+      style={{ perspective: 1200, ...style }}
     >
       {children}
     </motion.div>
@@ -87,7 +100,94 @@ export function ScrollReveal({
 }
 
 /* ═══════════════════════════════════════════════
-   GLITCH REVEAL — flickers in with RGB splits
+   CINEMATIC REVEAL — dramatic zoom + fade + rotate
+═══════════════════════════════════════════════ */
+function CinematicReveal({ children, inView, delay, style }) {
+  return (
+    <motion.div
+      initial={{
+        opacity: 0,
+        scale: 0.6,
+        rotateX: 25,
+        rotateY: -15,
+        y: 120,
+        filter: "blur(20px) brightness(0.5)",
+      }}
+      animate={
+        inView
+          ? {
+              opacity: 1,
+              scale: 1,
+              rotateX: 0,
+              rotateY: 0,
+              y: 0,
+              filter: "blur(0px) brightness(1)",
+            }
+          : {
+              opacity: 0,
+              scale: 0.6,
+              rotateX: 25,
+              rotateY: -15,
+              y: 120,
+              filter: "blur(20px) brightness(0.5)",
+            }
+      }
+      transition={{
+        duration: 1.4,
+        delay,
+        ease: [0.16, 1, 0.3, 1],
+      }}
+      style={{ perspective: 1400, transformStyle: "preserve-3d", ...style }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* ═══════════════════════════════════════════════
+   SHATTER REVEAL — pieces fly in from random positions
+═══════════════════════════════════════════════ */
+function ShatterReveal({ children, inView, delay, style }) {
+  return (
+    <motion.div
+      initial={{
+        opacity: 0,
+        scale: 1.3,
+        rotateZ: -5,
+        filter: "blur(15px) contrast(1.5)",
+        clipPath: "polygon(10% 0%, 90% 5%, 95% 90%, 5% 85%)",
+      }}
+      animate={
+        inView
+          ? {
+              opacity: 1,
+              scale: 1,
+              rotateZ: 0,
+              filter: "blur(0px) contrast(1)",
+              clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+            }
+          : {
+              opacity: 0,
+              scale: 1.3,
+              rotateZ: -5,
+              filter: "blur(15px) contrast(1.5)",
+              clipPath: "polygon(10% 0%, 90% 5%, 95% 90%, 5% 85%)",
+            }
+      }
+      transition={{
+        duration: 1.2,
+        delay,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      style={style}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* ═══════════════════════════════════════════════
+   GLITCH REVEAL
 ═══════════════════════════════════════════════ */
 function GlitchReveal({ children, inView, delay, style }) {
   const [phase, setPhase] = useState(0);
@@ -96,10 +196,10 @@ function GlitchReveal({ children, inView, delay, style }) {
     if (!inView) return;
     const timers = [
       setTimeout(() => setPhase(1), delay * 1000),
-      setTimeout(() => setPhase(2), delay * 1000 + 80),
-      setTimeout(() => setPhase(3), delay * 1000 + 160),
-      setTimeout(() => setPhase(4), delay * 1000 + 240),
-      setTimeout(() => setPhase(5), delay * 1000 + 380),
+      setTimeout(() => setPhase(2), delay * 1000 + 60),
+      setTimeout(() => setPhase(3), delay * 1000 + 120),
+      setTimeout(() => setPhase(4), delay * 1000 + 200),
+      setTimeout(() => setPhase(5), delay * 1000 + 320),
     ];
     return () => timers.forEach(clearTimeout);
   }, [inView, delay]);
@@ -107,20 +207,24 @@ function GlitchReveal({ children, inView, delay, style }) {
   const glitchFrames = [
     {
       opacity: 0,
-      transform: "translate(-4px, 0) skewX(-2deg)",
-      filter: "blur(4px)",
+      transform: "translate(-6px, 2px) skewX(-4deg) scaleY(1.02)",
+      filter: "blur(6px) hue-rotate(0deg)",
     },
     {
-      opacity: 0.4,
-      transform: "translate(6px, -2px) skewX(3deg)",
-      filter: "hue-rotate(90deg) blur(2px)",
+      opacity: 0.35,
+      transform: "translate(8px, -3px) skewX(5deg) scaleY(0.98)",
+      filter: "hue-rotate(120deg) blur(3px) saturate(3)",
     },
     {
-      opacity: 0.7,
-      transform: "translate(-3px, 1px) skewX(-1deg)",
-      filter: "hue-rotate(180deg)",
+      opacity: 0.65,
+      transform: "translate(-4px, 1px) skewX(-2deg)",
+      filter: "hue-rotate(240deg) blur(1px)",
     },
-    { opacity: 0.9, transform: "translate(2px, 0)", filter: "saturate(2)" },
+    {
+      opacity: 0.9,
+      transform: "translate(1px, 0) skewX(0.5deg)",
+      filter: "saturate(1.5) blur(0.5px)",
+    },
     { opacity: 1, transform: "translate(0, 0)", filter: "none" },
   ];
 
@@ -129,7 +233,7 @@ function GlitchReveal({ children, inView, delay, style }) {
   return (
     <div
       style={{
-        transition: phase < 4 ? "all 0.06s steps(1)" : "all 0.25s ease",
+        transition: phase < 4 ? "all 0.04s steps(1)" : "all 0.3s ease",
         ...frame,
         ...style,
       }}
@@ -140,7 +244,7 @@ function GlitchReveal({ children, inView, delay, style }) {
 }
 
 /* ═══════════════════════════════════════════════
-   SPLIT REVEAL — curtain opens from center
+   SPLIT REVEAL
 ═══════════════════════════════════════════════ */
 function SplitReveal({ children, inView, delay, style }) {
   return (
@@ -148,19 +252,24 @@ function SplitReveal({ children, inView, delay, style }) {
       <motion.div
         initial={{ y: 0 }}
         animate={inView ? { y: "-101%" } : { y: 0 }}
-        transition={{ duration: 0.7, delay, ease: [0.76, 0, 0.24, 1] }}
+        transition={{ duration: 0.8, delay, ease: [0.76, 0, 0.24, 1] }}
         style={{
           position: "absolute",
           inset: 0,
           zIndex: 2,
-          background: "var(--gold)",
+          background:
+            "linear-gradient(135deg, var(--gold), rgba(201,149,42,0.6))",
           transformOrigin: "top",
         }}
       />
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-        transition={{ duration: 0.5, delay: delay + 0.4 }}
+        initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
+        animate={
+          inView
+            ? { opacity: 1, y: 0, filter: "blur(0px)" }
+            : { opacity: 0, y: 30, filter: "blur(8px)" }
+        }
+        transition={{ duration: 0.6, delay: delay + 0.45 }}
       >
         {children}
       </motion.div>
@@ -169,19 +278,25 @@ function SplitReveal({ children, inView, delay, style }) {
 }
 
 /* ═══════════════════════════════════════════════
-   FLIP REVEAL — 3D perspective flip
+   FLIP REVEAL
 ═══════════════════════════════════════════════ */
 function FlipReveal({ children, inView, delay, style }) {
   return (
     <motion.div
-      initial={{ opacity: 0, rotateX: 90, transformOrigin: "top", scale: 0.9 }}
+      initial={{
+        opacity: 0,
+        rotateX: 90,
+        transformOrigin: "top",
+        scale: 0.85,
+        filter: "blur(8px)",
+      }}
       animate={
         inView
-          ? { opacity: 1, rotateX: 0, scale: 1 }
-          : { opacity: 0, rotateX: 90, scale: 0.9 }
+          ? { opacity: 1, rotateX: 0, scale: 1, filter: "blur(0px)" }
+          : { opacity: 0, rotateX: 90, scale: 0.85, filter: "blur(8px)" }
       }
-      transition={{ duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }}
-      style={{ perspective: 1000, ...style }}
+      transition={{ duration: 0.9, delay, ease: [0.16, 1, 0.3, 1] }}
+      style={{ perspective: 1200, ...style }}
     >
       {children}
     </motion.div>
@@ -189,7 +304,7 @@ function FlipReveal({ children, inView, delay, style }) {
 }
 
 /* ═══════════════════════════════════════════════
-   STAGGER — fires children one by one
+   STAGGER
 ═══════════════════════════════════════════════ */
 export function ScrollStagger({
   children,
@@ -217,14 +332,13 @@ export function ScrollStagger({
   );
 }
 
-/** Stagger item — slides up with blur */
 export const staggerItem = {
   hidden: {
     opacity: 0,
-    y: 40,
-    filter: "blur(4px)",
-    scale: 0.96,
-    rotateX: 8,
+    y: 50,
+    filter: "blur(6px)",
+    scale: 0.94,
+    rotateX: 12,
   },
   show: {
     opacity: 1,
@@ -232,12 +346,12 @@ export const staggerItem = {
     filter: "blur(0px)",
     scale: 1,
     rotateX: 0,
-    transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.75, ease: [0.16, 1, 0.3, 1] },
   },
 };
 
 /* ═══════════════════════════════════════════════
-   PARALLAX — element moves at different scroll speed
+   PARALLAX
 ═══════════════════════════════════════════════ */
 export function Parallax({ children, speed = 0.3, style = {} }) {
   const ref = useRef(null);
@@ -248,19 +362,24 @@ export function Parallax({ children, speed = 0.3, style = {} }) {
   const y = useTransform(
     scrollYProgress,
     [0, 1],
-    [`${-speed * 100}px`, `${speed * 100}px`],
+    [`${-speed * 120}px`, `${speed * 120}px`],
   );
-  const smooth = useSpring(y, { stiffness: 80, damping: 20 });
+  const opacity = useTransform(
+    scrollYProgress,
+    [0, 0.3, 0.7, 1],
+    [0.3, 1, 1, 0.3],
+  );
+  const smooth = useSpring(y, { stiffness: 60, damping: 20 });
 
   return (
-    <motion.div ref={ref} style={{ y: smooth, ...style }}>
+    <motion.div ref={ref} style={{ y: smooth, opacity, ...style }}>
       {children}
     </motion.div>
   );
 }
 
 /* ═══════════════════════════════════════════════
-   MAGNETIC — element follows cursor magnetically
+   MAGNETIC
 ═══════════════════════════════════════════════ */
 export function Magnetic({ children, strength = 0.3, style = {} }) {
   const ref = useRef(null);
@@ -286,7 +405,7 @@ export function Magnetic({ children, strength = 0.3, style = {} }) {
       onMouseMove={handleMove}
       onMouseLeave={handleLeave}
       animate={{ x: pos.x, y: pos.y }}
-      transition={{ type: "spring", stiffness: 200, damping: 18 }}
+      transition={{ type: "spring", stiffness: 250, damping: 16 }}
       style={{ display: "inline-block", ...style }}
     >
       {children}
@@ -295,7 +414,7 @@ export function Magnetic({ children, strength = 0.3, style = {} }) {
 }
 
 /* ═══════════════════════════════════════════════
-   TYPEWRITER — types text character by character
+   TYPEWRITER
 ═══════════════════════════════════════════════ */
 export function Typewriter({
   text,
@@ -347,7 +466,7 @@ export function Typewriter({
 }
 
 /* ═══════════════════════════════════════════════
-   COUNT UP — animates a number from 0 to value
+   COUNT UP
 ═══════════════════════════════════════════════ */
 export function CountUp({ value, suffix = "", delay = 0, style = {} }) {
   const ref = useRef(null);
@@ -381,7 +500,7 @@ export function CountUp({ value, suffix = "", delay = 0, style = {} }) {
 }
 
 /* ═══════════════════════════════════════════════
-   REVEAL LINE — horizontal wipe reveal
+   REVEAL LINE
 ═══════════════════════════════════════════════ */
 export function RevealLine({ children, delay = 0, style = {} }) {
   const ref = useRef(null);
@@ -390,12 +509,45 @@ export function RevealLine({ children, delay = 0, style = {} }) {
   return (
     <div ref={ref} style={{ overflow: "hidden", ...style }}>
       <motion.div
-        initial={{ y: "110%" }}
-        animate={inView ? { y: "0%" } : { y: "110%" }}
-        transition={{ duration: 0.75, delay, ease: [0.16, 1, 0.3, 1] }}
+        initial={{ y: "120%", rotateX: 40, opacity: 0 }}
+        animate={
+          inView
+            ? { y: "0%", rotateX: 0, opacity: 1 }
+            : { y: "120%", rotateX: 40, opacity: 0 }
+        }
+        transition={{ duration: 0.9, delay, ease: [0.16, 1, 0.3, 1] }}
+        style={{ perspective: 600 }}
       >
         {children}
       </motion.div>
     </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════
+   SCROLL PROGRESS — horizontal bar at top
+═══════════════════════════════════════════════ */
+export function ScrollProgress() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
+
+  return (
+    <motion.div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        height: "2px",
+        background: "linear-gradient(to right, #c9952a, #e8c547)",
+        transformOrigin: "0%",
+        scaleX,
+        zIndex: 9999,
+      }}
+    />
   );
 }

@@ -18,7 +18,6 @@ export default function About() {
         borderTop: "1px solid var(--border)",
       }}
     >
-      {/* Parallax bg word */}
       <Parallax
         speed={0.15}
         style={{
@@ -31,7 +30,7 @@ export default function About() {
       >
         <div
           style={{
-            fontFamily: "'Bebas Neue', cursive",
+            fontFamily: "'Bebas Neue', sans-serif",
             fontSize: "clamp(6rem, 20vw, 18rem)",
             color: "#ffffff04",
             letterSpacing: "0.05em",
@@ -50,12 +49,63 @@ export default function About() {
           zIndex: 1,
         }}
       >
-        {/* Section label */}
         <ScrollReveal direction="split" delay={0}>
-          <div className="section-label">About Me</div>
+          <div
+            className="section-label"
+            style={{ fontFamily: "'DM Sans', sans-serif" }}
+          >
+            About Me
+          </div>
         </ScrollReveal>
 
-        {/* ── Two-column grid ── */}
+        <ScrollReveal direction="cinematic" delay={0.1}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "3.5rem",
+              marginBottom: "4.5rem",
+            }}
+          >
+              {/* Profile removed from About per request */}
+
+            <div>
+              <RevealLine delay={0.2}>
+                <h2
+                  style={{
+                    fontFamily: "'Bebas Neue', sans-serif",
+                    fontSize: "clamp(2.2rem, 4.5vw, 3.8rem)",
+                    lineHeight: 1.05,
+                    letterSpacing: "0.04em",
+                    color: "var(--white)",
+                  }}
+                >
+                  Designer. Developer.{" "}
+                  <span style={{ color: "var(--gold)" }}>Strategist.</span>
+                </h2>
+              </RevealLine>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4, duration: 0.8 }}
+                style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: "0.9rem",
+                  color: "var(--muted)",
+                  lineHeight: 1.8,
+                  maxWidth: 440,
+                  marginTop: "1.2rem",
+                }}
+              >
+                I blend design, technology, and strategy to create purposeful,
+                efficient, and visually engaging work — always driven by
+                simplicity and clarity.
+              </motion.p>
+            </div>
+          </div>
+        </ScrollReveal>
+
         <div
           style={{
             display: "grid",
@@ -64,14 +114,13 @@ export default function About() {
             alignItems: "start",
           }}
         >
-          {/* ═══ LEFT — Simplicity headline + Education below ═══ */}
+          {/* LEFT */}
           <div>
-            {/* Headline */}
             <div style={{ marginBottom: "2.5rem" }}>
               <RevealLine delay={0.1}>
                 <h2
                   style={{
-                    fontFamily: "'Bebas Neue', cursive",
+                    fontFamily: "'Bebas Neue', sans-serif",
                     fontSize: "clamp(2.5rem, 5vw, 4.5rem)",
                     lineHeight: 1.05,
                     letterSpacing: "0.04em",
@@ -84,7 +133,7 @@ export default function About() {
               <RevealLine delay={0.22}>
                 <h2
                   style={{
-                    fontFamily: "'Bebas Neue', cursive",
+                    fontFamily: "'Bebas Neue', sans-serif",
                     fontSize: "clamp(2.5rem, 5vw, 4.5rem)",
                     lineHeight: 1.05,
                     letterSpacing: "0.04em",
@@ -97,7 +146,6 @@ export default function About() {
               </RevealLine>
             </div>
 
-            {/* Education — directly below headline */}
             <ScrollReveal direction="right" delay={0.3}>
               <motion.div
                 whileHover={{
@@ -114,7 +162,7 @@ export default function About() {
               >
                 <div
                   style={{
-                    fontFamily: "'Bebas Neue', cursive",
+                    fontFamily: "'Bebas Neue', sans-serif",
                     fontSize: "1.6rem",
                     color: "var(--gold)",
                     marginBottom: "1rem",
@@ -139,18 +187,32 @@ export default function About() {
                       key={deg}
                       variants={staggerItem}
                       whileHover={{ x: 5 }}
-                      style={{ marginBottom: "1rem", cursor: "none" }}
+                      style={{ marginBottom: "1rem" }}
                     >
-                      <div style={{ fontWeight: 500, fontSize: "0.85rem" }}>
+                      <div
+                        style={{
+                          fontFamily: "'DM Sans', sans-serif",
+                          fontWeight: 500,
+                          fontSize: "0.85rem",
+                        }}
+                      >
                         {deg}
                       </div>
                       <div
-                        style={{ color: "var(--gold)", fontSize: "0.75rem" }}
+                        style={{
+                          fontFamily: "'DM Sans', sans-serif",
+                          color: "var(--gold)",
+                          fontSize: "0.75rem",
+                        }}
                       >
                         {school}
                       </div>
                       <div
-                        style={{ color: "var(--muted)", fontSize: "0.72rem" }}
+                        style={{
+                          fontFamily: "'DM Sans', sans-serif",
+                          color: "var(--muted)",
+                          fontSize: "0.72rem",
+                        }}
                       >
                         {yr}
                       </div>
@@ -161,13 +223,12 @@ export default function About() {
             </ScrollReveal>
           </div>
 
-          {/* ═══ RIGHT — Promise headline + cards + Work Exp below ═══ */}
+          {/* RIGHT */}
           <div>
-            {/* "Big or small projects" promise headline */}
             <ScrollReveal direction="up" delay={0.15}>
               <h3
                 style={{
-                  fontFamily: "'Bebas Neue', cursive",
+                  fontFamily: "'Bebas Neue', sans-serif",
                   fontSize: "clamp(1.6rem, 3vw, 2.6rem)",
                   letterSpacing: "0.03em",
                   lineHeight: 1.1,
@@ -182,7 +243,6 @@ export default function About() {
               </h3>
             </ScrollReveal>
 
-            {/* Promise cards — below the headline */}
             <ScrollStagger
               delay={0.25}
               stagger={0.14}
@@ -234,6 +294,7 @@ export default function About() {
                   />
                   <div
                     style={{
+                      fontFamily: "'DM Sans', sans-serif",
                       fontWeight: 500,
                       marginBottom: "0.5rem",
                       fontSize: "0.9rem",
@@ -243,6 +304,7 @@ export default function About() {
                   </div>
                   <div
                     style={{
+                      fontFamily: "'DM Sans', sans-serif",
                       color: "var(--muted)",
                       fontSize: "0.8rem",
                       lineHeight: 1.7,
@@ -254,7 +316,6 @@ export default function About() {
               ))}
             </ScrollStagger>
 
-            {/* Work Experience — below promise cards */}
             <ScrollReveal direction="flip" delay={0.4}>
               <motion.div
                 whileHover={{
@@ -271,7 +332,7 @@ export default function About() {
               >
                 <div
                   style={{
-                    fontFamily: "'Bebas Neue', cursive",
+                    fontFamily: "'Bebas Neue', sans-serif",
                     fontSize: "2.2rem",
                     color: "var(--gold)",
                     marginBottom: "1.5rem",
@@ -311,7 +372,6 @@ export default function About() {
                         paddingLeft: "1rem",
                         marginBottom: "1.2rem",
                         transition: "border-color 0.3s",
-                        cursor: "none",
                       }}
                       onMouseEnter={(e) =>
                         (e.currentTarget.style.borderLeftColor = "var(--gold)")
@@ -323,6 +383,7 @@ export default function About() {
                     >
                       <div
                         style={{
+                          fontFamily: "'DM Sans', sans-serif",
                           fontWeight: 500,
                           fontSize: "0.85rem",
                           marginBottom: "0.2rem",
@@ -332,6 +393,7 @@ export default function About() {
                       </div>
                       <div
                         style={{
+                          fontFamily: "'DM Sans', sans-serif",
                           color: "var(--gold)",
                           fontSize: "0.75rem",
                           marginBottom: "0.2rem",
@@ -341,6 +403,7 @@ export default function About() {
                       </div>
                       <div
                         style={{
+                          fontFamily: "'DM Sans', sans-serif",
                           color: "var(--muted)",
                           fontSize: "0.72rem",
                           letterSpacing: "0.05em",

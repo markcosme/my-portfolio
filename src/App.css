@@ -36,3 +36,30 @@
     transform: rotate(360deg);
   }
 }
+
+/* Hero responsive tweaks */
+.hero-intro {
+  /* keep desktop layout by default (auto 1fr) */
+}
+
+@media (max-width: 900px) {
+  .hero-intro {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    text-align: center;
+  }
+
+  .hero-intro .hero-ron {
+    justify-self: center;
+    width: clamp(220px, 36vw, 360px) !important;
+    height: clamp(220px, 36vw, 360px) !important;
+  }
+
+  .hero-intro .hero-ron img {
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    height: auto !important;
+    max-width: 70%;
+    object-position: center bottom !important;
+  }
+}
