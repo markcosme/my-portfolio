@@ -1,6 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;700;800&display=swap");
 
-/* --- Reset & Base --- */
 *,
 *::before,
 *::after {
@@ -31,10 +30,10 @@ body {
   font-family: "DM Sans", sans-serif;
   font-weight: 300;
   overflow-x: hidden;
-  cursor: none; /* Desktop default: hide standard cursor */
+  cursor: none;
 }
 
-/* --- Custom Cursor (Desktop Only) --- */
+/* Custom cursor */
 .cursor {
   width: 12px;
   height: 12px;
@@ -48,7 +47,6 @@ body {
   transition: transform 0.15s ease;
   mix-blend-mode: difference;
 }
-
 .cursor-follower {
   width: 36px;
   height: 36px;
@@ -66,7 +64,6 @@ body {
   opacity: 0.5;
 }
 
-/* --- UI Elements --- */
 a {
   color: inherit;
   text-decoration: none;
@@ -97,7 +94,6 @@ button {
   align-items: center;
   gap: 0.75rem;
 }
-
 .section-label::before {
   content: "";
   display: inline-block;
@@ -106,51 +102,235 @@ button {
   background: var(--gold);
 }
 
-/* --- Responsive Fixes --- */
+/* ══════════════════════════════════════════
+   RESPONSIVE — Mobile & Tablet
+══════════════════════════════════════════ */
 
-/* Tablet and Mobile (under 768px) */
+/* ── Navbar ── */
+@media (max-width: 768px) {
+  .nav-desktop {
+    display: none !important;
+  }
+  .nav-hamburger {
+    display: flex !important;
+  }
+
+  /* Reduce nav padding on mobile */
+  nav {
+    padding: 1.1rem 1.5rem !important;
+  }
+}
+
+/* ── Hero ── */
+@media (max-width: 900px) {
+  /* Switch two-column to single column */
+  #home > div > div:first-child {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 2rem !important;
+    padding-top: 7rem;
+  }
+
+  /* Shrink name font on tablet */
+  #home h1 {
+    font-size: clamp(3.5rem, 14vw, 6rem) !important;
+  }
+
+  /* Photo goes below text, centered */
+  #home > div > div:last-child {
+    align-self: center;
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+  }
+
+  #home > div > div:last-child img {
+    width: clamp(200px, 55vw, 320px) !important;
+  }
+
+  /* Stats — move to center */
+  #home > div:nth-child(4) {
+    position: static !important;
+    display: flex !important;
+    justify-content: center !important;
+    margin-top: 1.5rem !important;
+    gap: 2rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  #home {
+    padding: 0 1.5rem !important;
+  }
+  #home h1 {
+    font-size: clamp(3rem, 16vw, 5rem) !important;
+  }
+
+  /* CTAs stack on small */
+  #home > div > div:first-child > div:last-child {
+    flex-direction: column !important;
+  }
+
+  /* Badge hidden on very small */
+  #home [style*="Open to Work"] {
+    display: none !important;
+  }
+}
+
+/* ── About ── */
+@media (max-width: 900px) {
+  #about {
+    padding: 5rem 1.8rem !important;
+  }
+
+  /* Two-col grid → single col */
+  #about > div > div:last-child > div[style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+
+  /* Promise cards → single col */
+  #about [style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 480px) {
+  #about {
+    padding: 4rem 1.2rem !important;
+  }
+  #about h2 {
+    font-size: clamp(2rem, 10vw, 3rem) !important;
+  }
+}
+
+/* ── Projects ── */
+@media (max-width: 900px) {
+  #projects {
+    padding: 5rem 1.8rem !important;
+  }
+
+  /* Document card header — wrap content */
+  #projects [style*="justify-content: space-between"] {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.8rem !important;
+  }
+
+  /* Document card layout — kill sidebar */
+  #projects [style*="grid-template-columns: 1fr 280px"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Hide info sidebar on mobile */
+  #projects
+    [style*="border-left: 1px solid #e8e4dc"][style*="background: #fafaf8"] {
+    display: none !important;
+  }
+
+  /* Category filter buttons wrap */
+  #projects [style*="display: flex"][style*="gap: 0.5rem"] {
+    flex-wrap: wrap !important;
+  }
+}
+
+@media (max-width: 480px) {
+  #projects {
+    padding: 4rem 1.2rem !important;
+  }
+}
+
+/* ── Skills ── */
+@media (max-width: 900px) {
+  #skills {
+    padding: 5rem 1.8rem !important;
+  }
+
+  /* Skill bars — single col */
+  #skills [style*="repeat(auto-fill, minmax(300px, 1fr))"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Tools wrap — already flex-wrap, just reduce gap */
+  #skills [style*="flex-wrap: wrap"] {
+    gap: 0.5rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  #skills {
+    padding: 4rem 1.2rem !important;
+  }
+}
+
+/* ── Contact ── */
+@media (max-width: 768px) {
+  #contact {
+    padding: 5rem 1.5rem 4rem !important;
+  }
+
+  /* Contact cards stack */
+  #contact [style*="repeat(auto-fit, minmax(220px, 1fr))"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Footer — stack vertically */
+  #contact [style*="justify-content: space-between"] {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 0.8rem !important;
+  }
+}
+
+/* ── Global body cursor & misc ── */
 @media (max-width: 768px) {
   body {
-    cursor: auto; /* Restore standard cursor for touch/mobile */
-    width: 100%;
-    overflow-x: hidden;
+    cursor: auto !important;
   }
-
-  /* Hide custom cursor elements on touch devices */
-  .cursor,
-  .cursor-follower {
-    display: none;
-  }
-
   button,
   a {
-    cursor: pointer; /* Restore standard pointer for mobile */
+    cursor: pointer !important;
+  }
+  .cursor,
+  .cursor-follower {
+    display: none !important;
+  }
+  #custom-cursor-canvas {
+    display: none !important;
+  }
+  ::-webkit-scrollbar {
+    width: 0 !important;
   }
 
+  /* Reduce section headings globally */
+  h2[style] {
+    font-size: clamp(2rem, 8vw, 3.5rem) !important;
+  }
+
+  /* Hero intro grid (about-section photo grid) */
+  .hero-intro {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+    text-align: center;
+  }
+  .hero-ron {
+    justify-self: center !important;
+    width: clamp(200px, 50vw, 300px) !important;
+    height: clamp(200px, 50vw, 300px) !important;
+  }
+}
+
+@media (max-width: 480px) {
   html {
-    font-size: 14px; /* Global scale-down for mobile readability */
+    font-size: 14px;
   }
 
   .section-label {
     font-size: 0.6rem;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.18em;
   }
-
-  /* Hide thin scrollbar on mobile for cleaner look */
-  ::-webkit-scrollbar {
-    width: 0px;
-  }
-}
-
-/* Small Phones (under 480px) */
-@media (max-width: 480px) {
   .section-label::before {
-    width: 16px; /* Save horizontal space */
-  }
-
-  /* Prevent any padding/margin issues from creating horizontal scroll */
-  body {
-    padding-left: 0;
-    padding-right: 0;
+    width: 16px;
   }
 }
