@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import svpBrandImg from "../assets/svp-brand-guidelines.png";
 import svpPrintImg from "../assets/svp-brand-presentations.png";
@@ -12,7 +12,7 @@ const projects = [
   {
     id: 4,
     cat: "Branding",
-    title: "SVP Brand Guides",
+    title: "SVP Brand Guidelines",
     subtitle: "Logo / Typography / Swatches",
     desc: "Full brand identity for Southern Veterinary Partners — logo usage rules, typography system, primary/accent color swatches, digital combinations, and print-ready files.",
     tags: ["Brand", "Typography", "Identity", "Print"],
@@ -71,6 +71,13 @@ const projects = [
 
 /* ─────────────────── Lightbox ─────────────────── */
 function Lightbox({ img, title, onClose }) {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
