@@ -44,7 +44,7 @@ export default function App() {
     const ly = lagPos.current.y * dpr;
 
     const color = "#C9952A";
-    const glowColor = "rgba(201, 149, 42, 0.5)";
+    // glowColor used earlier but removed; keep for future if needed
 
     // 1. Central Precision Diamond
     ctx.save();
@@ -61,7 +61,7 @@ export default function App() {
     ctx.restore();
 
     // 2. Crosshair Brackets
-    const size = (hoveredRef.current ? 24 : 12) * dpr;
+    // const size = (hoveredRef.current ? 24 : 12) * dpr; // unused, leftover from earlier version
     const offset = (clickedRef.current ? 4 : hoveredRef.current ? 2 : 8) * dpr;
     const lineLen = (hoveredRef.current ? 8 : 4) * dpr;
 
