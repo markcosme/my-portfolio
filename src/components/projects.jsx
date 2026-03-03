@@ -10,22 +10,9 @@ const categories = ["All", "UI/UX", "Branding", "Social Media"];
 
 const projects = [
   {
-    id: 1,
-    cat: "UI/UX",
-    title: "UI/UX Designs",
-    subtitle: "Mobile Auth · Dashboard · Sign In / Create Account",
-    desc: "A collection of mobile-first UI/UX screens — Login, Sign Up, Forgot Password, light/dark dashboard navigation, and multi-step account creation with OTP verification. Designed in Figma with clean, accessible layouts.",
-    tags: ["Figma", "Mobile UI", "Dashboard", "Auth Flow", "UX"],
-    color: "#6c5aee",
-    image: uiuxImg,
-    documentStyle: true,
-    client: "Figma · Personal & Client Projects",
-    enterEffect: "slideLeft",
-  },
-  {
     id: 4,
     cat: "Branding",
-    title: "SVP Brand Guidelines",
+    title: "SVP Brand Guides",
     subtitle: "Logo / Typography / Swatches",
     desc: "Full brand identity for Southern Veterinary Partners — logo usage rules, typography system, primary/accent color swatches, digital combinations, and print-ready files.",
     tags: ["Brand", "Typography", "Identity", "Print"],
@@ -66,6 +53,19 @@ const projects = [
     documentStyle: true,
     client: "Multiple Clients · Freelance Projects",
     enterEffect: "zoomFade",
+  },
+  {
+    id: 1,
+    cat: "UI/UX",
+    title: "UI/UX Designs",
+    subtitle: "Mobile Auth · Dashboard · Sign In / Create Account",
+    desc: "A collection of mobile-first UI/UX screens — Login, Sign Up, Forgot Password, light/dark dashboard navigation, and multi-step account creation with OTP verification. Designed in Figma with clean, accessible layouts.",
+    tags: ["Figma", "Mobile UI", "Dashboard", "Auth Flow", "UX"],
+    color: "#6c5aee",
+    image: uiuxImg,
+    documentStyle: true,
+    client: "Figma · Personal & Client Projects",
+    enterEffect: "slideLeft",
   },
 ];
 
@@ -185,28 +185,12 @@ const enterEffects = {
       filter: "blur(10px)",
       scale: 0.96,
     },
-    show: {
-      opacity: 1,
-      x: 0,
-      rotateZ: 0,
-      filter: "blur(0px)",
-      scale: 1,
-    },
+    show: { opacity: 1, x: 0, rotateZ: 0, filter: "blur(0px)", scale: 1 },
     transition: { duration: 0.95, ease: [0.16, 1, 0.3, 1] },
   },
   flipY: {
-    hidden: {
-      opacity: 0,
-      rotateY: 180,
-      scale: 0.86,
-      filter: "blur(14px)",
-    },
-    show: {
-      opacity: 1,
-      rotateY: 360,
-      scale: 1,
-      filter: "blur(0px)",
-    },
+    hidden: { opacity: 0, rotateY: 180, scale: 0.86, filter: "blur(14px)" },
+    show: { opacity: 1, rotateY: 360, scale: 1, filter: "blur(0px)" },
     transition: { duration: 1.2, ease: [0.22, 1, 0.36, 1] },
   },
   riseUp: {
@@ -217,26 +201,12 @@ const enterEffects = {
       filter: "blur(8px)",
       scale: 0.94,
     },
-    show: {
-      opacity: 1,
-      y: 0,
-      rotateX: 0,
-      filter: "blur(0px)",
-      scale: 1,
-    },
+    show: { opacity: 1, y: 0, rotateX: 0, filter: "blur(0px)", scale: 1 },
     transition: { duration: 1.0, ease: [0.16, 1, 0.3, 1] },
   },
   zoomFade: {
-    hidden: {
-      opacity: 0,
-      scale: 0.68,
-      filter: "blur(22px) brightness(1.5)",
-    },
-    show: {
-      opacity: 1,
-      scale: 1,
-      filter: "blur(0px) brightness(1)",
-    },
+    hidden: { opacity: 0, scale: 0.68, filter: "blur(22px) brightness(1.5)" },
+    show: { opacity: 1, scale: 1, filter: "blur(0px) brightness(1)" },
     transition: { duration: 1.1, ease: [0.22, 1, 0.36, 1] },
   },
 };
@@ -333,11 +303,7 @@ function DocumentCard({ p, i }) {
               </div>
             </div>
             <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.6rem",
-              }}
+              style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}
             >
               <span
                 style={{
@@ -397,10 +363,7 @@ function DocumentCard({ p, i }) {
             >
               <motion.div
                 animate={{ y: hovered ? -6 : 0 }}
-                transition={{
-                  duration: 0.5,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                 style={{
                   background: "#fff",
                   borderRadius: "8px 8px 0 0",
@@ -680,13 +643,7 @@ function ProjectCard({ p, i }) {
           >
             {p.desc}
           </p>
-          <div
-            style={{
-              display: "flex",
-              gap: "0.4rem",
-              flexWrap: "wrap",
-            }}
-          >
+          <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
             {p.tags.map((tag) => (
               <span
                 key={tag}
@@ -787,13 +744,7 @@ export default function Projects() {
             >
               My Projects
             </h2>
-            <div
-              style={{
-                display: "flex",
-                gap: "0.5rem",
-                flexWrap: "wrap",
-              }}
-            >
+            <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
               {categories.map((cat) => (
                 <motion.button
                   key={cat}

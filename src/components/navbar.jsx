@@ -95,28 +95,6 @@ export default function Navbar() {
               </Link>
             </motion.div>
           ))}
-          <motion.a
-            href="mailto:ronaldramirezmedina@gmail.com"
-            whileHover={{
-              scale: 1.03,
-              backgroundColor: "var(--gold)",
-              color: "#000",
-            }}
-            data-cursor-hover
-            style={{
-              padding: "0.5rem 1.4rem",
-              border: "1px solid var(--gold)",
-              fontSize: "0.75rem",
-              letterSpacing: "0.15em",
-              textTransform: "uppercase",
-              color: "var(--gold)",
-              borderRadius: "2px",
-              transition: "all 0.3s",
-              fontFamily: "'DM Sans', sans-serif",
-            }}
-          >
-            Hire Me
-          </motion.a>
         </div>
 
         {/* Hamburger button — mobile only */}
@@ -232,31 +210,6 @@ export default function Navbar() {
                 </Link>
               </motion.div>
             ))}
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.55 }}
-              style={{ marginTop: "2rem" }}
-            >
-              <a
-                href="mailto:ronaldramirezmedina@gmail.com"
-                onClick={() => setMenuOpen(false)}
-                style={{
-                  padding: "0.8rem 2.5rem",
-                  border: "1px solid var(--gold)",
-                  color: "var(--gold)",
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: "0.78rem",
-                  letterSpacing: "0.2em",
-                  textTransform: "uppercase",
-                  borderRadius: "2px",
-                  display: "inline-block",
-                }}
-              >
-                Hire Me
-              </a>
-            </motion.div>
 
             {/* Decorative gold line */}
             <motion.div
