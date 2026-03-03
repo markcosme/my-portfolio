@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { CountUp, Magnetic } from "./scrollreveal";
-import ronPhoto from "../assets/ron-profile.png";
+import ronPhoto from "../assets/Ron-Profile.png";
 
 const roles = ["Developer.", "Strategist."];
 
