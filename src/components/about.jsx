@@ -3,26 +3,29 @@ import {
   ScrollReveal,
   ScrollStagger,
   staggerItem,
-  RevealLine,
   Parallax,
 } from "./scrollreveal";
+
+const CV = "'Coolvetica','DM Sans',sans-serif";
+const DM = "'DM Sans',sans-serif";
 
 export default function About() {
   return (
     <section
       id="about"
       style={{
-        padding: "8rem 3rem",
+        padding: "var(--pad-section)",
         position: "relative",
         overflow: "hidden",
         borderTop: "1px solid var(--border)",
       }}
     >
+      {/* Bg word */}
       <Parallax
         speed={0.15}
         style={{
           position: "absolute",
-          top: "2rem",
+          top: "1rem",
           left: "1rem",
           pointerEvents: "none",
           userSelect: "none",
@@ -30,9 +33,9 @@ export default function About() {
       >
         <div
           style={{
-            fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: "clamp(6rem, 20vw, 18rem)",
-            color: "#ffffff04",
+            fontFamily: CV,
+            fontSize: "clamp(5rem,18vw,16rem)",
+            color: "rgba(201,149,42,0.03)",
             letterSpacing: "0.05em",
             lineHeight: 1,
           }}
@@ -43,224 +46,107 @@ export default function About() {
 
       <div
         style={{
-          maxWidth: 1100,
+          maxWidth: "var(--max-w)",
           margin: "0 auto",
           position: "relative",
           zIndex: 1,
         }}
       >
-        <ScrollReveal direction="split" delay={0}>
-          <div
-            className="section-label"
-            style={{ fontFamily: "'DM Sans', sans-serif" }}
-          >
-            About Me
-          </div>
-        </ScrollReveal>
-
-        <ScrollReveal direction="cinematic" delay={0.1}>
-          <div
+        {/* Header */}
+        <ScrollReveal direction="up" delay={0}>
+          <div className="section-label">About Me</div>
+          <h2
             style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "3.5rem",
-              marginBottom: "4.5rem",
+              fontFamily: CV,
+              fontSize: "var(--fs-h1)",
+              letterSpacing: "0.04em",
+              marginBottom: "3.5rem",
+              fontWeight: 400,
+              color: "var(--text)",
             }}
           >
-              {/* Profile removed from About per request */}
-
-            <div>
-              <RevealLine delay={0.2}>
-                <h2
-                  style={{
-                    fontFamily: "'Bebas Neue', sans-serif",
-                    fontSize: "clamp(2.2rem, 4.5vw, 3.8rem)",
-                    lineHeight: 1.05,
-                    letterSpacing: "0.04em",
-                    color: "var(--white)",
-                  }}
-                >
-                  Designer. Developer.{" "}
-                  <span style={{ color: "var(--gold)" }}>Strategist.</span>
-                </h2>
-              </RevealLine>
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.4, duration: 0.8 }}
-                style={{
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: "0.9rem",
-                  color: "var(--muted)",
-                  lineHeight: 1.8,
-                  maxWidth: 440,
-                  marginTop: "1.2rem",
-                }}
-              >
-                I blend design, technology, and strategy to create purposeful,
-                efficient, and visually engaging work — always driven by
-                simplicity and clarity.
-              </motion.p>
-            </div>
-          </div>
+            Who I <span style={{ color: "var(--gold)" }}>Am.</span>
+          </h2>
         </ScrollReveal>
 
+        {/* Grid */}
         <div
+          className="about-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
-            gap: "5rem",
+            gap: "clamp(2rem,5vw,5rem)",
             alignItems: "start",
           }}
         >
-          {/* LEFT */}
-          <div>
-            <div style={{ marginBottom: "2.5rem" }}>
-              <RevealLine delay={0.1}>
-                <h2
-                  style={{
-                    fontFamily: "'Bebas Neue', sans-serif",
-                    fontSize: "clamp(2.5rem, 5vw, 4.5rem)",
-                    lineHeight: 1.05,
-                    letterSpacing: "0.04em",
-                  }}
-                >
-                  Simplicity.{" "}
-                  <span style={{ color: "var(--gold)" }}>Pure.</span>
-                </h2>
-              </RevealLine>
-              <RevealLine delay={0.22}>
-                <h2
-                  style={{
-                    fontFamily: "'Bebas Neue', sans-serif",
-                    fontSize: "clamp(2.5rem, 5vw, 4.5rem)",
-                    lineHeight: 1.05,
-                    letterSpacing: "0.04em",
-                    color: "transparent",
-                    WebkitTextStroke: "1px var(--white)",
-                  }}
-                >
-                  Precise. Purposeful.
-                </h2>
-              </RevealLine>
-            </div>
-
-            <ScrollReveal direction="right" delay={0.3}>
-              <motion.div
-                whileHover={{
-                  borderColor: "var(--gold)",
-                  boxShadow: "0 0 40px rgba(201,149,42,0.08)",
-                }}
-                style={{
-                  background: "var(--card-bg)",
-                  border: "1px solid var(--border)",
-                  borderRadius: "8px",
-                  padding: "2rem",
-                  transition: "all 0.3s",
-                }}
-              >
-                <div
-                  style={{
-                    fontFamily: "'Bebas Neue', sans-serif",
-                    fontSize: "1.6rem",
-                    color: "var(--gold)",
-                    marginBottom: "1rem",
-                  }}
-                >
-                  Education
-                </div>
-                <ScrollStagger delay={0} stagger={0.12}>
-                  {[
-                    [
-                      "Masters in Information Technology",
-                      "Systems Plus College Foundation",
-                      "Jun 2021 – Dec 2022",
-                    ],
-                    [
-                      "Bachelor of Information Technology",
-                      "Holy Angel University",
-                      "Jun 2008 – Apr 2013",
-                    ],
-                  ].map(([deg, school, yr]) => (
-                    <motion.div
-                      key={deg}
-                      variants={staggerItem}
-                      whileHover={{ x: 5 }}
-                      style={{ marginBottom: "1rem" }}
-                    >
-                      <div
-                        style={{
-                          fontFamily: "'DM Sans', sans-serif",
-                          fontWeight: 500,
-                          fontSize: "0.85rem",
-                        }}
-                      >
-                        {deg}
-                      </div>
-                      <div
-                        style={{
-                          fontFamily: "'DM Sans', sans-serif",
-                          color: "var(--gold)",
-                          fontSize: "0.75rem",
-                        }}
-                      >
-                        {school}
-                      </div>
-                      <div
-                        style={{
-                          fontFamily: "'DM Sans', sans-serif",
-                          color: "var(--muted)",
-                          fontSize: "0.72rem",
-                        }}
-                      >
-                        {yr}
-                      </div>
-                    </motion.div>
-                  ))}
-                </ScrollStagger>
-              </motion.div>
-            </ScrollReveal>
-          </div>
-
-          {/* RIGHT */}
+          {/* ── LEFT ── */}
           <div>
             <ScrollReveal direction="up" delay={0.15}>
+              <p
+                style={{
+                  fontFamily: DM,
+                  fontSize: "var(--fs-body)",
+                  color: "var(--text-sub)",
+                  lineHeight: 1.85,
+                  marginBottom: "1.3rem",
+                }}
+              >
+                I'm a creative and technically skilled professional with a
+                passion for blending design, technology, and strategy — bringing
+                artistic vision and analytical thinking to purposeful, efficient
+                work.
+              </p>
+              <p
+                style={{
+                  fontFamily: DM,
+                  fontSize: "var(--fs-body)",
+                  color: "var(--text-sub)",
+                  lineHeight: 1.85,
+                  marginBottom: "2.2rem",
+                }}
+              >
+                I believe simplicity and clarity drive the best results —
+                whether in design, systems, or collaboration.
+              </p>
+            </ScrollReveal>
+
+            <ScrollReveal direction="up" delay={0.35}>
               <h3
                 style={{
-                  fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "clamp(1.6rem, 3vw, 2.6rem)",
+                  fontFamily: CV,
+                  fontSize: "var(--fs-h3)",
                   letterSpacing: "0.03em",
-                  lineHeight: 1.1,
-                  color: "var(--white)",
-                  marginBottom: "1.8rem",
+                  lineHeight: 1.25,
+                  color: "var(--text)",
+                  marginBottom: "1.3rem",
+                  fontWeight: 400,
                 }}
               >
                 Big or small projects,
                 <br />
                 Two things I always promise.{" "}
-                <span style={{ fontSize: "0.75em" }}>🙏</span>
+                <span style={{ fontSize: "0.8em" }}>🙏</span>
               </h3>
             </ScrollReveal>
 
             <ScrollStagger
-              delay={0.25}
-              stagger={0.14}
+              delay={0.4}
+              stagger={0.13}
               style={{
                 display: "grid",
                 gridTemplateColumns: "1fr 1fr",
-                gap: "1.2rem",
-                marginBottom: "2.5rem",
+                gap: "1rem",
               }}
+              className="promise-grid"
             >
               {[
                 [
                   "Designs you'll love",
-                  "I love creating new things — making sure you're happy with the results, because great teamwork always brings ideas to life.",
+                  "Making sure you're happy with the results — because great teamwork always brings ideas to life.",
                 ],
                 [
                   "Stress-free relationship",
-                  "What drives me is finding solutions and staying focused on the goal. No stress, no drama — just results that help your business move forward.",
+                  "No stress, no drama — just focused solutions and results that help your business move forward.",
                 ],
               ].map(([title, desc]) => (
                 <motion.div
@@ -268,14 +154,14 @@ export default function About() {
                   variants={staggerItem}
                   whileHover={{
                     borderColor: "var(--gold)",
-                    y: -5,
-                    boxShadow: "0 8px 30px rgba(201,149,42,0.1)",
+                    y: -4,
+                    boxShadow: "0 8px 28px rgba(201,149,42,0.1)",
                   }}
                   style={{
-                    padding: "1.5rem",
+                    padding: "1.4rem",
                     border: "1px solid var(--border)",
                     borderRadius: "6px",
-                    background: "var(--card-bg)",
+                    background: "var(--surface)",
                     transition: "all 0.3s",
                   }}
                 >
@@ -285,7 +171,7 @@ export default function About() {
                     viewport={{ once: true }}
                     transition={{ duration: 0.5 }}
                     style={{
-                      width: 28,
+                      width: 24,
                       height: 2,
                       background: "var(--gold)",
                       marginBottom: "0.8rem",
@@ -294,19 +180,20 @@ export default function About() {
                   />
                   <div
                     style={{
-                      fontFamily: "'DM Sans', sans-serif",
-                      fontWeight: 500,
-                      marginBottom: "0.5rem",
-                      fontSize: "0.9rem",
+                      fontFamily: DM,
+                      fontWeight: 600,
+                      fontSize: "var(--fs-sm)",
+                      marginBottom: "0.45rem",
+                      color: "var(--text)",
                     }}
                   >
                     {title}
                   </div>
                   <div
                     style={{
-                      fontFamily: "'DM Sans', sans-serif",
-                      color: "var(--muted)",
-                      fontSize: "0.8rem",
+                      fontFamily: DM,
+                      fontSize: "var(--fs-sm)",
+                      color: "var(--text-sub)",
                       lineHeight: 1.7,
                     }}
                   >
@@ -315,27 +202,33 @@ export default function About() {
                 </motion.div>
               ))}
             </ScrollStagger>
+          </div>
 
-            <ScrollReveal direction="flip" delay={0.4}>
+          {/* ── RIGHT ── */}
+          <div>
+            {/* Work Experience */}
+            <ScrollReveal direction="up" delay={0.2}>
               <motion.div
                 whileHover={{
                   borderColor: "var(--gold)",
-                  boxShadow: "0 0 40px rgba(201,149,42,0.08)",
+                  boxShadow: "0 0 36px rgba(201,149,42,0.08)",
                 }}
                 style={{
-                  background: "var(--card-bg)",
+                  background: "var(--surface)",
                   border: "1px solid var(--border)",
                   borderRadius: "8px",
-                  padding: "2.5rem",
+                  padding: "2.2rem",
+                  marginBottom: "1.8rem",
                   transition: "all 0.3s",
                 }}
               >
                 <div
                   style={{
-                    fontFamily: "'Bebas Neue', sans-serif",
-                    fontSize: "2.2rem",
+                    fontFamily: CV,
+                    fontSize: "var(--fs-h2)",
                     color: "var(--gold)",
-                    marginBottom: "1.5rem",
+                    marginBottom: "1.4rem",
+                    fontWeight: 400,
                   }}
                 >
                   Work Experience
@@ -362,17 +255,11 @@ export default function About() {
                       "Sutherland Global Services",
                       "May 2013 – Sep 2014",
                     ],
-                  ].map(([role, company, period]) => (
+                  ].map(([role, co, period]) => (
                     <motion.div
                       key={role}
                       variants={staggerItem}
-                      whileHover={{ x: 8 }}
-                      style={{
-                        borderLeft: "2px solid var(--border)",
-                        paddingLeft: "1rem",
-                        marginBottom: "1.2rem",
-                        transition: "border-color 0.3s",
-                      }}
+                      whileHover={{ x: 6 }}
                       onMouseEnter={(e) =>
                         (e.currentTarget.style.borderLeftColor = "var(--gold)")
                       }
@@ -380,36 +267,121 @@ export default function About() {
                         (e.currentTarget.style.borderLeftColor =
                           "var(--border)")
                       }
+                      style={{
+                        borderLeft: "2px solid var(--border)",
+                        paddingLeft: "1rem",
+                        marginBottom: "1.1rem",
+                        transition: "border-color 0.3s",
+                      }}
                     >
                       <div
                         style={{
-                          fontFamily: "'DM Sans', sans-serif",
-                          fontWeight: 500,
-                          fontSize: "0.85rem",
-                          marginBottom: "0.2rem",
+                          fontFamily: DM,
+                          fontWeight: 600,
+                          fontSize: "var(--fs-sm)",
+                          marginBottom: "0.15rem",
+                          color: "var(--text)",
                         }}
                       >
                         {role}
                       </div>
                       <div
                         style={{
-                          fontFamily: "'DM Sans', sans-serif",
+                          fontFamily: DM,
                           color: "var(--gold)",
-                          fontSize: "0.75rem",
-                          marginBottom: "0.2rem",
+                          fontSize: "var(--fs-xs)",
                         }}
                       >
-                        {company}
+                        {co}
                       </div>
                       <div
                         style={{
-                          fontFamily: "'DM Sans', sans-serif",
-                          color: "var(--muted)",
-                          fontSize: "0.72rem",
-                          letterSpacing: "0.05em",
+                          fontFamily: DM,
+                          color: "var(--text-sub)",
+                          fontSize: "var(--fs-xs)",
+                          letterSpacing: "0.04em",
                         }}
                       >
                         {period}
+                      </div>
+                    </motion.div>
+                  ))}
+                </ScrollStagger>
+              </motion.div>
+            </ScrollReveal>
+
+            {/* Education */}
+            <ScrollReveal direction="up" delay={0.35}>
+              <motion.div
+                whileHover={{
+                  borderColor: "var(--gold)",
+                  boxShadow: "0 0 36px rgba(201,149,42,0.08)",
+                }}
+                style={{
+                  background: "var(--surface)",
+                  border: "1px solid var(--border)",
+                  borderRadius: "8px",
+                  padding: "2rem",
+                  transition: "all 0.3s",
+                }}
+              >
+                <div
+                  style={{
+                    fontFamily: CV,
+                    fontSize: "var(--fs-h3)",
+                    color: "var(--gold)",
+                    marginBottom: "1rem",
+                    fontWeight: 400,
+                  }}
+                >
+                  Education
+                </div>
+                <ScrollStagger delay={0} stagger={0.12}>
+                  {[
+                    [
+                      "Masters in Information Technology",
+                      "Systems Plus College Foundation",
+                      "Jun 2021 – Dec 2022",
+                    ],
+                    [
+                      "Bachelor of Information Technology",
+                      "Holy Angel University",
+                      "Jun 2008 – Apr 2013",
+                    ],
+                  ].map(([deg, school, yr]) => (
+                    <motion.div
+                      key={deg}
+                      variants={staggerItem}
+                      whileHover={{ x: 5 }}
+                      style={{ marginBottom: "1rem" }}
+                    >
+                      <div
+                        style={{
+                          fontFamily: DM,
+                          fontWeight: 600,
+                          fontSize: "var(--fs-sm)",
+                          color: "var(--text)",
+                        }}
+                      >
+                        {deg}
+                      </div>
+                      <div
+                        style={{
+                          fontFamily: DM,
+                          color: "var(--gold)",
+                          fontSize: "var(--fs-xs)",
+                        }}
+                      >
+                        {school}
+                      </div>
+                      <div
+                        style={{
+                          fontFamily: DM,
+                          color: "var(--text-sub)",
+                          fontSize: "var(--fs-xs)",
+                        }}
+                      >
+                        {yr}
                       </div>
                     </motion.div>
                   ))}

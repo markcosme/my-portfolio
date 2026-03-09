@@ -12,7 +12,7 @@ const projects = [
   {
     id: 4,
     cat: "Branding",
-    title: "Brand Guides",
+    title: "SVP Brand Guidelines",
     subtitle: "Logo / Typography / Swatches",
     desc: "Full brand identity for Southern Veterinary Partners — logo usage rules, typography system, primary/accent color swatches, digital combinations, and print-ready files.",
     tags: ["Brand", "Typography", "Identity", "Print"],
@@ -147,7 +147,7 @@ function Lightbox({ img, title, onClose }) {
             padding: "2.5rem 1.8rem 1.4rem",
             background:
               "linear-gradient(to top, rgba(0,0,0,0.92), transparent)",
-            fontFamily: "'Bebas Neue', sans-serif",
+            fontFamily: "'Coolvetica','DM Sans',sans-serif",
             fontSize: "1.3rem",
             letterSpacing: "0.1em",
             color: "#fff",
@@ -694,7 +694,7 @@ export default function Projects() {
     <section
       id="projects"
       style={{
-        padding: "8rem 3rem",
+        padding: "var(--pad-section)",
         borderTop: "1px solid var(--border)",
         position: "relative",
         overflow: "hidden",
@@ -705,7 +705,7 @@ export default function Projects() {
           position: "absolute",
           top: "3rem",
           right: "2rem",
-          fontFamily: "'Bebas Neue', sans-serif",
+          fontFamily: "'Coolvetica','DM Sans',sans-serif",
           fontSize: "clamp(5rem, 16vw, 14rem)",
           color: "#ffffff03",
           letterSpacing: "0.05em",
@@ -744,7 +744,7 @@ export default function Projects() {
           >
             <h2
               style={{
-                fontFamily: "'Bebas Neue', sans-serif",
+                fontFamily: "'Coolvetica','DM Sans',sans-serif",
                 fontSize: "clamp(2.5rem, 5vw, 4rem)",
                 letterSpacing: "0.04em",
               }}

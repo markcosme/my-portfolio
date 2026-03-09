@@ -8,148 +8,136 @@ import Contact from "./components/contact";
 import "./index.css";
 
 export default function App() {
+  /* ── theme ── */
+  const [theme, setTheme] = useState("dark");
+  const toggleTheme = () => {
+    setTheme((t) => {
+      const next = t === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      return next;
+    });
+  };
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", "dark");
+  }, []);
+
+  /* ── canvas cursor ── */
   const canvasRef = useRef(null);
-  const mouse = useRef({ x: -100, y: -100 });
-  const lagPos = useRef({ x: -100, y: -100 });
-  const rafRef = useRef(null);
-
-  const [hovered, setHovered] = useState(false);
-  const [clicked, setClicked] = useState(false);
-  const hoveredRef = useRef(false);
-  const clickedRef = useRef(false);
-
-  useEffect(() => {
-    hoveredRef.current = hovered;
-  }, [hovered]);
-  useEffect(() => {
-    clickedRef.current = clicked;
-  }, [clicked]);
+  const mouse = useRef({ x: -200, y: -200 });
+  const lag = useRef({ x: -200, y: -200 });
+  const raf = useRef(null);
+  const hovRef = useRef(false);
+  const clkRef = useRef(false);
 
   const animate = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     const dpr = window.devicePixelRatio || 1;
-
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Dynamic easing: snaps faster when hovering
-    const lerpFactor = hoveredRef.current ? 0.25 : 0.12;
-    lagPos.current.x += (mouse.current.x - lagPos.current.x) * lerpFactor;
-    lagPos.current.y += (mouse.current.y - lagPos.current.y) * lerpFactor;
+    const ease = hovRef.current ? 0.25 : 0.12;
+    lag.current.x += (mouse.current.x - lag.current.x) * ease;
+    lag.current.y += (mouse.current.y - lag.current.y) * ease;
 
-    const mx = mouse.current.x * dpr;
-    const my = mouse.current.y * dpr;
-    const lx = lagPos.current.x * dpr;
-    const ly = lagPos.current.y * dpr;
+    const mx = mouse.current.x * dpr,
+      my = mouse.current.y * dpr;
+    const lx = lag.current.x * dpr,
+      ly = lag.current.y * dpr;
+    const C = "#C9952A";
 
-    const color = "#C9952A";
-    // glowColor used earlier but removed; keep for future if needed
-
-    // 1. Central Precision Diamond
+    /* diamond dot */
     ctx.save();
     ctx.translate(mx, my);
     ctx.rotate(Math.PI / 4);
-    ctx.fillStyle = color;
-    const dotSize = clickedRef.current ? 2 : 4;
-    ctx.fillRect(
-      (-dotSize * dpr) / 2,
-      (-dotSize * dpr) / 2,
-      dotSize * dpr,
-      dotSize * dpr,
-    );
+    ctx.fillStyle = C;
+    const d = (clkRef.current ? 2 : 4) * dpr;
+    ctx.fillRect(-d / 2, -d / 2, d, d);
     ctx.restore();
 
-    // 2. Crosshair Brackets
-    // const size = (hoveredRef.current ? 24 : 12) * dpr; // unused, leftover from earlier version
-    const offset = (clickedRef.current ? 4 : hoveredRef.current ? 2 : 8) * dpr;
-    const lineLen = (hoveredRef.current ? 8 : 4) * dpr;
-
-    ctx.strokeStyle = color;
+    /* brackets */
+    const off = (clkRef.current ? 4 : hovRef.current ? 2 : 8) * dpr;
+    const len = (hovRef.current ? 8 : 4) * dpr;
+    ctx.strokeStyle = C;
     ctx.lineWidth = 1.5 * dpr;
-    ctx.shadowBlur = hoveredRef.current ? 10 : 0;
-    ctx.shadowColor = color;
-
-    const drawBracket = (x, y, rotation) => {
+    ctx.shadowBlur = hovRef.current ? 10 : 0;
+    ctx.shadowColor = C;
+    [0, Math.PI / 2, Math.PI, -Math.PI / 2].forEach((r) => {
       ctx.save();
       ctx.translate(lx, ly);
-      ctx.rotate(rotation);
+      ctx.rotate(r);
       ctx.beginPath();
-      ctx.moveTo(offset + lineLen, offset);
-      ctx.lineTo(offset, offset);
-      ctx.lineTo(offset, offset + lineLen);
+      ctx.moveTo(off + len, off);
+      ctx.lineTo(off, off);
+      ctx.lineTo(off, off + len);
       ctx.stroke();
       ctx.restore();
-    };
+    });
 
-    // Draw 4 corners
-    drawBracket(lx, ly, 0); // Bottom Right
-    drawBracket(lx, ly, Math.PI / 2); // Bottom Left
-    drawBracket(lx, ly, Math.PI); // Top Left
-    drawBracket(lx, ly, -Math.PI / 2); // Top Right
-
-    // 3. Speed Lines (Badass subtle trail when moving fast)
-    const dx = mouse.current.x - lagPos.current.x;
-    const dy = mouse.current.y - lagPos.current.y;
-    const speed = Math.sqrt(dx * dx + dy * dy);
-
-    if (speed > 5) {
+    /* speed trail */
+    const sp = Math.hypot(
+      mouse.current.x - lag.current.x,
+      mouse.current.y - lag.current.y,
+    );
+    if (sp > 5) {
       ctx.beginPath();
       ctx.moveTo(mx, my);
       ctx.lineTo(lx, ly);
-      ctx.strokeStyle = `rgba(201, 149, 42, ${Math.min(speed / 100, 0.3)})`;
-      ctx.lineWidth = 1 * dpr;
+      ctx.strokeStyle = `rgba(201,149,42,${Math.min(sp / 100, 0.3)})`;
+      ctx.lineWidth = dpr;
+      ctx.shadowBlur = 0;
       ctx.stroke();
     }
-
-    rafRef.current = requestAnimationFrame(animate);
+    raf.current = requestAnimationFrame(animate);
   }, []);
 
   useEffect(() => {
-    const handleResize = () => {
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      canvas.width = window.innerWidth * (window.devicePixelRatio || 1);
-      canvas.height = window.innerHeight * (window.devicePixelRatio || 1);
-      canvas.style.width = `${window.innerWidth}px`;
-      canvas.style.height = `${window.innerHeight}px`;
+    const resize = () => {
+      const c = canvasRef.current;
+      if (!c) return;
+      const dpr = window.devicePixelRatio || 1;
+      c.width = window.innerWidth * dpr;
+      c.height = window.innerHeight * dpr;
+      c.style.width = window.innerWidth + "px";
+      c.style.height = window.innerHeight + "px";
     };
-
-    const handleMouseMove = (e) => {
+    const mm = (e) => {
       mouse.current = { x: e.clientX, y: e.clientY };
     };
-
-    const handleMouseDown = () => setClicked(true);
-    const handleMouseUp = () => setClicked(false);
-
-    const bindListeners = () => {
+    const md = () => {
+      clkRef.current = true;
+    };
+    const mu = () => {
+      clkRef.current = false;
+    };
+    const bind = () => {
       document
-        .querySelectorAll("a, button, input, textarea, [role='button']")
+        .querySelectorAll("a,button,input,textarea,[role='button']")
         .forEach((el) => {
-          el.addEventListener("mouseenter", () => setHovered(true));
-          el.addEventListener("mouseleave", () => setHovered(false));
+          el.addEventListener("mouseenter", () => {
+            hovRef.current = true;
+          });
+          el.addEventListener("mouseleave", () => {
+            hovRef.current = false;
+          });
         });
     };
-
-    window.addEventListener("resize", handleResize);
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mousedown", handleMouseDown);
-    window.addEventListener("mouseup", handleMouseUp);
-
-    handleResize();
-    bindListeners();
-    rafRef.current = requestAnimationFrame(animate);
-
-    const observer = new MutationObserver(bindListeners);
-    observer.observe(document.body, { childList: true, subtree: true });
-
+    window.addEventListener("resize", resize);
+    window.addEventListener("mousemove", mm);
+    window.addEventListener("mousedown", md);
+    window.addEventListener("mouseup", mu);
+    resize();
+    bind();
+    raf.current = requestAnimationFrame(animate);
+    const obs = new MutationObserver(bind);
+    obs.observe(document.body, { childList: true, subtree: true });
     return () => {
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mousedown", handleMouseDown);
-      window.removeEventListener("mouseup", handleMouseUp);
-      cancelAnimationFrame(rafRef.current);
-      observer.disconnect();
+      window.removeEventListener("resize", resize);
+      window.removeEventListener("mousemove", mm);
+      window.removeEventListener("mousedown", md);
+      window.removeEventListener("mouseup", mu);
+      cancelAnimationFrame(raf.current);
+      obs.disconnect();
     };
   }, [animate]);
 
@@ -162,7 +150,6 @@ export default function App() {
           * { cursor: auto !important; }
         }
       `}</style>
-
       <canvas
         id="custom-cursor-canvas"
         ref={canvasRef}
@@ -174,8 +161,7 @@ export default function App() {
           zIndex: 999999,
         }}
       />
-
-      <Navbar />
+      <Navbar theme={theme} toggleTheme={toggleTheme} />
       <main>
         <Hero />
         <About />

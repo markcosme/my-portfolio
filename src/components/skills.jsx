@@ -2,8 +2,10 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Parallax, Magnetic } from "./scrollreveal";
 
+const DM = "'DM Sans',sans-serif";
+const CV = "'Coolvetica','DM Sans',sans-serif";
+
 const tools = [
-  // Adobe Creative Cloud
   {
     name: "Photoshop",
     color: "#31A8FF",
@@ -49,7 +51,6 @@ const tools = [
     color: "#EC1C24",
     icon: "https://cdn.simpleicons.org/adobeacrobatreader/EC1C24",
   },
-  // Other Design
   {
     name: "Figma",
     color: "#F24E1E",
@@ -60,7 +61,6 @@ const tools = [
     color: "#00C4CC",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/canva/canva-original.svg",
   },
-  // Dev
   {
     name: "HTML/CSS",
     color: "#E34F26",
@@ -83,38 +83,35 @@ const tools = [
   },
 ];
 
-/* ── Tool chip with logo ── */
 function ToolChip({ tool, index }) {
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.75, y: 20 }}
+      initial={{ opacity: 0, scale: 0.75, y: 18 }}
       whileInView={{ opacity: 1, scale: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{
-        delay: index * 0.05,
+        delay: index * 0.045,
         duration: 0.45,
         ease: [0.22, 1, 0.36, 1],
       }}
       whileHover={{
-        scale: 1.07,
+        scale: 1.06,
         borderColor: tool.color,
-        boxShadow: `0 6px 28px ${tool.color}33`,
+        boxShadow: `0 6px 26px ${tool.color}33`,
         y: -3,
       }}
       style={{
         display: "flex",
         alignItems: "center",
-        gap: "0.65rem",
-        padding: "0.55rem 1.1rem 0.55rem 0.55rem",
+        gap: "0.6rem",
+        padding: "0.5rem 1rem 0.5rem 0.5rem",
         border: "1px solid var(--border)",
         borderRadius: "10px",
-        background: "var(--card-bg)",
-        cursor: "none",
+        background: "var(--surface)",
         transition: "border-color 0.3s, box-shadow 0.3s",
         userSelect: "none",
       }}
     >
-      {/* Clean white icon box */}
       <div
         style={{
           width: 32,
@@ -143,17 +140,17 @@ function ToolChip({ tool, index }) {
           onError={(e) => {
             e.target.style.display = "none";
             e.target.parentNode.style.background = tool.color;
-            e.target.parentNode.innerHTML = `<span style="font-size:0.8rem;font-weight:800;color:#fff;line-height:1">${tool.name[0]}</span>`;
+            e.target.parentNode.innerHTML = `<span style="font-size:0.75rem;font-weight:800;color:#fff">${tool.name[0]}</span>`;
           }}
         />
       </div>
       <span
         style={{
-          fontSize: "0.78rem",
-          letterSpacing: "0.05em",
-          color: "var(--white)",
+          fontFamily: DM,
+          fontSize: "var(--fs-sm)",
+          letterSpacing: "0.04em",
+          color: "var(--text)",
           whiteSpace: "nowrap",
-          fontWeight: 400,
         }}
       >
         {tool.name}
@@ -162,33 +159,15 @@ function ToolChip({ tool, index }) {
   );
 }
 
-/* ── Scroll-reveal wrapper ── */
-function RevealOnScroll({ children, delay = 0, direction = "up" }) {
+function Reveal({ children, delay = 0 }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, amount: 0.15 });
-
-  const variants = {
-    hidden: {
-      opacity: 0,
-      y: direction === "up" ? 50 : direction === "down" ? -50 : 0,
-      x: direction === "left" ? 50 : direction === "right" ? -50 : 0,
-      scale: 0.96,
-    },
-    show: {
-      opacity: 1,
-      y: 0,
-      x: 0,
-      scale: 1,
-      transition: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] },
-    },
-  };
-
   return (
     <motion.div
       ref={ref}
-      variants={variants}
-      initial="hidden"
-      animate={inView ? "show" : "hidden"}
+      initial={{ opacity: 0, y: 40, scale: 0.97 }}
+      animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>
@@ -200,13 +179,12 @@ export default function Skills() {
     <section
       id="skills"
       style={{
-        padding: "8rem 3rem",
+        padding: "var(--pad-section)",
         borderTop: "1px solid var(--border)",
         position: "relative",
         overflow: "hidden",
       }}
     >
-      {/* Giant parallax bg word */}
       <Parallax
         speed={0.2}
         style={{
@@ -219,9 +197,9 @@ export default function Skills() {
       >
         <div
           style={{
-            fontFamily: "'Bebas Neue', cursive",
-            fontSize: "clamp(5rem, 16vw, 14rem)",
-            color: "#ffffff03",
+            fontFamily: CV,
+            fontSize: "clamp(5rem,15vw,13rem)",
+            color: "rgba(201,149,42,0.03)",
             lineHeight: 1,
           }}
         >
@@ -231,56 +209,44 @@ export default function Skills() {
 
       <div
         style={{
-          maxWidth: 1100,
+          maxWidth: "var(--max-w)",
           margin: "0 auto",
           position: "relative",
           zIndex: 1,
         }}
       >
-        {/* Header */}
-        <RevealOnScroll delay={0}>
+        <Reveal delay={0}>
           <div className="section-label">Expertise</div>
           <h2
             style={{
-              fontFamily: "'Bebas Neue', cursive",
-              fontSize: "clamp(2.5rem, 5vw, 4rem)",
+              fontFamily: CV,
+              fontSize: "var(--fs-h1)",
               letterSpacing: "0.04em",
-              marginBottom: "4rem",
-            }}
-          >
-            <span style={{ color: "var(--gold)" }}>Tools</span>
-          </h2>
-        </RevealOnScroll>
-
-        {/* Tools with logos */}
-        <RevealOnScroll delay={0.1}>
-          <div
-            style={{
-              fontSize: "0.7rem",
-              letterSpacing: "0.25em",
-              textTransform: "uppercase",
-              color: "var(--muted)",
-              marginBottom: "1.5rem",
-              textAlign: "center",
+              marginBottom: "3.5rem",
+              color: "var(--gold)",
+              fontWeight: 400,
             }}
           >
             Tools I Work With
-          </div>
+          </h2>
+        </Reveal>
+
+        <Reveal delay={0.1}>
           <div
             style={{
               display: "flex",
               flexWrap: "wrap",
-              gap: "0.65rem",
+              gap: "0.6rem",
               justifyContent: "center",
             }}
           >
-            {tools.map((tool, i) => (
-              <Magnetic key={tool.name} strength={0.2}>
-                <ToolChip tool={tool} index={i} />
+            {tools.map((t, i) => (
+              <Magnetic key={t.name} strength={0.2}>
+                <ToolChip tool={t} index={i} />
               </Magnetic>
             ))}
           </div>
-        </RevealOnScroll>
+        </Reveal>
       </div>
     </section>
   );

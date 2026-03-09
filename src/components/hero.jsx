@@ -1,34 +1,14 @@
-import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { CountUp, Magnetic } from "./scrollreveal";
 import ronPhoto from "../assets/Ron-Profile.png";
-const roles = ["Developer.", "Strategist."];
+
+const CV = "'Coolvetica','DM Sans',sans-serif";
+const DM = "'DM Sans',sans-serif";
 
 export default function Hero() {
-  const wordRef = useRef(null);
-  const indexRef = useRef(0);
-
-  useEffect(() => {
-    const el = wordRef.current;
-    if (!el) return;
-    const interval = setInterval(() => {
-      el.style.opacity = "0";
-      el.style.transform = "translateY(10px)";
-      el.style.filter = "blur(6px)";
-      setTimeout(() => {
-        indexRef.current = (indexRef.current + 1) % roles.length;
-        el.textContent = roles[indexRef.current];
-        el.style.opacity = "1";
-        el.style.transform = "translateY(0)";
-        el.style.filter = "blur(0px)";
-      }, 380);
-    }, 2400);
-    return () => clearInterval(interval);
-  }, []);
-
   return (
-    <div id="home" style={{ background: "#0a0a08", color: "#f5f0e8" }}>
-      {/* SECTION 1 — EDITORIAL HERO BANNER */}
+    <div id="home">
+      {/* ══ SECTION 1 — EDITORIAL BANNER ══ */}
       <section
         style={{
           minHeight: "100vh",
@@ -37,154 +17,151 @@ export default function Hero() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          padding: "0",
+          background: "var(--hero-s1-bg, #08080a)",
+          transition: "background 0.4s ease",
         }}
       >
+        {/* Breathing glow */}
+        <motion.div
+          animate={{ opacity: [0.5, 0.85, 0.5], scale: [1, 1.06, 1] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          style={{
+            position: "absolute",
+            inset: 0,
+            pointerEvents: "none",
+            background:
+              "radial-gradient(ellipse 70% 55% at 50% 48%, rgba(201,149,42,0.1), transparent 70%)",
+          }}
+        />
+
+        {/* Edge vignette */}
         <div
           style={{
             position: "absolute",
             inset: 0,
+            pointerEvents: "none",
             background:
-              "linear-gradient(160deg, #111008 0%, #0a0a08 50%, #080806 100%)",
-            zIndex: 0,
+              "radial-gradient(ellipse 120% 100% at 50% 50%, transparent 40%, var(--hero-s1-vignette, rgba(3,3,3,0.8)) 100%)",
           }}
         />
 
+        {/* Gold shimmer line */}
         <motion.div
-          initial={{ opacity: 0, x: 80 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.3, duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+          initial={{ scaleX: 0, opacity: 0 }}
+          animate={{ scaleX: 1, opacity: 1 }}
+          transition={{ delay: 1.0, duration: 2.2, ease: [0.16, 1, 0.3, 1] }}
           style={{
             position: "absolute",
-            right: "-5%",
-            top: "-10%",
-            width: "55%",
-            height: "130%",
-            background:
-              "linear-gradient(135deg, rgba(201,149,42,0.22) 0%, rgba(180,130,30,0.12) 30%, transparent 65%)",
-            transform: "skewX(-12deg)",
+            top: "50%",
+            left: 0,
+            right: 0,
+            height: "1px",
+            transformOrigin: "center",
             pointerEvents: "none",
-            zIndex: 0,
+            background:
+              "linear-gradient(to right, transparent 0%, rgba(201,149,42,0.12) 25%, rgba(201,149,42,0.28) 50%, rgba(201,149,42,0.12) 75%, transparent 100%)",
           }}
         />
 
-        <motion.div
-          initial={{ opacity: 0, x: 60 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.5, duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
+        {/* Grain texture */}
+        <div
           style={{
             position: "absolute",
-            right: "5%",
-            top: "5%",
-            width: "40%",
-            height: "110%",
-            background:
-              "linear-gradient(140deg, rgba(201,149,42,0.15) 0%, rgba(160,110,20,0.08) 40%, transparent 70%)",
-            transform: "skewX(-16deg)",
+            inset: 0,
             pointerEvents: "none",
-            zIndex: 0,
+            opacity: 0.04,
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E")`,
+            backgroundSize: "300px 300px",
           }}
         />
 
-        <motion.div
-          initial={{ opacity: 0, scaleY: 0 }}
-          animate={{ opacity: 1, scaleY: 1 }}
-          transition={{ delay: 0.8, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          style={{
-            position: "absolute",
-            right: "28%",
-            top: 0,
-            width: "2px",
-            height: "100%",
-            background:
-              "linear-gradient(to bottom, transparent, rgba(201,149,42,0.6) 30%, rgba(201,149,42,0.3) 70%, transparent)",
-            transform: "skewX(-12deg)",
-            transformOrigin: "top",
-            pointerEvents: "none",
-            zIndex: 0,
-          }}
-        />
-
-        <motion.div
-          animate={{ opacity: [0.6, 0.9, 0.6] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          style={{
-            position: "absolute",
-            right: "0%",
-            top: "0%",
-            width: "50%",
-            height: "100%",
-            background:
-              "radial-gradient(ellipse at 80% 40%, rgba(201,149,42,0.1) 0%, transparent 60%)",
-            pointerEvents: "none",
-            zIndex: 0,
-          }}
-        />
-
+        {/* Text content */}
         <div
           style={{
             position: "relative",
-            zIndex: 1,
-            padding: "0 5rem",
+            zIndex: 2,
+            padding: "0 clamp(1.5rem,5vw,5rem)",
             maxWidth: 1280,
             margin: "0 auto",
             width: "100%",
             textAlign: "center",
           }}
         >
+          {/* Portfolio label */}
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+            style={{
+              fontFamily: DM,
+              fontSize: "var(--fs-xs)",
+              letterSpacing: "0.4em",
+              textTransform: "uppercase",
+              color: "var(--hero-s1-muted, rgba(245,240,232,0.22))",
+              marginBottom: "2rem",
+            }}
+          >
+          </motion.div>
+
+          {/* SIMPLICITY */}
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.45, duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
           >
             <h1
               style={{
-                fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: "clamp(5rem, 16vw, 15rem)",
+                fontFamily: CV,
+                fontSize: "var(--fs-hero)",
                 lineHeight: 0.9,
                 letterSpacing: "0.01em",
-                color: "#f5f0e8",
-                margin: "0 0 1.2rem 0",
+                color: "var(--hero-s1-text, #f5f0e8)",
+                margin: "0 0 1.1rem",
+                fontWeight: 400,
+                transition: "color 0.4s ease",
               }}
             >
               Simplicity.
             </h1>
           </motion.div>
 
+          {/* Tagline */}
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.75, duration: 0.9 }}
+            transition={{ delay: 0.8, duration: 0.9 }}
             style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: "clamp(0.8rem, 1.5vw, 1.1rem)",
-              letterSpacing: "0.38em",
+              fontFamily: DM,
+              fontSize: "clamp(0.75rem,1.4vw,1rem)",
+              letterSpacing: "0.35em",
               textTransform: "uppercase",
-              color: "rgba(245,240,232,0.45)",
+              color: "var(--hero-s1-sub, rgba(245,240,232,0.4))",
               margin: 0,
+              transition: "color 0.4s ease",
             }}
           >
             Pure.&nbsp;&nbsp;Precise.&nbsp;&nbsp;Purposeful.
           </motion.p>
         </div>
 
+        {/* Scroll indicator */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.6 }}
           style={{
             position: "absolute",
-            bottom: "2.5rem",
-            left: "5rem",
+            bottom: "2.2rem",
+            left: "clamp(1.5rem,5vw,5rem)",
             display: "flex",
             alignItems: "center",
-            gap: "0.9rem",
-            fontSize: "0.55rem",
-            letterSpacing: "0.32em",
+            gap: "0.8rem",
+            fontSize: "var(--fs-xs)",
+            letterSpacing: "0.3em",
             textTransform: "uppercase",
-            color: "rgba(255,255,255,0.2)",
-            fontFamily: "'DM Sans', sans-serif",
-            zIndex: 1,
+            color: "var(--hero-s1-muted, rgba(255,255,255,0.18))",
+            fontFamily: DM,
+            zIndex: 2,
           }}
         >
           <motion.div
@@ -192,48 +169,86 @@ export default function Hero() {
             transition={{ duration: 1.7, repeat: Infinity, ease: "easeInOut" }}
             style={{
               width: 1,
-              height: 34,
+              height: 30,
               background:
                 "linear-gradient(to bottom, var(--gold), transparent)",
             }}
           />
           Scroll
         </motion.div>
+
+        {/* Coordinates */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.8 }}
+          style={{
+            position: "absolute",
+            bottom: "2.2rem",
+            right: "clamp(1.5rem,5vw,5rem)",
+            fontSize: "var(--fs-xs)",
+            letterSpacing: "0.18em",
+            color: "var(--hero-s1-muted, rgba(245,240,232,0.12))",
+            fontFamily: DM,
+            zIndex: 2,
+          }}
+        >
+        </motion.div>
       </section>
 
-      {/* SECTION 2 — "I'm Ron Medina" INTRO */}
+      {/* ══ SECTION 2 — INTRO ══ */}
       <section
         style={{
-          padding: "7rem 5rem",
-          background: "#f5f0e8",
+          padding: "clamp(4rem,8vw,7rem) clamp(1.5rem,5vw,5rem)",
+          background: "var(--bg2)",
           position: "relative",
           overflow: "hidden",
+          borderTop: "1px solid var(--border)",
         }}
       >
+        {/* Watermark */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: "-2rem",
+            right: "-1rem",
+            fontFamily: CV,
+            fontSize: "clamp(7rem,20vw,18rem)",
+            color: "rgba(201,149,42,0.04)",
+            lineHeight: 1,
+            userSelect: "none",
+            pointerEvents: "none",
+            letterSpacing: "0.02em",
+          }}
+        >
+          RM
+        </div>
+
         <div
           className="hero-intro"
           style={{
-            maxWidth: 1100,
+            maxWidth: "var(--max-w)",
             margin: "0 auto",
             display: "grid",
             gridTemplateColumns: "auto 1fr",
             alignItems: "center",
-            gap: "5rem",
+            gap: "clamp(2rem,5vw,5rem)",
           }}
         >
+          {/* Photo */}
           <motion.div
             className="hero-ron"
-            initial={{ opacity: 0, scale: 0.85 }}
+            initial={{ opacity: 0, scale: 0.88 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
             style={{
               position: "relative",
-              width: "clamp(260px, 28vw, 380px)",
-              height: "clamp(260px, 28vw, 380px)",
+              width: "clamp(220px,26vw,340px)",
+              height: "clamp(220px,26vw,340px)",
               flexShrink: 0,
               overflow: "hidden",
-              borderRadius: "14px",
+              borderRadius: "12px",
             }}
           >
             <div
@@ -243,7 +258,7 @@ export default function Hero() {
                 borderRadius: "12px",
                 background:
                   "radial-gradient(circle at 40% 35%, #e8a820, #c47d10 60%, #8a5a08)",
-                boxShadow: "0 30px 80px rgba(201,149,42,0.45)",
+                boxShadow: "0 24px 70px rgba(201,149,42,0.4)",
               }}
             />
             <img
@@ -261,65 +276,75 @@ export default function Hero() {
             />
           </motion.div>
 
+          {/* Text */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
+            initial={{ opacity: 0, x: 28 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.9, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
           >
+            <div
+              style={{
+                fontFamily: DM,
+                fontSize: "var(--fs-xs)",
+                letterSpacing: "0.28em",
+                textTransform: "uppercase",
+                color: "var(--text-sub)",
+                marginBottom: "0.7rem",
+              }}
+            >
+              — Based in Pampanga, PH
+            </div>
             <h2
               style={{
-                fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: "clamp(2.5rem, 5vw, 4.5rem)",
+                fontFamily: CV,
+                fontSize: "var(--fs-h1)",
                 letterSpacing: "0.04em",
-                color: "#0a0a08",
-                margin: "0 0 1.2rem 0",
-                lineHeight: 1,
+                color: "var(--text)",
+                margin: "0 0 1.1rem",
+                lineHeight: 1.05,
+                fontWeight: 400,
               }}
             >
               I'm Ron Medina
             </h2>
             <p
               style={{
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: "clamp(0.85rem, 1.3vw, 1rem)",
-                color: "rgba(10,10,8,0.55)",
+                fontFamily: DM,
+                fontSize: "var(--fs-body)",
+                color: "var(--text-sub)",
                 lineHeight: 1.85,
-                maxWidth: 500,
-                margin: "0 0 2.5rem 0",
+                maxWidth: 480,
+                margin: "0 0 2.2rem",
               }}
             >
-              I'm a creative and technically skilled professional with a passion
-              for blending design, technology, and strategy. I bring together
-              artistic vision and analytical thinking to create purposeful,
-              efficient, and visually engaging work. I believe simplicity and
-              clarity drive the best results — whether in design, systems, or
-              collaboration.
+              A multi-disciplinary creative — crafting purposeful brand
+              identities, clean digital experiences, and the systems that run
+              them. 10+ years turning ideas into work that matters.
             </p>
-
-            <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: "0.9rem", flexWrap: "wrap" }}>
               <Magnetic strength={0.2}>
                 <motion.a
                   href="#projects"
                   data-cursor-hover
                   whileHover={{
                     scale: 1.03,
-                    boxShadow: "0 0 40px rgba(201,149,42,0.3)",
+                    boxShadow: "0 0 36px rgba(201,149,42,0.3)",
                   }}
                   whileTap={{ scale: 0.97 }}
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
-                    gap: "0.5rem",
+                    gap: "0.4rem",
                     padding: "0.85rem 2rem",
-                    background: "#c9952a",
+                    background: "var(--gold)",
                     color: "#0a0a08",
                     fontWeight: 700,
-                    fontSize: "0.7rem",
+                    fontSize: "var(--fs-xs)",
                     letterSpacing: "0.2em",
                     textTransform: "uppercase",
                     borderRadius: "2px",
-                    fontFamily: "'DM Sans', sans-serif",
+                    fontFamily: DM,
                     transition: "box-shadow 0.3s",
                   }}
                 >
@@ -330,18 +355,21 @@ export default function Hero() {
                 <motion.a
                   href="#contact"
                   data-cursor-hover
-                  whileHover={{ borderColor: "#0a0a08", color: "#0a0a08" }}
+                  whileHover={{
+                    borderColor: "var(--text)",
+                    color: "var(--text)",
+                  }}
                   style={{
                     display: "inline-block",
                     padding: "0.85rem 2rem",
-                    border: "1px solid rgba(10,10,8,0.2)",
-                    color: "rgba(10,10,8,0.45)",
-                    fontSize: "0.7rem",
+                    border: "1px solid var(--border)",
+                    color: "var(--text-sub)",
+                    fontSize: "var(--fs-xs)",
                     letterSpacing: "0.2em",
                     textTransform: "uppercase",
                     borderRadius: "2px",
                     transition: "all 0.3s",
-                    fontFamily: "'DM Sans', sans-serif",
+                    fontFamily: DM,
                   }}
                 >
                   Get In Touch
@@ -351,45 +379,48 @@ export default function Hero() {
           </motion.div>
         </div>
 
+        {/* Stats */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          className="hero-stats"
+          initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.8, delay: 0.3 }}
           style={{
-            maxWidth: 1100,
-            margin: "5rem auto 0",
-            paddingTop: "3rem",
-            borderTop: "1px solid rgba(10,10,8,0.1)",
+            maxWidth: "var(--max-w)",
+            margin: "4.5rem auto 0",
+            paddingTop: "2.5rem",
+            borderTop: "1px solid var(--border)",
             display: "flex",
             gap: "4rem",
             flexWrap: "wrap",
           }}
         >
           {[
-            { num: "10", suffix: "+", label: "Years Experience" },
-            { num: "50", suffix: "+", label: "Projects Completed" },
-            { num: "3", suffix: "", label: "Core Roles" },
-          ].map(({ num, suffix, label }) => (
+            { num: "10", suf: "+", label: "Years Experience" },
+            { num: "50", suf: "+", label: "Projects Completed" },
+            { num: "3", suf: "", label: "Core Roles" },
+          ].map(({ num, suf, label }) => (
             <div key={label}>
               <div
                 style={{
-                  fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "3.5rem",
-                  color: "#c9952a",
+                  fontFamily: CV,
+                  fontSize: "clamp(2.5rem,5vw,3.8rem)",
+                  color: "var(--gold)",
                   lineHeight: 1,
                   letterSpacing: "0.03em",
+                  fontWeight: 400,
                 }}
               >
-                <CountUp value={num} suffix={suffix} delay={0.5} />
+                <CountUp value={num} suffix={suf} delay={0.5} />
               </div>
               <div
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: "0.62rem",
+                  fontFamily: DM,
+                  fontSize: "var(--fs-xs)",
                   letterSpacing: "0.2em",
                   textTransform: "uppercase",
-                  color: "rgba(10,10,8,0.4)",
+                  color: "var(--text-sub)",
                   marginTop: "0.3rem",
                 }}
               >

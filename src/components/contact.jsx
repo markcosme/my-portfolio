@@ -1,6 +1,9 @@
 import { motion } from "framer-motion";
 import { ScrollReveal, ScrollStagger, staggerItem } from "./scrollreveal";
 
+const DM = "'DM Sans',sans-serif";
+const CV = "'Coolvetica','DM Sans',sans-serif";
+
 const contacts = [
   {
     label: "Phone",
@@ -22,21 +25,23 @@ export default function Contact() {
     <section
       id="contact"
       style={{
-        padding: "8rem 3rem 6rem",
+        padding: "var(--pad-section)",
         borderTop: "1px solid var(--border)",
         position: "relative",
         overflow: "hidden",
       }}
     >
+      {/* Glow */}
       <div
         style={{
           position: "absolute",
           top: "50%",
           left: "50%",
           transform: "translate(-50%,-50%)",
-          width: 600,
-          height: 600,
-          background: "radial-gradient(circle, #c9952a0d, transparent 65%)",
+          width: 560,
+          height: 560,
+          background:
+            "radial-gradient(circle, rgba(201,149,42,0.06), transparent 65%)",
           borderRadius: "50%",
           filter: "blur(40px)",
           pointerEvents: "none",
@@ -45,7 +50,7 @@ export default function Contact() {
 
       <div
         style={{
-          maxWidth: 900,
+          maxWidth: 860,
           margin: "0 auto",
           position: "relative",
           zIndex: 1,
@@ -53,13 +58,7 @@ export default function Contact() {
         }}
       >
         <ScrollReveal direction="up" delay={0}>
-          <div
-            className="section-label"
-            style={{
-              justifyContent: "center",
-              fontFamily: "'DM Sans', sans-serif",
-            }}
-          >
+          <div className="section-label" style={{ justifyContent: "center" }}>
             Get In Touch
           </div>
         </ScrollReveal>
@@ -67,11 +66,13 @@ export default function Contact() {
         <ScrollReveal direction="scale" delay={0.1}>
           <h2
             style={{
-              fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: "clamp(3rem, 8vw, 7rem)",
+              fontFamily: CV,
+              fontSize: "clamp(2.8rem,7vw,6rem)",
               letterSpacing: "0.04em",
               lineHeight: 1,
-              marginBottom: "1.5rem",
+              marginBottom: "1.2rem",
+              fontWeight: 400,
+              color: "var(--text)",
             }}
           >
             Let's Work
@@ -80,12 +81,12 @@ export default function Contact() {
           </h2>
           <p
             style={{
-              fontFamily: "'DM Sans', sans-serif",
-              color: "var(--muted)",
-              maxWidth: 500,
-              margin: "0 auto 4rem",
-              lineHeight: 1.8,
-              fontSize: "0.95rem",
+              fontFamily: DM,
+              fontSize: "var(--fs-body)",
+              color: "var(--text-sub)",
+              maxWidth: 460,
+              margin: "0 auto 3.5rem",
+              lineHeight: 1.85,
             }}
           >
             Big or small projects — two things I always promise: designs you'll
@@ -95,13 +96,14 @@ export default function Contact() {
 
         <ScrollStagger
           delay={0.15}
-          stagger={0.12}
+          stagger={0.1}
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-            gap: "1.2rem",
-            marginBottom: "4rem",
+            gridTemplateColumns: "repeat(auto-fit, minmax(200px,1fr))",
+            gap: "1.1rem",
+            marginBottom: "3.5rem",
           }}
+          className="contact-grid"
         >
           {contacts.map((c) => (
             <motion.a
@@ -109,16 +111,16 @@ export default function Contact() {
               href={c.href || undefined}
               variants={staggerItem}
               whileHover={{
-                y: -6,
+                y: -5,
                 borderColor: "var(--gold)",
-                boxShadow: "0 12px 40px rgba(201,149,42,0.12)",
+                boxShadow: "0 12px 36px rgba(201,149,42,0.12)",
               }}
               transition={{ duration: 0.25 }}
               data-cursor-hover
               style={{
                 display: "block",
-                padding: "2rem 1.5rem",
-                background: "var(--card-bg)",
+                padding: "1.8rem 1.4rem",
+                background: "var(--surface)",
                 border: "1px solid var(--border)",
                 borderRadius: "6px",
                 textDecoration: "none",
@@ -126,26 +128,26 @@ export default function Contact() {
                   "border-color 0.3s, box-shadow 0.3s, transform 0.3s",
               }}
             >
-              <div style={{ fontSize: "1.6rem", marginBottom: "0.8rem" }}>
+              <div style={{ fontSize: "1.5rem", marginBottom: "0.7rem" }}>
                 {c.icon}
               </div>
               <div
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: "0.65rem",
+                  fontFamily: DM,
+                  fontSize: "var(--fs-xs)",
                   letterSpacing: "0.2em",
                   textTransform: "uppercase",
                   color: "var(--gold)",
-                  marginBottom: "0.4rem",
+                  marginBottom: "0.35rem",
                 }}
               >
                 {c.label}
               </div>
               <div
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: "0.85rem",
-                  color: "var(--white)",
+                  fontFamily: DM,
+                  fontSize: "var(--fs-sm)",
+                  color: "var(--text)",
                   wordBreak: "break-all",
                 }}
               >
@@ -157,8 +159,9 @@ export default function Contact() {
 
         <ScrollReveal direction="up" delay={0.4}>
           <div
+            className="footer-row"
             style={{
-              marginTop: "6rem",
+              marginTop: "5rem",
               paddingTop: "2rem",
               borderTop: "1px solid var(--border)",
               display: "flex",
@@ -170,28 +173,29 @@ export default function Contact() {
           >
             <div
               style={{
-                fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: "1.5rem",
-                letterSpacing: "0.1em",
+                fontFamily: CV,
+                fontSize: "var(--fs-h3)",
+                letterSpacing: "0.08em",
                 color: "var(--gold)",
+                fontWeight: 400,
               }}
             >
               Ron Medina
             </div>
             <div
               style={{
-                fontFamily: "'DM Sans', sans-serif",
-                color: "var(--muted)",
-                fontSize: "0.75rem",
+                fontFamily: DM,
+                color: "var(--text-sub)",
+                fontSize: "var(--fs-xs)",
               }}
             >
               © 2026 Ron Medina · All Rights Reserved
             </div>
             <div
               style={{
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: "0.75rem",
-                color: "var(--muted)",
+                fontFamily: DM,
+                fontSize: "var(--fs-xs)",
+                color: "var(--text-sub)",
                 letterSpacing: "0.05em",
               }}
             >
