@@ -121,7 +121,7 @@ export default function Hero() {
                 transition: "color 0.4s ease",
               }}
             >
-              Simplicity.
+              Simplicity
             </h1>
           </motion.div>
 
@@ -140,7 +140,7 @@ export default function Hero() {
               transition: "color 0.4s ease",
             }}
           >
-            Pure.&nbsp;&nbsp;Precise.&nbsp;&nbsp;Purposeful.
+            Pure. &nbsp;&nbsp; Precise.&nbsp;&nbsp; Purposeful.
           </motion.p>
         </div>
 
