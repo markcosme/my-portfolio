@@ -116,7 +116,7 @@ export default function Hero() {
                 lineHeight: 0.9,
                 letterSpacing: "0.01em",
                 color: "var(--hero-s1-text, #f5f0e8)",
-                margin: "0 0 1.1rem",
+                margin: "0 0 2.8rem",
                 fontWeight: 400,
                 transition: "color 0.4s ease",
               }}
@@ -140,7 +140,7 @@ export default function Hero() {
               transition: "color 0.4s ease",
             }}
           >
-            Pure. &nbsp;&nbsp; Precise.&nbsp;&nbsp; Purposeful.
+            Pure&nbsp;&nbsp;&nbsp;&nbsp;Precise&nbsp;&nbsp;&nbsp;&nbsp;Purposeful
           </motion.p>
         </div>
 
