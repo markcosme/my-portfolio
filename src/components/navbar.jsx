@@ -22,7 +22,16 @@ export default function Navbar({ theme, toggleTheme, onAdminOpen }) {
     };
   }, [menuOpen]);
 
-  const navBg = scrolled || menuOpen ? "rgba(12,11,9,0.97)" : "transparent";
+  /* ── Navbar bg adapts to light/dark theme ── */
+  const navBg =
+    scrolled || menuOpen
+      ? theme === "dark"
+        ? "rgba(10,10,8,0.97)"
+        : "rgba(250,250,248,0.97)"
+      : "transparent";
+
+  const mobileMenuBg =
+    theme === "dark" ? "rgba(10,10,8,0.98)" : "rgba(250,250,248,0.98)";
 
   return (
     <>
@@ -200,7 +209,7 @@ export default function Navbar({ theme, toggleTheme, onAdminOpen }) {
               position: "fixed",
               inset: 0,
               zIndex: 999,
-              background: "rgba(10,10,8,0.98)",
+              background: mobileMenuBg,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
