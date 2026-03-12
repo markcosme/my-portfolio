@@ -21,7 +21,7 @@ export default function Navbar({ theme, toggleTheme }) {
     };
   }, [menuOpen]);
 
-  const navBg = scrolled || menuOpen ? "rgba(12,11,9,0.97)" : "transparent";
+  const navBg = scrolled || menuOpen ? "var(--bg)" : "transparent";
 
   return (
     <>
@@ -59,7 +59,7 @@ export default function Navbar({ theme, toggleTheme }) {
             zIndex: 1001,
           }}
         >
-          RM.
+          RM
         </motion.div>
 
         {/* Desktop nav */}
@@ -77,8 +77,8 @@ export default function Navbar({ theme, toggleTheme }) {
               <Link
                 to={l}
                 smooth
-                duration={700}
-                offset={-70}
+                duration={300}
+                offset={-80}
                 data-cursor-hover
                 style={{
                   fontFamily: "'DM Sans',sans-serif",

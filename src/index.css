@@ -63,11 +63,11 @@
   --gold-dim: rgba(184, 130, 26, 0.1);
   --hero-intro-bg: #0c0b09;
   --hero-intro-text: #f5f0e8;
-  --hero-s1-bg: #1a1612;
-  --hero-s1-text: #f5f0e8;
-  --hero-s1-sub: rgba(245, 240, 232, 0.45);
-  --hero-s1-muted: rgba(245, 240, 232, 0.22);
-  --hero-s1-vignette: rgba(8, 6, 4, 0.75);
+ --hero-s1-bg: #f0ebe2;
+--hero-s1-text: #0c0b09;
+--hero-s1-sub: rgba(12, 11, 9, 0.45);
+--hero-s1-muted: rgba(12, 11, 9, 0.22);
+--hero-s1-vignette: rgba(240, 235, 226, 0.7);
 }
 
 html {
