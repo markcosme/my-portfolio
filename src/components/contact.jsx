@@ -11,20 +11,34 @@ const contacts = [
     value: "+63 951 977 6912",
     icon: "📞",
     href: "tel:+639519776912",
+    external: false,
   },
   {
     label: "Email",
     value: "ronaldramirezmedina@gmail.com",
     icon: "✉",
     href: "mailto:ronaldramirezmedina@gmail.com",
+    external: false,
   },
-  { label: "Location", value: "Porac, Pampanga, PH", icon: "📍", href: null },
+  {
+    label: "LinkedIn",
+    value: "linkedin.com/in/ronmedina777",
+    icon: "💼",
+    href: "https://www.linkedin.com/in/ronmedina777/",
+    external: true,
+  },
+  {
+    label: "Location",
+    value: "Porac, Pampanga, PH",
+    icon: "📍",
+    href: null,
+    external: false,
+  },
 ];
 
 export default function Contact({ onAdminOpen }) {
   const [clicks, setClicks] = useState(0);
 
-  /* Triple-click on copyright text reveals admin */
   const handleCopyClick = () => {
     const next = clicks + 1;
     setClicks(next);
@@ -122,6 +136,8 @@ export default function Contact({ onAdminOpen }) {
             <motion.a
               key={c.label}
               href={c.href || undefined}
+              target={c.external ? "_blank" : undefined}
+              rel={c.external ? "noopener noreferrer" : undefined}
               variants={staggerItem}
               whileHover={{
                 y: -5,
@@ -137,6 +153,7 @@ export default function Contact({ onAdminOpen }) {
                 border: "1px solid var(--border)",
                 borderRadius: "6px",
                 textDecoration: "none",
+                cursor: c.href ? "pointer" : "default",
                 transition:
                   "border-color 0.3s, box-shadow 0.3s, transform 0.3s",
               }}
@@ -165,6 +182,17 @@ export default function Contact({ onAdminOpen }) {
                 }}
               >
                 {c.value}
+                {c.external && (
+                  <span
+                    style={{
+                      marginLeft: "0.3em",
+                      fontSize: "0.7em",
+                      opacity: 0.5,
+                    }}
+                  >
+                    ↗
+                  </span>
+                )}
               </div>
             </motion.a>
           ))}
@@ -196,10 +224,8 @@ export default function Contact({ onAdminOpen }) {
               Ron Medina
             </div>
 
-            {/* Triple-click this to open Admin Panel */}
             <div
               onClick={handleCopyClick}
-              title=""
               style={{
                 fontFamily: DM,
                 color: "var(--text-sub)",
