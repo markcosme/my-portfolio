@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { ScrollReveal, ScrollStagger, staggerItem } from "./scrollreveal";
 
@@ -20,7 +21,19 @@ const contacts = [
   { label: "Location", value: "Porac, Pampanga, PH", icon: "📍", href: null },
 ];
 
-export default function Contact() {
+export default function Contact({ onAdminOpen }) {
+  const [clicks, setClicks] = useState(0);
+
+  /* Triple-click on copyright text reveals admin */
+  const handleCopyClick = () => {
+    const next = clicks + 1;
+    setClicks(next);
+    if (next >= 3) {
+      setClicks(0);
+      onAdminOpen?.();
+    }
+  };
+
   return (
     <section
       id="contact"
@@ -182,15 +195,35 @@ export default function Contact() {
             >
               Ron Medina
             </div>
+
+            {/* Triple-click this to open Admin Panel */}
             <div
+              onClick={handleCopyClick}
+              title=""
               style={{
                 fontFamily: DM,
                 color: "var(--text-sub)",
                 fontSize: "var(--fs-xs)",
+                cursor: "default",
+                userSelect: "none",
+                transition: "color 0.2s",
               }}
             >
               © 2026 Ron Medina · All Rights Reserved
+              {clicks > 0 && (
+                <span
+                  style={{
+                    marginLeft: "0.5em",
+                    fontSize: "0.55rem",
+                    color: "var(--gold)",
+                    opacity: 0.5,
+                  }}
+                >
+                  {"·".repeat(clicks)}
+                </span>
+              )}
             </div>
+
             <div
               style={{
                 fontFamily: DM,

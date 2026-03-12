@@ -4,9 +4,10 @@ import { Link } from "react-scroll";
 
 const links = ["home", "about", "projects", "skills", "contact"];
 
-export default function Navbar({ theme, toggleTheme }) {
+export default function Navbar({ theme, toggleTheme, onAdminOpen }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [logoClicks, setLogoClicks] = useState(0);
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 40);
@@ -20,6 +21,16 @@ export default function Navbar({ theme, toggleTheme }) {
       document.body.style.overflow = "";
     };
   }, [menuOpen]);
+
+  const handleLogoClick = () => {
+    const next = logoClicks + 1;
+    if (next >= 3) {
+      onAdminOpen();
+      setLogoClicks(0);
+    } else {
+      setLogoClicks(next);
+    }
+  };
 
   const navBg = scrolled || menuOpen ? "var(--bg)" : "transparent";
 
@@ -50,6 +61,7 @@ export default function Navbar({ theme, toggleTheme }) {
         {/* Logo */}
         <motion.div
           whileHover={{ scale: 1.04 }}
+          onClick={handleLogoClick}
           style={{
             fontFamily: "'Coolvetica','DM Sans',sans-serif",
             fontSize: "1.65rem",
@@ -57,6 +69,8 @@ export default function Navbar({ theme, toggleTheme }) {
             color: "var(--gold)",
             fontWeight: 400,
             zIndex: 1001,
+            cursor: "pointer",
+            userSelect: "none",
           }}
         >
           RM

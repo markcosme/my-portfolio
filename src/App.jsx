@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState, useCallback } from "react";
+import { AnimatePresence } from "framer-motion";
 import Navbar from "./components/navbar";
 import Hero from "./components/hero";
 import About from "./components/about";
 import Projects from "./components/projects";
 import Skills from "./components/skills";
 import Contact from "./components/contact";
+import AdminPanel from "./components/AdminPanel";
 import "./index.css";
 
 export default function App() {
@@ -20,6 +22,9 @@ export default function App() {
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", "dark");
   }, []);
+
+  /* ── admin panel ── */
+  const [adminOpen, setAdminOpen] = useState(false);
 
   /* ── canvas cursor ── */
   const canvasRef = useRef(null);
@@ -161,14 +166,22 @@ export default function App() {
           zIndex: 999999,
         }}
       />
-      <Navbar theme={theme} toggleTheme={toggleTheme} />
+      <Navbar
+        theme={theme}
+        toggleTheme={toggleTheme}
+        onAdminOpen={() => setAdminOpen(true)}
+      />
       <main>
         <Hero />
         <About />
         <Projects />
         <Skills />
-        <Contact />
+        <Contact onAdminOpen={() => setAdminOpen(true)} />
       </main>
+
+      <AnimatePresence>
+        {adminOpen && <AdminPanel onClose={() => setAdminOpen(false)} />}
+      </AnimatePresence>
     </>
   );
 }

@@ -39,17 +39,17 @@ const tools = [
   {
     name: "Lightroom",
     color: "#31A8FF",
-    icon: "https://cdn.simpleicons.org/adobelightroom/31A8FF",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/lightroom/lightroom-original.svg",
   },
   {
     name: "Audition",
     color: "#00E4BB",
-    icon: "https://cdn.simpleicons.org/adobeaudition/00E4BB",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/audition/audition-original.svg",
   },
   {
     name: "Acrobat",
     color: "#EC1C24",
-    icon: "https://cdn.simpleicons.org/adobeacrobatreader/EC1C24",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/acrobatreader/acrobatreader-original.svg",
   },
   {
     name: "Figma",
