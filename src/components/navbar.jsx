@@ -22,7 +22,6 @@ export default function Navbar({ theme, toggleTheme, onAdminOpen }) {
     };
   }, [menuOpen]);
 
-  /* ── Navbar bg adapts to light/dark theme ── */
   const navBg =
     scrolled || menuOpen
       ? theme === "dark"
@@ -99,8 +98,8 @@ export default function Navbar({ theme, toggleTheme, onAdminOpen }) {
             >
               <Link
                 to={l}
-                smooth
-                duration={700}
+                smooth={true}
+                duration={350}
                 offset={-70}
                 data-cursor-hover
                 style={{
@@ -110,6 +109,7 @@ export default function Navbar({ theme, toggleTheme, onAdminOpen }) {
                   textTransform: "uppercase",
                   color: "var(--text-sub)",
                   transition: "color 0.3s",
+                  cursor: "pointer",
                 }}
                 onMouseEnter={(e) => (e.target.style.color = "var(--gold)")}
                 onMouseLeave={(e) => (e.target.style.color = "var(--text-sub)")}
@@ -227,8 +227,8 @@ export default function Navbar({ theme, toggleTheme, onAdminOpen }) {
               >
                 <Link
                   to={l}
-                  smooth
-                  duration={700}
+                  smooth={true}
+                  duration={350}
                   offset={-70}
                   onClick={() => setMenuOpen(false)}
                   style={{
@@ -241,6 +241,7 @@ export default function Navbar({ theme, toggleTheme, onAdminOpen }) {
                     textAlign: "center",
                     padding: "0.2rem 0",
                     transition: "color 0.3s",
+                    cursor: "pointer",
                   }}
                   onMouseEnter={(e) => (e.target.style.color = "var(--gold)")}
                   onMouseLeave={(e) =>

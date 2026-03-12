@@ -5,9 +5,9 @@ import { ScrollReveal } from "./scrollreveal";
 const CV = "'Coolvetica','DM Sans',sans-serif";
 const DM = "'DM Sans',sans-serif";
 const EXP_KEY = "ron-portfolio-experience";
+const GOLD = "var(--gold)";
+const GOLD_HEX = "#c9952a";
 
-/* Default data — matches AdminPanel DEFAULT_JOBS schema:
-   { id, role, company, type, period, duration, location, desc, skills[], current } */
 const DEFAULT_JOBS = [
   {
     id: "exp1",
@@ -115,21 +115,11 @@ function loadExperiences() {
   }
 }
 
-const typeColor = {
-  "Full-time": "#1a6fa8",
-  Freelance: "#c9952a",
-  "Part-time": "#2a7a4e",
-  Contract: "#6c5aee",
-  Internship: "#d4420a",
-  "Self-employed": "#a84a1a",
-};
-
 /* ── Single card ── */
 function ExpCard({ job, index, isLast }) {
   const [expanded, setExpanded] = useState(false);
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, amount: 0.15 });
-  const color = typeColor[job.type] || "#c9952a";
 
   return (
     <motion.div
@@ -170,9 +160,9 @@ function ExpCard({ job, index, isLast }) {
             borderRadius: "50%",
             flexShrink: 0,
             marginTop: "0.38rem",
-            background: job.current ? color : "var(--surface)",
-            border: `2px solid ${color}`,
-            boxShadow: job.current ? `0 0 16px ${color}aa` : "none",
+            background: job.current ? GOLD : "var(--surface)",
+            border: `2px solid ${GOLD}`,
+            boxShadow: job.current ? `0 0 16px ${GOLD_HEX}aa` : "none",
             position: "relative",
             zIndex: 1,
           }}
@@ -241,7 +231,7 @@ function ExpCard({ job, index, isLast }) {
                       fontSize: "0.55rem",
                       letterSpacing: "0.16em",
                       textTransform: "uppercase",
-                      background: "var(--gold)",
+                      background: GOLD,
                       color: "#0a0a08",
                       padding: "0.15rem 0.6rem",
                       borderRadius: "99px",
@@ -256,7 +246,7 @@ function ExpCard({ job, index, isLast }) {
                 style={{
                   fontFamily: DM,
                   fontSize: "0.82rem",
-                  color: color,
+                  color: GOLD,
                   fontWeight: 600,
                   marginTop: "0.2rem",
                 }}
@@ -274,7 +264,7 @@ function ExpCard({ job, index, isLast }) {
                   fontFamily: DM,
                   fontSize: "0.7rem",
                   letterSpacing: "0.08em",
-                  color: job.current ? color : "var(--text-sub)",
+                  color: job.current ? GOLD : "var(--text-sub)",
                   fontWeight: job.current ? 700 : 400,
                 }}
               >
@@ -304,7 +294,7 @@ function ExpCard({ job, index, isLast }) {
               fontSize: "0.62rem",
               letterSpacing: "0.14em",
               textTransform: "uppercase",
-              color: color,
+              color: GOLD,
               opacity: 0.8,
             }}
           >
@@ -326,7 +316,7 @@ function ExpCard({ job, index, isLast }) {
               <div
                 style={{
                   paddingTop: "0.9rem",
-                  borderTop: `1px solid ${color}22`,
+                  borderTop: `1px solid ${GOLD_HEX}22`,
                   marginTop: "0.5rem",
                 }}
               >
@@ -352,9 +342,9 @@ function ExpCard({ job, index, isLast }) {
                           fontFamily: DM,
                           fontSize: "0.62rem",
                           letterSpacing: "0.08em",
-                          color: color,
-                          background: color + "12",
-                          border: `1px solid ${color}30`,
+                          color: GOLD,
+                          background: `${GOLD_HEX}12`,
+                          border: `1px solid ${GOLD_HEX}30`,
                           padding: "0.2rem 0.65rem",
                           borderRadius: "2px",
                         }}
@@ -377,7 +367,6 @@ function ExpCard({ job, index, isLast }) {
 export default function Experience() {
   const [jobs, setJobs] = useState(() => loadExperiences());
 
-  /* live sync when AdminPanel saves */
   useEffect(() => {
     const sync = () => setJobs(loadExperiences());
     window.addEventListener("storage", sync);
@@ -461,7 +450,7 @@ export default function Experience() {
                   style={{
                     fontFamily: CV,
                     fontSize: "1.6rem",
-                    color: "var(--gold)",
+                    color: GOLD,
                     lineHeight: 1,
                   }}
                 >
@@ -488,7 +477,7 @@ export default function Experience() {
                   style={{
                     fontFamily: CV,
                     fontSize: "1.6rem",
-                    color: "var(--gold)",
+                    color: GOLD,
                     lineHeight: 1,
                   }}
                 >
