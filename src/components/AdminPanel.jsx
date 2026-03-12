@@ -7,9 +7,130 @@ const DM = "'DM Sans',sans-serif";
 const CLOUD = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
 const APIKEY = process.env.REACT_APP_CLOUDINARY_API_KEY;
 const SECRET = process.env.REACT_APP_CLOUDINARY_API_SECRET;
+const PRESET =
+  process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET || "ron_portfolio_unsigned";
 const FOLDER = "ron-portfolio";
 
-/* ── sha1 via SubtleCrypto ── */
+if (!CLOUD) console.warn("⚠ REACT_APP_CLOUDINARY_CLOUD_NAME is not set");
+if (!APIKEY) console.warn("⚠ REACT_APP_CLOUDINARY_API_KEY is not set");
+if (!SECRET) console.warn("⚠ REACT_APP_CLOUDINARY_API_SECRET is not set");
+if (!PRESET) console.warn("⚠ REACT_APP_CLOUDINARY_UPLOAD_PRESET is not set");
+
+/* ══════════════════════════════════════════
+   EXPERIENCE STORAGE KEY + DEFAULTS
+══════════════════════════════════════════ */
+const EXP_KEY = "ron-portfolio-experience";
+
+const DEFAULT_JOBS = [
+  {
+    id: "exp1",
+    role: "Senior Graphic Designer",
+    company: "Skills Unlimited Digital Printing Services",
+    type: "Freelance",
+    period: "Dec 2025 – Present",
+    duration: "4 mos",
+    location: "Philippines · Remote",
+    desc: "Led end-to-end design production for large- and small-format digital printing projects, including banners, stickers, DTF, sublimation, signage, packaging, and marketing collaterals. Prepared press-ready files with accurate color profiles, bleed, trapping, and imposition while managing pre-press workflows to ensure production efficiency and minimal material waste. Coordinated with production teams and clients to deliver on-time, production-feasible designs, supervised print quality control to maintain high standards, and mentored junior designers on workflow and print best practices.",
+    skills: [
+      "Corporate Branding",
+      "Branding & Identity",
+      "Print Production",
+      "Pre-press",
+      "Color Management",
+      "DTF/Sublimation",
+      "Project Coordination",
+    ],
+    current: true,
+  },
+  {
+    id: "exp2",
+    role: "Graphic Designer",
+    company: "The Brandit Agency",
+    type: "Full-time",
+    period: "Nov 2024 – Oct 2025",
+    duration: "1 yr",
+    location: "Florida, United States · Remote",
+    desc: "Design impactful brand identities and marketing materials that clearly convey the client's message and maintain consistency across all platforms. Collaborate with clients and teams to meet project goals and deadlines while staying current with design trends to ensure high-quality, creative outcomes.",
+    skills: [
+      "Corporate Branding",
+      "Branding & Identity",
+      "Brand Strategy",
+      "Marketing Materials",
+      "Client Collaboration",
+      "Design Trends",
+    ],
+    current: false,
+  },
+  {
+    id: "exp3",
+    role: "Web Designer",
+    company: "3LC Corporation",
+    type: "Freelance",
+    period: "Jun 2020 – Nov 2024",
+    duration: "4 yrs 6 mos",
+    location: "Remote",
+    desc: "Designed and maintained conversion-focused e-commerce websites for a drop shipping business, ensuring strong user experience, mobile responsiveness, and brand consistency. Managed product listings, pricing updates, and inventory synchronization while developing customized landing pages and promotional campaigns. Integrated payment gateways, order tracking systems, and third-party applications to streamline checkout and fulfillment processes. Monitored website analytics, applied basic SEO strategies, and optimized site performance to improve traffic, customer engagement, and overall conversion rates.",
+    skills: [
+      "Corporate Branding",
+      "Graphic Design",
+      "E-commerce",
+      "UI/UX",
+      "SEO",
+      "Landing Pages",
+    ],
+    current: false,
+  },
+  {
+    id: "exp4",
+    role: "Graphic Designer",
+    company: "Skills Unlimited Digital Printing Services",
+    type: "Full-time",
+    period: "Jan 2015 – May 2020",
+    duration: "5 yrs 5 mos",
+    location: "Philippines · On-site",
+    desc: "Designed and prepared print-ready artwork for banners, tarpaulins, flyers, stickers, and apparel (DTF/sublimation), ensuring high-quality and production-ready outputs. Converted client-provided files into accurate production formats and supported pre-press processes, including file checking, resizing, imposition, and RIP software preparation. Coordinated with senior designers and production staff to maintain print accuracy and on-time delivery, while assisting walk-in clients with layout revisions and quick-turnaround print requirements.",
+    skills: [
+      "Corporate Branding",
+      "Branding & Identity",
+      "Print Design",
+      "Pre-press",
+      "Apparel Design",
+      "Client Service",
+    ],
+    current: false,
+  },
+  {
+    id: "exp5",
+    role: "Information Technology Manager",
+    company: "Holy Trinity School",
+    type: "Full-time",
+    period: "Jun 2013 – Oct 2014",
+    duration: "1 yr 5 mos",
+    location: "Philippines · On-site",
+    desc: "Oversaw the school's IT infrastructure, including networks, servers, computer labs, and internet systems, while administering the Management Information System (MIS) for enrollment, grading, attendance, billing, and academic records. Led digital transformation initiatives by streamlining workflows, automating processes, and integrating technology across academic and administrative departments. Provided technical support and troubleshooting for faculty, staff, and students, implemented data security and backup protocols, and developed analytical reporting tools to support data-driven decision-making and optimize institutional performance.",
+    skills: [
+      "Technology Management",
+      "Project Management",
+      "IT Infrastructure",
+      "MIS Administration",
+      "Digital Transformation",
+    ],
+    current: false,
+  },
+];
+
+function loadExperience() {
+  try {
+    const s = localStorage.getItem(EXP_KEY);
+    return s ? JSON.parse(s) : DEFAULT_JOBS;
+  } catch {
+    return DEFAULT_JOBS;
+  }
+}
+
+/* ══════════════════════════════════════════
+   CLOUDINARY UTILS
+══════════════════════════════════════════ */
 async function sha1(str) {
   const buf = await crypto.subtle.digest(
     "SHA-1",
@@ -20,33 +141,35 @@ async function sha1(str) {
     .join("");
 }
 
-/* ── Upload ── */
 async function uploadToCloudinary(file, folder) {
-  const timestamp = Math.round(Date.now() / 1000);
-  const paramStr = `folder=${folder}&timestamp=${timestamp}${SECRET}`;
-  const signature = await sha1(paramStr);
+  if (!CLOUD) throw new Error("Cloudinary cloud name is not configured.");
+  if (!PRESET) throw new Error("Cloudinary upload preset is not configured.");
   const fd = new FormData();
   fd.append("file", file);
-  fd.append("api_key", APIKEY);
-  fd.append("timestamp", timestamp);
+  fd.append("upload_preset", PRESET);
   fd.append("folder", folder);
-  fd.append("signature", signature);
   const res = await fetch(
     `https://api.cloudinary.com/v1_1/${CLOUD}/image/upload`,
-    {
-      method: "POST",
-      body: fd,
-    },
+    { method: "POST", body: fd },
   );
-  if (!res.ok) throw new Error(await res.text());
+  if (!res.ok) {
+    const errBody = await res.text();
+    let msg = errBody;
+    try {
+      msg = JSON.parse(errBody)?.error?.message || errBody;
+    } catch {}
+    throw new Error(msg);
+  }
   return res.json();
 }
 
-/* ── Delete ── */
 async function deleteFromCloudinary(publicId) {
+  if (!CLOUD || !APIKEY || !SECRET)
+    throw new Error("Cloudinary credentials not configured.");
   const timestamp = Math.round(Date.now() / 1000);
-  const paramStr = `public_id=${publicId}&timestamp=${timestamp}${SECRET}`;
-  const signature = await sha1(paramStr);
+  const signature = await sha1(
+    `public_id=${publicId}&timestamp=${timestamp}${SECRET}`,
+  );
   const fd = new FormData();
   fd.append("public_id", publicId);
   fd.append("api_key", APIKEY);
@@ -54,33 +177,30 @@ async function deleteFromCloudinary(publicId) {
   fd.append("signature", signature);
   const res = await fetch(
     `https://api.cloudinary.com/v1_1/${CLOUD}/image/destroy`,
-    {
-      method: "POST",
-      body: fd,
-    },
+    { method: "POST", body: fd },
   );
   if (!res.ok) throw new Error(await res.text());
   return res.json();
 }
 
-/* ── Fetch from localStorage cache ── */
-function fetchCloudinaryImages(folder) {
+const CACHE_KEY = "cloudinary_ron-portfolio";
+function saveCache(images) {
   try {
-    const cached = localStorage.getItem(`cloudinary_${folder}`);
-    return cached ? JSON.parse(cached) : [];
+    localStorage.setItem(CACHE_KEY, JSON.stringify(images));
+  } catch {}
+}
+function readCache() {
+  try {
+    const c = localStorage.getItem(CACHE_KEY);
+    return c ? JSON.parse(c) : [];
   } catch {
     return [];
   }
 }
-
-/* ── Save to localStorage cache ── */
-function cacheImages(folder, images) {
-  try {
-    localStorage.setItem(`cloudinary_${folder}`, JSON.stringify(images));
-  } catch {}
+function fetchCloudinaryImages() {
+  return readCache();
 }
 
-/* ── Shared input style ── */
 const inp = {
   width: "100%",
   padding: "0.75rem 1rem",
@@ -95,15 +215,82 @@ const inp = {
   transition: "border-color 0.2s",
 };
 
-/* ════════════════════════════════════════
+/* ══════════════════════════════════════════
+   EXPERIENCE FIELD — defined at module level
+   so it never gets recreated on re-render
+══════════════════════════════════════════ */
+function ExpField({
+  field,
+  label,
+  ph,
+  textarea,
+  select,
+  options,
+  form,
+  setForm,
+}) {
+  return (
+    <div>
+      <label
+        style={{
+          display: "block",
+          fontFamily: DM,
+          fontSize: "0.62rem",
+          letterSpacing: "0.18em",
+          textTransform: "uppercase",
+          color: "var(--text-sub)",
+          marginBottom: "0.35rem",
+        }}
+      >
+        {label}
+      </label>
+      {textarea ? (
+        <textarea
+          value={form[field]}
+          rows={4}
+          placeholder={ph}
+          onChange={(e) => setForm((f) => ({ ...f, [field]: e.target.value }))}
+          onFocus={(e) => (e.target.style.borderColor = "var(--gold)")}
+          onBlur={(e) => (e.target.style.borderColor = "var(--border)")}
+          style={{ ...inp, resize: "vertical", minHeight: 90 }}
+        />
+      ) : select ? (
+        <select
+          value={form[field]}
+          onChange={(e) => setForm((f) => ({ ...f, [field]: e.target.value }))}
+          onFocus={(e) => (e.target.style.borderColor = "var(--gold)")}
+          onBlur={(e) => (e.target.style.borderColor = "var(--border)")}
+          style={{ ...inp, cursor: "pointer" }}
+        >
+          {options.map((o) => (
+            <option key={o} value={o}>
+              {o}
+            </option>
+          ))}
+        </select>
+      ) : (
+        <input
+          type="text"
+          value={form[field]}
+          placeholder={ph}
+          onChange={(e) => setForm((f) => ({ ...f, [field]: e.target.value }))}
+          onFocus={(e) => (e.target.style.borderColor = "var(--gold)")}
+          onBlur={(e) => (e.target.style.borderColor = "var(--border)")}
+          style={inp}
+        />
+      )}
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════
    LOGIN FORM
-════════════════════════════════════════ */
+══════════════════════════════════════════ */
 function LoginForm({ onLogin }) {
   const [user, setUser] = useState("");
   const [pw, setPw] = useState("");
   const [err, setErr] = useState("");
   const [show, setShow] = useState(false);
-
   const USER = process.env.REACT_APP_ADMIN_USERNAME || "ronmedina";
   const PASS = process.env.REACT_APP_ADMIN_PASSWORD || "ronmedina2026";
 
@@ -164,9 +351,8 @@ function LoginForm({ onLogin }) {
           marginBottom: "2rem",
         }}
       >
-        Sign in to manage your portfolio projects
+        Sign in to manage your portfolio
       </div>
-
       <form
         onSubmit={handle}
         style={{
@@ -176,90 +362,72 @@ function LoginForm({ onLogin }) {
           textAlign: "left",
         }}
       >
-        <div>
-          <label
-            style={{
-              display: "block",
-              fontFamily: DM,
-              fontSize: "0.62rem",
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: "var(--text-sub)",
-              marginBottom: "0.35rem",
-            }}
-          >
-            Username
-          </label>
-          <input
-            type="text"
-            value={user}
-            autoComplete="username"
-            onChange={(e) => setUser(e.target.value)}
-            placeholder="Enter username"
-            style={{ ...inp, borderColor: err ? "#e55" : "var(--border)" }}
-            onFocus={(e) =>
-              !err && (e.target.style.borderColor = "var(--gold)")
-            }
-            onBlur={(e) =>
-              !err && (e.target.style.borderColor = "var(--border)")
-            }
-          />
-        </div>
-
-        <div>
-          <label
-            style={{
-              display: "block",
-              fontFamily: DM,
-              fontSize: "0.62rem",
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: "var(--text-sub)",
-              marginBottom: "0.35rem",
-            }}
-          >
-            Password
-          </label>
-          <div style={{ position: "relative" }}>
-            <input
-              type={show ? "text" : "password"}
-              value={pw}
-              autoComplete="current-password"
-              onChange={(e) => setPw(e.target.value)}
-              placeholder="Enter password"
+        {[
+          ["Username", "text", user, setUser, "username"],
+          [
+            "Password",
+            show ? "text" : "password",
+            pw,
+            setPw,
+            "current-password",
+          ],
+        ].map(([label, type, val, setter, ac], i) => (
+          <div key={label}>
+            <label
               style={{
-                ...inp,
-                paddingRight: "2.8rem",
-                borderColor: err ? "#e55" : "var(--border)",
-              }}
-              onFocus={(e) =>
-                !err && (e.target.style.borderColor = "var(--gold)")
-              }
-              onBlur={(e) =>
-                !err && (e.target.style.borderColor = "var(--border)")
-              }
-            />
-            <button
-              type="button"
-              onClick={() => setShow((s) => !s)}
-              style={{
-                position: "absolute",
-                right: "0.75rem",
-                top: "50%",
-                transform: "translateY(-50%)",
-                background: "none",
-                border: "none",
+                display: "block",
+                fontFamily: DM,
+                fontSize: "0.62rem",
+                letterSpacing: "0.18em",
+                textTransform: "uppercase",
                 color: "var(--text-sub)",
-                fontSize: "1rem",
-                cursor: "pointer",
-                padding: 0,
+                marginBottom: "0.35rem",
               }}
             >
-              {show ? "🙈" : "👁"}
-            </button>
+              {label}
+            </label>
+            <div style={{ position: "relative" }}>
+              <input
+                type={type}
+                value={val}
+                autoComplete={ac}
+                onChange={(e) => setter(e.target.value)}
+                placeholder={`Enter ${label.toLowerCase()}`}
+                style={{
+                  ...inp,
+                  paddingRight: i === 1 ? "2.8rem" : "1rem",
+                  borderColor: err ? "#e55" : "var(--border)",
+                }}
+                onFocus={(e) =>
+                  !err && (e.target.style.borderColor = "var(--gold)")
+                }
+                onBlur={(e) =>
+                  !err && (e.target.style.borderColor = "var(--border)")
+                }
+              />
+              {i === 1 && (
+                <button
+                  type="button"
+                  onClick={() => setShow((s) => !s)}
+                  style={{
+                    position: "absolute",
+                    right: "0.75rem",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    background: "none",
+                    border: "none",
+                    color: "var(--text-sub)",
+                    fontSize: "1rem",
+                    cursor: "pointer",
+                    padding: 0,
+                  }}
+                >
+                  {show ? "🙈" : "👁"}
+                </button>
+              )}
+            </div>
           </div>
-        </div>
-
+        ))}
         <AnimatePresence>
           {err && (
             <motion.div
@@ -280,7 +448,6 @@ function LoginForm({ onLogin }) {
             </motion.div>
           )}
         </AnimatePresence>
-
         <motion.button
           type="submit"
           whileHover={{ scale: 1.02 }}
@@ -307,9 +474,9 @@ function LoginForm({ onLogin }) {
   );
 }
 
-/* ════════════════════════════════════════
+/* ══════════════════════════════════════════
    IMAGE CARD
-════════════════════════════════════════ */
+══════════════════════════════════════════ */
 function ImageCard({ img, onDelete }) {
   const [deleting, setDeleting] = useState(false);
   const [confirm, setConfirm] = useState(false);
@@ -331,7 +498,6 @@ function ImageCard({ img, onDelete }) {
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
-
   const name = img.public_id.split("/").pop().replace(/_/g, " ");
 
   return (
@@ -458,16 +624,15 @@ function ImageCard({ img, onDelete }) {
   );
 }
 
-/* ════════════════════════════════════════
+/* ══════════════════════════════════════════
    UPLOAD ZONE
-════════════════════════════════════════ */
-function UploadZone({ onUploaded }) {
+══════════════════════════════════════════ */
+function UploadZone({ onUploaded, onError }) {
   const inputRef = useRef(null);
   const [dragging, setDragging] = useState(false);
   const [queue, setQueue] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState({});
-
   const CATS = [
     "Branding",
     "UI/UX",
@@ -478,28 +643,26 @@ function UploadZone({ onUploaded }) {
   ];
 
   const addFiles = (fileList) => {
-    const arr = Array.from(fileList).filter((f) => f.type.startsWith("image/"));
-    const items = arr.map((f) => ({
-      file: f,
-      preview: URL.createObjectURL(f),
-      title: "",
-      subtitle: "",
-      desc: "",
-      category: "Branding",
-      tags: "",
-    }));
+    const items = Array.from(fileList)
+      .filter((f) => f.type.startsWith("image/"))
+      .map((f) => ({
+        file: f,
+        preview: URL.createObjectURL(f),
+        title: "",
+        subtitle: "",
+        desc: "",
+        category: "Branding",
+        tags: "",
+      }));
     setQueue((prev) => [...prev, ...items]);
   };
 
-  const updateField = (i, field, val) => {
+  const updateField = (i, field, val) =>
     setQueue((prev) =>
       prev.map((item, idx) => (idx === i ? { ...item, [field]: val } : item)),
     );
-  };
-
-  const removeItem = (i) => {
+  const removeItem = (i) =>
     setQueue((prev) => prev.filter((_, idx) => idx !== i));
-  };
 
   const uploadAll = async () => {
     if (!queue.length) return;
@@ -523,15 +686,34 @@ function UploadZone({ onUploaded }) {
           },
         });
         setProgress((p) => ({ ...p, [i]: "done" }));
-      } catch (e) {
+      } catch (uploadErr) {
+        const errMsg = uploadErr?.message || "Upload failed";
         setProgress((p) => ({ ...p, [i]: "error" }));
+        if (onError) onError(errMsg);
       }
     }
     setUploading(false);
     setQueue([]);
     setProgress({});
-    onUploaded(results);
+    if (results.length > 0) onUploaded(results);
   };
+
+  const statusColor = (s) =>
+    s === "done"
+      ? "#4caf50"
+      : s === "error"
+        ? "#e55"
+        : s === "uploading"
+          ? "var(--gold)"
+          : "var(--text-sub)";
+  const statusLabel = (s) =>
+    s === "done"
+      ? "✓ Uploaded"
+      : s === "error"
+        ? "✕ Failed"
+        : s === "uploading"
+          ? "Uploading…"
+          : "Ready";
 
   return (
     <div style={{ marginBottom: "2.5rem" }}>
@@ -649,30 +831,11 @@ function UploadZone({ onUploaded }) {
                   style={{
                     fontFamily: DM,
                     fontSize: "0.65rem",
-                    color: "var(--text-sub)",
+                    color: statusColor(progress[i]),
                   }}
                 >
                   {Math.round(item.file.size / 1024)} KB ·{" "}
-                  <span
-                    style={{
-                      color:
-                        progress[i] === "done"
-                          ? "#4caf50"
-                          : progress[i] === "error"
-                            ? "#e55"
-                            : progress[i] === "uploading"
-                              ? "var(--gold)"
-                              : "var(--text-sub)",
-                    }}
-                  >
-                    {progress[i] === "done"
-                      ? "✓ Uploaded"
-                      : progress[i] === "error"
-                        ? "✕ Failed"
-                        : progress[i] === "uploading"
-                          ? "Uploading…"
-                          : "Ready to upload"}
-                  </span>
+                  {statusLabel(progress[i])}
                 </div>
               </div>
               {!uploading && (
@@ -691,7 +854,6 @@ function UploadZone({ onUploaded }) {
                 </button>
               )}
             </div>
-
             <div
               style={{
                 padding: "1rem",
@@ -770,7 +932,6 @@ function UploadZone({ onUploaded }) {
                   </select>
                 </div>
               </div>
-
               <div>
                 <label
                   style={{
@@ -796,7 +957,6 @@ function UploadZone({ onUploaded }) {
                   style={inp}
                 />
               </div>
-
               <div>
                 <label
                   style={{
@@ -812,7 +972,7 @@ function UploadZone({ onUploaded }) {
                   Description
                 </label>
                 <textarea
-                  placeholder="Describe this project — what it is, what you did, the outcome..."
+                  placeholder="Describe this project…"
                   value={item.desc}
                   disabled={uploading}
                   rows={3}
@@ -822,7 +982,6 @@ function UploadZone({ onUploaded }) {
                   style={{ ...inp, resize: "vertical", minHeight: 80 }}
                 />
               </div>
-
               <div>
                 <label
                   style={{
@@ -893,11 +1052,575 @@ function UploadZone({ onUploaded }) {
   );
 }
 
-/* ════════════════════════════════════════
+/* ══════════════════════════════════════════
+   EXPERIENCE MANAGER
+══════════════════════════════════════════ */
+const EMPLOYMENT_TYPES = [
+  "Full-time",
+  "Part-time",
+  "Freelance",
+  "Contract",
+  "Internship",
+  "Self-employed",
+];
+const EMPTY_JOB = {
+  id: "",
+  role: "",
+  company: "",
+  type: "Full-time",
+  period: "",
+  duration: "",
+  location: "",
+  desc: "",
+  skills: "",
+  current: false,
+};
+
+function ExperienceManager({ showToast }) {
+  const [jobs, setJobs] = useState(loadExperience);
+  const [editing, setEditing] = useState(null);
+  const [form, setForm] = useState(EMPTY_JOB);
+  const [delConfirm, setDelConfirm] = useState(null);
+
+  const saveJobs = (updated) => {
+    try {
+      localStorage.setItem(EXP_KEY, JSON.stringify(updated));
+    } catch {}
+    setJobs(updated);
+    setTimeout(() => window.dispatchEvent(new Event("storage")), 0);
+  };
+
+  const openNew = () => {
+    setForm({ ...EMPTY_JOB, id: "exp_" + Date.now() });
+    setEditing("new");
+  };
+  const openEdit = (job) => {
+    setForm({
+      ...job,
+      skills: Array.isArray(job.skills) ? job.skills.join(", ") : job.skills,
+    });
+    setEditing(job.id);
+  };
+  const cancelEdit = () => {
+    setEditing(null);
+    setForm(EMPTY_JOB);
+  };
+
+  const saveForm = () => {
+    if (!form.role.trim() || !form.company.trim()) {
+      showToast("⚠ Role and Company are required.");
+      return;
+    }
+    const job = {
+      ...form,
+      skills: form.skills
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean),
+    };
+    const updated =
+      editing === "new"
+        ? [job, ...jobs]
+        : jobs.map((j) => (j.id === editing ? job : j));
+    saveJobs(updated);
+    showToast("✓ Experience saved!");
+    cancelEdit();
+  };
+
+  const deleteJob = (id) => {
+    saveJobs(jobs.filter((j) => j.id !== id));
+    setDelConfirm(null);
+    showToast("✓ Entry deleted.");
+  };
+  const moveUp = (i) => {
+    if (i === 0) return;
+    const a = [...jobs];
+    [a[i - 1], a[i]] = [a[i], a[i - 1]];
+    saveJobs(a);
+  };
+  const moveDown = (i) => {
+    if (i === jobs.length - 1) return;
+    const a = [...jobs];
+    [a[i], a[i + 1]] = [a[i + 1], a[i]];
+    saveJobs(a);
+  };
+  const resetToDefault = () => {
+    saveJobs(DEFAULT_JOBS);
+    showToast("✓ Reset to defaults.");
+  };
+
+  if (editing !== null) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.8rem",
+            marginBottom: "1.5rem",
+          }}
+        >
+          <button
+            onClick={cancelEdit}
+            style={{
+              background: "none",
+              border: "1px solid var(--border)",
+              color: "var(--text-sub)",
+              fontFamily: DM,
+              fontSize: "0.72rem",
+              padding: "0.4rem 0.9rem",
+              borderRadius: "5px",
+              cursor: "pointer",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+            }}
+          >
+            ← Back
+          </button>
+          <div
+            style={{ fontFamily: CV, fontSize: "1.3rem", color: "var(--gold)" }}
+          >
+            {editing === "new" ? "Add New Experience" : "Edit Experience"}
+          </div>
+        </div>
+        <div
+          style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}
+        >
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: "0.85rem",
+            }}
+          >
+            <ExpField
+              field="role"
+              label="Job Title *"
+              ph="e.g. Senior Graphic Designer"
+              form={form}
+              setForm={setForm}
+            />
+            <ExpField
+              field="company"
+              label="Company *"
+              ph="e.g. The Brandit Agency"
+              form={form}
+              setForm={setForm}
+            />
+          </div>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr 1fr",
+              gap: "0.85rem",
+            }}
+          >
+            <ExpField
+              field="type"
+              label="Employment Type"
+              select
+              options={EMPLOYMENT_TYPES}
+              form={form}
+              setForm={setForm}
+            />
+            <ExpField
+              field="period"
+              label="Period"
+              ph="e.g. Dec 2025 – Present"
+              form={form}
+              setForm={setForm}
+            />
+            <ExpField
+              field="duration"
+              label="Duration"
+              ph="e.g. 4 mos"
+              form={form}
+              setForm={setForm}
+            />
+          </div>
+          <ExpField
+            field="location"
+            label="Location"
+            ph="e.g. Philippines · Remote"
+            form={form}
+            setForm={setForm}
+          />
+          <ExpField
+            field="desc"
+            label="Description"
+            ph="Describe your responsibilities…"
+            textarea
+            form={form}
+            setForm={setForm}
+          />
+          <ExpField
+            field="skills"
+            label="Skills"
+            ph="e.g. Branding, Illustrator (comma separated)"
+            form={form}
+            setForm={setForm}
+          />
+
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.75rem",
+              padding: "0.75rem 1rem",
+              background: "var(--surface)",
+              border: "1px solid var(--border)",
+              borderRadius: "6px",
+            }}
+          >
+            <input
+              type="checkbox"
+              id="cur"
+              checked={form.current}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, current: e.target.checked }))
+              }
+              style={{
+                width: 16,
+                height: 16,
+                accentColor: "var(--gold)",
+                cursor: "pointer",
+              }}
+            />
+            <label
+              htmlFor="cur"
+              style={{
+                fontFamily: DM,
+                fontSize: "0.83rem",
+                color: "var(--text)",
+                cursor: "pointer",
+              }}
+            >
+              This is my{" "}
+              <strong style={{ color: "var(--gold)" }}>current</strong> position
+            </label>
+          </div>
+
+          <div style={{ display: "flex", gap: "0.75rem", marginTop: "0.5rem" }}>
+            <motion.button
+              onClick={saveForm}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+              style={{
+                flex: 1,
+                padding: "0.9rem",
+                background: "var(--gold)",
+                color: "#0a0a08",
+                border: "none",
+                borderRadius: "6px",
+                fontFamily: DM,
+                fontWeight: 700,
+                fontSize: "0.85rem",
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                cursor: "pointer",
+              }}
+            >
+              {editing === "new" ? "Add to Timeline +" : "Save Changes ✓"}
+            </motion.button>
+            <button
+              onClick={cancelEdit}
+              style={{
+                padding: "0.9rem 1.5rem",
+                background: "transparent",
+                border: "1px solid var(--border)",
+                borderRadius: "6px",
+                color: "var(--text-sub)",
+                fontFamily: DM,
+                fontSize: "0.83rem",
+                cursor: "pointer",
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    );
+  }
+
+  return (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "1.5rem",
+          flexWrap: "wrap",
+          gap: "0.6rem",
+        }}
+      >
+        <div
+          style={{
+            fontFamily: DM,
+            fontSize: "0.78rem",
+            color: "var(--text-sub)",
+          }}
+        >
+          {jobs.length} experience entr{jobs.length === 1 ? "y" : "ies"}
+        </div>
+        <div style={{ display: "flex", gap: "0.5rem" }}>
+          <button
+            onClick={resetToDefault}
+            style={{
+              padding: "0.45rem 0.9rem",
+              background: "transparent",
+              border: "1px solid var(--border)",
+              borderRadius: "5px",
+              color: "var(--text-sub)",
+              fontFamily: DM,
+              fontSize: "0.68rem",
+              cursor: "pointer",
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+            }}
+          >
+            Reset
+          </button>
+          <motion.button
+            onClick={openNew}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            style={{
+              padding: "0.45rem 1.1rem",
+              background: "var(--gold)",
+              color: "#0a0a08",
+              border: "none",
+              borderRadius: "5px",
+              fontFamily: DM,
+              fontWeight: 700,
+              fontSize: "0.72rem",
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              cursor: "pointer",
+            }}
+          >
+            + Add Experience
+          </motion.button>
+        </div>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+        <AnimatePresence>
+          {jobs.map((job, i) => (
+            <motion.div
+              key={job.id}
+              layout
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              style={{
+                padding: "1rem 1.2rem",
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
+                borderRadius: "8px",
+                display: "flex",
+                gap: "1rem",
+                alignItems: "flex-start",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.2rem",
+                  paddingTop: "0.1rem",
+                }}
+              >
+                <button
+                  onClick={() => moveUp(i)}
+                  disabled={i === 0}
+                  style={{
+                    background: "none",
+                    border: "1px solid var(--border)",
+                    borderRadius: "3px",
+                    color: i === 0 ? "var(--border)" : "var(--text-sub)",
+                    width: 24,
+                    height: 24,
+                    cursor: i === 0 ? "default" : "pointer",
+                    fontSize: "0.7rem",
+                  }}
+                >
+                  ↑
+                </button>
+                <button
+                  onClick={() => moveDown(i)}
+                  disabled={i === jobs.length - 1}
+                  style={{
+                    background: "none",
+                    border: "1px solid var(--border)",
+                    borderRadius: "3px",
+                    color:
+                      i === jobs.length - 1
+                        ? "var(--border)"
+                        : "var(--text-sub)",
+                    width: 24,
+                    height: 24,
+                    cursor: i === jobs.length - 1 ? "default" : "pointer",
+                    fontSize: "0.7rem",
+                  }}
+                >
+                  ↓
+                </button>
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    flexWrap: "wrap",
+                    marginBottom: "0.2rem",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: DM,
+                      fontWeight: 700,
+                      fontSize: "0.9rem",
+                      color: "var(--text)",
+                    }}
+                  >
+                    {job.role}
+                  </span>
+                  {job.current && (
+                    <span
+                      style={{
+                        fontFamily: DM,
+                        fontSize: "0.55rem",
+                        letterSpacing: "0.18em",
+                        textTransform: "uppercase",
+                        background: "var(--gold)",
+                        color: "#0a0a08",
+                        padding: "0.15rem 0.55rem",
+                        borderRadius: "99px",
+                        fontWeight: 700,
+                      }}
+                    >
+                      Current
+                    </span>
+                  )}
+                </div>
+                <div
+                  style={{
+                    fontFamily: DM,
+                    fontSize: "0.78rem",
+                    color: "var(--gold)",
+                  }}
+                >
+                  {job.company}{" "}
+                  <span style={{ color: "var(--text-sub)", fontWeight: 400 }}>
+                    · {job.type}
+                  </span>
+                </div>
+                <div
+                  style={{
+                    fontFamily: DM,
+                    fontSize: "0.7rem",
+                    color: "var(--text-sub)",
+                    marginTop: "0.15rem",
+                  }}
+                >
+                  {job.period} · {job.duration}
+                  {job.location ? ` · ${job.location}` : ""}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: "0.4rem", flexShrink: 0 }}>
+                <button
+                  onClick={() => openEdit(job)}
+                  style={{
+                    padding: "0.35rem 0.8rem",
+                    background: "transparent",
+                    border: "1px solid var(--border)",
+                    borderRadius: "4px",
+                    color: "var(--text-sub)",
+                    fontFamily: DM,
+                    fontSize: "0.65rem",
+                    cursor: "pointer",
+                    letterSpacing: "0.08em",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Edit
+                </button>
+                {delConfirm === job.id ? (
+                  <button
+                    onClick={() => deleteJob(job.id)}
+                    style={{
+                      padding: "0.35rem 0.8rem",
+                      background: "#e55",
+                      border: "none",
+                      borderRadius: "4px",
+                      color: "#fff",
+                      fontFamily: DM,
+                      fontWeight: 700,
+                      fontSize: "0.65rem",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Confirm
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => setDelConfirm(job.id)}
+                    style={{
+                      padding: "0.35rem 0.6rem",
+                      background: "transparent",
+                      border: "1px solid var(--border)",
+                      borderRadius: "4px",
+                      color: "var(--text-sub)",
+                      fontFamily: DM,
+                      fontSize: "0.65rem",
+                      cursor: "pointer",
+                    }}
+                  >
+                    🗑
+                  </button>
+                )}
+              </div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+        {jobs.length === 0 && (
+          <div
+            style={{
+              textAlign: "center",
+              padding: "3rem",
+              border: "1px solid var(--border)",
+              borderRadius: "10px",
+            }}
+          >
+            <div style={{ fontSize: "2rem", marginBottom: "0.6rem" }}>💼</div>
+            <div
+              style={{
+                fontFamily: DM,
+                color: "var(--text-sub)",
+                fontSize: "0.85rem",
+              }}
+            >
+              No entries yet — click "Add Experience" to start.
+            </div>
+          </div>
+        )}
+      </div>
+    </motion.div>
+  );
+}
+
+/* ══════════════════════════════════════════
    MAIN ADMIN PANEL
-════════════════════════════════════════ */
+══════════════════════════════════════════ */
 export default function AdminPanel({ onClose }) {
   const [loggedIn, setLoggedIn] = useState(false);
+  const [tab, setTab] = useState("projects");
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState("");
@@ -905,12 +1628,12 @@ export default function AdminPanel({ onClose }) {
 
   const showToast = useCallback((msg) => {
     setToast(msg);
-    setTimeout(() => setToast(""), 3000);
+    setTimeout(() => setToast(""), 3500);
   }, []);
 
   const loadImages = useCallback(() => {
     setLoading(true);
-    const imgs = fetchCloudinaryImages(FOLDER);
+    const imgs = fetchCloudinaryImages();
     setImages(imgs);
     setLoading(false);
   }, []);
@@ -920,26 +1643,36 @@ export default function AdminPanel({ onClose }) {
   }, [loggedIn, loadImages]);
 
   const handleUploaded = (results) => {
-    const updated = [...results, ...images];
-    setImages(updated);
-    cacheImages(FOLDER, updated);
+    if (!results.length) return;
+    setImages((prev) => {
+      const updated = [...results, ...prev];
+      saveCache(updated);
+      return updated;
+    });
+    setTimeout(() => window.dispatchEvent(new Event("storage")), 0);
     showToast(
       `✓ ${results.length} image${results.length > 1 ? "s" : ""} uploaded!`,
     );
-    window.dispatchEvent(new Event("storage"));
   };
 
   const handleDeleted = (publicId) => {
-    const updated = images.filter((i) => i.public_id !== publicId);
-    setImages(updated);
-    cacheImages(FOLDER, updated);
+    setImages((prev) => {
+      const updated = prev.filter((i) => i.public_id !== publicId);
+      saveCache(updated);
+      return updated;
+    });
+    setTimeout(() => window.dispatchEvent(new Event("storage")), 0);
     showToast("✓ Image deleted.");
-    window.dispatchEvent(new Event("storage"));
   };
 
   const filtered = images.filter((img) =>
     img.public_id.toLowerCase().includes(search.toLowerCase()),
   );
+
+  const TABS = [
+    { id: "projects", label: "🖼 Projects" },
+    { id: "experience", label: "💼 Experience" },
+  ];
 
   return (
     <motion.div
@@ -962,7 +1695,7 @@ export default function AdminPanel({ onClose }) {
         animate={{ y: 0, opacity: 1 }}
         transition={{ ease: [0.22, 1, 0.36, 1], duration: 0.5 }}
         style={{
-          maxWidth: 860,
+          maxWidth: 900,
           margin: "0 auto",
           background: "var(--bg)",
           borderRadius: "16px",
@@ -970,7 +1703,7 @@ export default function AdminPanel({ onClose }) {
           overflow: "hidden",
         }}
       >
-        {/* ── Header ── */}
+        {/* Header */}
         <div
           style={{
             display: "flex",
@@ -990,7 +1723,7 @@ export default function AdminPanel({ onClose }) {
                 fontWeight: 400,
               }}
             >
-              Project Manager
+              Portfolio Manager
             </div>
             <div
               style={{
@@ -1000,12 +1733,13 @@ export default function AdminPanel({ onClose }) {
                 marginTop: "0.1rem",
               }}
             >
-              Cloudinary · ron-portfolio · {images.length} image
-              {images.length !== 1 ? "s" : ""}
+              {tab === "projects"
+                ? `Cloudinary · ron-portfolio · ${images.length} image${images.length !== 1 ? "s" : ""}`
+                : "Manage your work experience timeline"}
             </div>
           </div>
           <div style={{ display: "flex", gap: "0.6rem", alignItems: "center" }}>
-            {loggedIn && (
+            {loggedIn && tab === "projects" && (
               <motion.button
                 onClick={loadImages}
                 whileHover={{ scale: 1.05 }}
@@ -1021,7 +1755,6 @@ export default function AdminPanel({ onClose }) {
                   cursor: "pointer",
                   letterSpacing: "0.1em",
                   textTransform: "uppercase",
-                  transition: "all 0.2s",
                 }}
               >
                 ↻ Refresh
@@ -1042,7 +1775,6 @@ export default function AdminPanel({ onClose }) {
                   cursor: "pointer",
                   textTransform: "uppercase",
                   letterSpacing: "0.1em",
-                  transition: "all 0.2s",
                 }}
               >
                 Logout
@@ -1072,14 +1804,53 @@ export default function AdminPanel({ onClose }) {
           </div>
         </div>
 
-        {/* ── Body ── */}
+        {/* Tabs */}
+        {loggedIn && (
+          <div
+            style={{
+              display: "flex",
+              borderBottom: "1px solid var(--border)",
+              background: "var(--surface)",
+              padding: "0 2rem",
+            }}
+          >
+            {TABS.map((t) => (
+              <button
+                key={t.id}
+                onClick={() => setTab(t.id)}
+                style={{
+                  padding: "0.85rem 1.2rem",
+                  background: "none",
+                  border: "none",
+                  borderBottom: `2px solid ${tab === t.id ? "var(--gold)" : "transparent"}`,
+                  color: tab === t.id ? "var(--gold)" : "var(--text-sub)",
+                  fontFamily: DM,
+                  fontSize: "0.78rem",
+                  fontWeight: tab === t.id ? 700 : 400,
+                  letterSpacing: "0.08em",
+                  cursor: "pointer",
+                  transition: "all 0.2s",
+                  marginBottom: "-1px",
+                }}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Body */}
         <div style={{ padding: "2rem" }}>
           {!loggedIn ? (
             <LoginForm onLogin={() => setLoggedIn(true)} />
+          ) : tab === "experience" ? (
+            <ExperienceManager showToast={showToast} />
           ) : (
             <>
-              <UploadZone onUploaded={handleUploaded} />
-
+              <UploadZone
+                onUploaded={handleUploaded}
+                onError={(msg) => showToast("✕ " + msg.slice(0, 80))}
+              />
               <div
                 style={{
                   padding: "0.9rem 1.1rem",
@@ -1114,31 +1885,7 @@ export default function AdminPanel({ onClose }) {
                   <strong style={{ color: "var(--text)" }}>
                     Upload to Cloudinary
                   </strong>{" "}
-                  → click{" "}
-                  <strong style={{ color: "var(--text)" }}>Copy URL</strong> on
-                  the card below → paste the URL into{" "}
-                  <code
-                    style={{
-                      color: "var(--gold)",
-                      background: "var(--bg)",
-                      padding: "0.1em 0.4em",
-                      borderRadius: "3px",
-                    }}
-                  >
-                    projects.jsx
-                  </code>{" "}
-                  as the{" "}
-                  <code
-                    style={{
-                      color: "var(--gold)",
-                      background: "var(--bg)",
-                      padding: "0.1em 0.4em",
-                      borderRadius: "3px",
-                    }}
-                  >
-                    image:
-                  </code>{" "}
-                  value.
+                  → the project card appears automatically on the site.
                 </div>
               </div>
 
@@ -1199,8 +1946,7 @@ export default function AdminPanel({ onClose }) {
                   layout
                   style={{
                     display: "grid",
-                    gridTemplateColumns:
-                      "repeat(auto-fill, minmax(190px, 1fr))",
+                    gridTemplateColumns: "repeat(auto-fill, minmax(190px,1fr))",
                     gap: "1rem",
                   }}
                 >

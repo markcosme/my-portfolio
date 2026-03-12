@@ -7,7 +7,15 @@ import uiuxImg from "../assets/uiux-designs.png";
 import { ScrollReveal } from "./scrollreveal";
 
 const ENTER_EFFECTS = ["flipY", "riseUp", "zoomFade", "slideLeft"];
-const COLORS = ["#1a6fa8", "#2a7a4e", "#d4420a", "#6c5aee", "#c9952a", "#a84a1a"];
+const COLORS = [
+  "#1a6fa8",
+  "#2a7a4e",
+  "#d4420a",
+  "#6c5aee",
+  "#c9952a",
+  "#a84a1a",
+];
+const CACHE_KEY = "cloudinary_ron-portfolio"; /* ← must match AdminPanel */
 
 const hardcodedProjects = [
   {
@@ -42,7 +50,13 @@ const hardcodedProjects = [
     title: "Social Media Posters",
     subtitle: "Black Friday · Porac · Consumer Week · Aero · Travel · Repair",
     desc: "High-impact social media posters spanning product ads, tourism campaigns, event promotions, personal branding, and lifestyle photography composites.",
-    tags: ["Photoshop", "Illustrator", "Social Ads", "Typography", "Compositing"],
+    tags: [
+      "Photoshop",
+      "Illustrator",
+      "Social Ads",
+      "Typography",
+      "Compositing",
+    ],
     color: "#d4420a",
     image: socialPostersImg,
     documentStyle: true,
@@ -64,23 +78,24 @@ const hardcodedProjects = [
   },
 ];
 
-/* ── Load uploaded projects from localStorage ── */
+/* ── Read uploaded projects from localStorage (written by AdminPanel) ── */
 function loadUploadedProjects() {
   try {
-    const cached = localStorage.getItem("cloudinary_ron-portfolio");
+    const cached = localStorage.getItem(CACHE_KEY);
     if (!cached) return [];
     const images = JSON.parse(cached);
     return images.map((img, idx) => ({
       id: `uploaded_${img.public_id}`,
       cat: img._meta?.category || "Branding",
-      title: img._meta?.title || img.public_id.split("/").pop().replace(/_/g, " "),
+      title:
+        img._meta?.title || img.public_id.split("/").pop().replace(/_/g, " "),
       subtitle: img._meta?.subtitle || "",
       desc: img._meta?.desc || "",
       tags: img._meta?.tags || [],
       color: COLORS[idx % COLORS.length],
       image: img.secure_url,
       documentStyle: true,
-      client: "Uploaded Project",
+      client: img._meta?.client || "Uploaded Project",
       enterEffect: ENTER_EFFECTS[idx % ENTER_EFFECTS.length],
       _uploaded: true,
     }));
@@ -93,7 +108,9 @@ function loadUploadedProjects() {
 function Lightbox({ img, title, onClose }) {
   useEffect(() => {
     document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, []);
 
   return (
@@ -103,10 +120,15 @@ function Lightbox({ img, title, onClose }) {
       exit={{ opacity: 0 }}
       onClick={onClose}
       style={{
-        position: "fixed", inset: 0, zIndex: 2000,
+        position: "fixed",
+        inset: 0,
+        zIndex: 2000,
         background: "rgba(0,0,0,0.94)",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        padding: "2rem", backdropFilter: "blur(16px)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "2rem",
+        backdropFilter: "blur(16px)",
       }}
     >
       <motion.div
@@ -116,8 +138,11 @@ function Lightbox({ img, title, onClose }) {
         transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
         onClick={(e) => e.stopPropagation()}
         style={{
-          position: "relative", maxWidth: "94vw", maxHeight: "92vh",
-          borderRadius: "10px", overflow: "hidden",
+          position: "relative",
+          maxWidth: "94vw",
+          maxHeight: "92vh",
+          borderRadius: "10px",
+          overflow: "hidden",
           boxShadow: "0 60px 160px rgba(0,0,0,0.9)",
           border: "1px solid rgba(255,255,255,0.08)",
         }}
@@ -127,42 +152,81 @@ function Lightbox({ img, title, onClose }) {
           whileHover={{ scale: 1.1 }}
           data-cursor-hover
           style={{
-            position: "absolute", top: "1rem", right: "1rem", zIndex: 10,
-            width: 38, height: 38, borderRadius: "50%",
+            position: "absolute",
+            top: "1rem",
+            right: "1rem",
+            zIndex: 10,
+            width: 38,
+            height: 38,
+            borderRadius: "50%",
             background: "rgba(0,0,0,0.75)",
             border: "1px solid rgba(255,255,255,0.2)",
-            color: "#fff", fontSize: "1rem", display: "flex",
-            alignItems: "center", justifyContent: "center",
-            backdropFilter: "blur(10px)", fontFamily: "'DM Sans', sans-serif",
+            color: "#fff",
+            fontSize: "1rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backdropFilter: "blur(10px)",
+            fontFamily: "'DM Sans',sans-serif",
           }}
-        >✕</motion.button>
-        <div style={{
-          position: "absolute", bottom: 0, left: 0, right: 0, zIndex: 5,
-          padding: "2.5rem 1.8rem 1.4rem",
-          background: "linear-gradient(to top, rgba(0,0,0,0.92), transparent)",
-          fontFamily: "'Coolvetica','DM Sans',sans-serif",
-          fontSize: "1.3rem", letterSpacing: "0.1em", color: "#fff",
-        }}>
+        >
+          ✕
+        </motion.button>
+        <div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 5,
+            padding: "2.5rem 1.8rem 1.4rem",
+            background:
+              "linear-gradient(to top, rgba(0,0,0,0.92), transparent)",
+            fontFamily: "'Coolvetica','DM Sans',sans-serif",
+            fontSize: "1.3rem",
+            letterSpacing: "0.1em",
+            color: "#fff",
+          }}
+        >
           {title}
-          <div style={{
-            fontSize: "0.62rem", letterSpacing: "0.22em",
-            color: "rgba(255,255,255,0.4)",
-            fontFamily: "'DM Sans', sans-serif", marginTop: "0.2rem",
-          }}>CLICK OUTSIDE TO CLOSE</div>
+          <div
+            style={{
+              fontSize: "0.62rem",
+              letterSpacing: "0.22em",
+              color: "rgba(255,255,255,0.4)",
+              fontFamily: "'DM Sans',sans-serif",
+              marginTop: "0.2rem",
+            }}
+          >
+            CLICK OUTSIDE TO CLOSE
+          </div>
         </div>
-        <img src={img} alt={title} style={{
-          display: "block", maxWidth: "94vw", maxHeight: "90vh",
-          objectFit: "contain", imageRendering: "-webkit-optimize-contrast",
-        }} />
+        <img
+          src={img}
+          alt={title}
+          style={{
+            display: "block",
+            maxWidth: "94vw",
+            maxHeight: "90vh",
+            objectFit: "contain",
+            imageRendering: "-webkit-optimize-contrast",
+          }}
+        />
       </motion.div>
     </motion.div>
   );
 }
 
-/* ─────────────────── Per-card entrance effects ─────────────────── */
+/* ─────────────────── Entrance effects ─────────────────── */
 const enterEffects = {
   slideLeft: {
-    hidden: { opacity: 0, x: -110, rotateZ: -2.5, filter: "blur(10px)", scale: 0.96 },
+    hidden: {
+      opacity: 0,
+      x: -110,
+      rotateZ: -2.5,
+      filter: "blur(10px)",
+      scale: 0.96,
+    },
     show: { opacity: 1, x: 0, rotateZ: 0, filter: "blur(0px)", scale: 1 },
     transition: { duration: 0.95, ease: [0.16, 1, 0.3, 1] },
   },
@@ -172,7 +236,13 @@ const enterEffects = {
     transition: { duration: 1.2, ease: [0.22, 1, 0.36, 1] },
   },
   riseUp: {
-    hidden: { opacity: 0, y: 90, rotateX: 26, filter: "blur(8px)", scale: 0.94 },
+    hidden: {
+      opacity: 0,
+      y: 90,
+      rotateX: 26,
+      filter: "blur(8px)",
+      scale: 0.94,
+    },
     show: { opacity: 1, y: 0, rotateX: 0, filter: "blur(0px)", scale: 1 },
     transition: { duration: 1.0, ease: [0.16, 1, 0.3, 1] },
   },
@@ -183,7 +253,6 @@ const enterEffects = {
   },
 };
 
-/* ─────────────────── Entrance Wrapper ─────────────────── */
 function EnterReveal({ children, effect = "flipY", delay = 0 }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, amount: 0.1 });
@@ -201,7 +270,7 @@ function EnterReveal({ children, effect = "flipY", delay = 0 }) {
   );
 }
 
-/* ─────────────────── Document-Style Card ─────────────────── */
+/* ─────────────────── Document Card ─────────────────── */
 function DocumentCard({ p, i }) {
   const [lightbox, setLightbox] = useState(false);
   const [hovered, setHovered] = useState(false);
@@ -214,182 +283,318 @@ function DocumentCard({ p, i }) {
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
           style={{
-            borderRadius: "12px", overflow: "hidden",
+            borderRadius: "12px",
+            overflow: "hidden",
             border: `1px solid ${hovered ? p.color + "55" : "#2a2518"}`,
             background: "var(--card-bg)",
-            boxShadow: hovered ? `0 20px 80px ${p.color}22` : "0 4px 30px rgba(0,0,0,0.3)",
+            boxShadow: hovered
+              ? `0 20px 80px ${p.color}22`
+              : "0 4px 30px rgba(0,0,0,0.3)",
             transition: "border-color 0.35s, box-shadow 0.35s",
           }}
         >
-          {/* Document header bar */}
-          <div style={{
-            background: "#f8f8f6", padding: "1.4rem 2rem 1.2rem",
-            borderBottom: "1px solid #e8e4dc",
-            display: "flex", justifyContent: "space-between", alignItems: "center",
-          }}>
+          {/* Document header */}
+          <div
+            style={{
+              background: "#f8f8f6",
+              padding: "1.4rem 2rem 1.2rem",
+              borderBottom: "1px solid #e8e4dc",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
             <div>
-              <div style={{
-                fontFamily: "'DM Sans', sans-serif", fontWeight: 800,
-                fontSize: "clamp(1rem, 2vw, 1.25rem)", color: "#1a1a1a",
-                letterSpacing: "-0.01em",
-              }}>
+              <div
+                style={{
+                  fontFamily: "'DM Sans',sans-serif",
+                  fontWeight: 800,
+                  fontSize: "clamp(1rem,2vw,1.25rem)",
+                  color: "#1a1a1a",
+                  letterSpacing: "-0.01em",
+                }}
+              >
                 {p.title}
                 {p.subtitle && (
                   <>
                     <span style={{ color: "#999", fontWeight: 400 }}> — </span>
-                    <span style={{ fontWeight: 400, color: "#555", fontSize: "0.9em" }}>
+                    <span
+                      style={{
+                        fontWeight: 400,
+                        color: "#555",
+                        fontSize: "0.9em",
+                      }}
+                    >
                       {p.subtitle}
                     </span>
                   </>
                 )}
               </div>
-              <div style={{
-                fontFamily: "'DM Sans', sans-serif", fontSize: "0.72rem",
-                color: "#888", marginTop: "0.2rem", letterSpacing: "0.08em",
-              }}>
+              <div
+                style={{
+                  fontFamily: "'DM Sans',sans-serif",
+                  fontSize: "0.72rem",
+                  color: "#888",
+                  marginTop: "0.2rem",
+                  letterSpacing: "0.08em",
+                }}
+              >
                 {p.client || "Client Project"}
               </div>
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
-              <span style={{
-                fontFamily: "'DM Sans', sans-serif", fontSize: "0.62rem",
-                letterSpacing: "0.18em", textTransform: "uppercase",
-                color: p.color, background: p.color + "12",
-                padding: "0.3rem 0.8rem", borderRadius: "2px",
-                border: `1px solid ${p.color}30`,
-              }}>{p.cat}</span>
+            <div
+              style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}
+            >
+              <span
+                style={{
+                  fontFamily: "'DM Sans',sans-serif",
+                  fontSize: "0.62rem",
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  color: p.color,
+                  background: p.color + "12",
+                  padding: "0.3rem 0.8rem",
+                  borderRadius: "2px",
+                  border: `1px solid ${p.color}30`,
+                }}
+              >
+                {p.cat}
+              </span>
               <motion.button
                 onClick={() => setLightbox(true)}
                 whileHover={{ background: p.color, color: "#fff" }}
                 data-cursor-hover
                 style={{
-                  fontFamily: "'DM Sans', sans-serif", fontSize: "0.65rem",
-                  letterSpacing: "0.14em", textTransform: "uppercase",
-                  color: p.color, background: "transparent",
-                  border: `1px solid ${p.color}55`, padding: "0.3rem 1rem",
-                  borderRadius: "2px", transition: "all 0.25s",
+                  fontFamily: "'DM Sans',sans-serif",
+                  fontSize: "0.65rem",
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                  color: p.color,
+                  background: "transparent",
+                  border: `1px solid ${p.color}55`,
+                  padding: "0.3rem 1rem",
+                  borderRadius: "2px",
+                  transition: "all 0.25s",
                 }}
-              >View Full ↗</motion.button>
+              >
+                View Full ↗
+              </motion.button>
             </div>
           </div>
 
-          {/* Image + info layout */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 280px", minHeight: 320 }}>
-            {/* Image panel */}
+          {/* Image + sidebar */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 280px",
+              minHeight: 320,
+            }}
+          >
             <div
               onClick={() => setLightbox(true)}
               data-cursor-hover
               style={{
-                background: "#ededeb", padding: "1.5rem 2rem 0",
-                position: "relative", overflow: "hidden",
+                background: "#ededeb",
+                padding: "1.5rem 2rem 0",
+                position: "relative",
+                overflow: "hidden",
+                cursor: "pointer",
               }}
             >
               <motion.div
                 animate={{ y: hovered ? -6 : 0 }}
                 transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                 style={{
-                  background: "#fff", borderRadius: "8px 8px 0 0", overflow: "hidden",
-                  boxShadow: "0 -4px 24px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.05)",
+                  background: "#fff",
+                  borderRadius: "8px 8px 0 0",
+                  overflow: "hidden",
+                  boxShadow:
+                    "0 -4px 24px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.05)",
                 }}
               >
                 <img
                   src={p.image}
                   alt={p.title}
                   style={{
-                    display: "block", width: "100%",
-                    maxHeight: p.cat === "Social Media" ? "420px" : p.cat === "UI/UX" ? "380px" : "300px",
-                    objectFit: "cover", objectPosition: "top center",
-                    background: "#fff", imageRendering: "-webkit-optimize-contrast",
+                    display: "block",
+                    width: "100%",
+                    maxHeight:
+                      p.cat === "Social Media"
+                        ? "420px"
+                        : p.cat === "UI/UX"
+                          ? "380px"
+                          : "300px",
+                    objectFit: "cover",
+                    objectPosition: "top center",
+                    background: "#fff",
+                    imageRendering: "-webkit-optimize-contrast",
                   }}
                 />
               </motion.div>
             </div>
 
-            {/* Info sidebar */}
             <motion.div
               animate={{ opacity: hovered ? 1 : 0.82 }}
               transition={{ duration: 0.35 }}
               style={{
-                borderLeft: "1px solid #e8e4dc", background: "#fafaf8",
+                borderLeft: "1px solid #e8e4dc",
+                background: "#fafaf8",
                 padding: "2rem 1.6rem",
-                display: "flex", flexDirection: "column",
-                justifyContent: "space-between", gap: "1.2rem",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                gap: "1.2rem",
               }}
             >
               <motion.div
                 initial={{ scaleY: 0 }}
                 animate={{ scaleY: 1 }}
-                transition={{ duration: 0.7, delay: i * 0.1 + 0.5, ease: [0.16, 1, 0.3, 1] }}
+                transition={{
+                  duration: 0.7,
+                  delay: i * 0.1 + 0.5,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
                 style={{
-                  width: 2, height: 40,
+                  width: 2,
+                  height: 40,
                   background: `linear-gradient(to bottom, ${p.color}, transparent)`,
-                  transformOrigin: "top", marginBottom: "0.5rem",
+                  transformOrigin: "top",
+                  marginBottom: "0.5rem",
                 }}
               />
               <div>
-                <div style={{
-                  fontFamily: "'DM Sans', sans-serif", fontSize: "0.6rem",
-                  letterSpacing: "0.22em", textTransform: "uppercase",
-                  color: p.color, marginBottom: "0.5rem",
-                }}>About</div>
-                <p style={{
-                  fontFamily: "'DM Sans', sans-serif", fontSize: "0.78rem",
-                  color: "#555", lineHeight: 1.75,
-                }}>
+                <div
+                  style={{
+                    fontFamily: "'DM Sans',sans-serif",
+                    fontSize: "0.6rem",
+                    letterSpacing: "0.22em",
+                    textTransform: "uppercase",
+                    color: p.color,
+                    marginBottom: "0.5rem",
+                  }}
+                >
+                  About
+                </div>
+                <p
+                  style={{
+                    fontFamily: "'DM Sans',sans-serif",
+                    fontSize: "0.78rem",
+                    color: "#555",
+                    lineHeight: 1.75,
+                  }}
+                >
                   {p.desc
-                    ? p.desc.length > 120 ? p.desc.slice(0, 120) + "…" : p.desc
+                    ? p.desc.length > 120
+                      ? p.desc.slice(0, 120) + "…"
+                      : p.desc
                     : "No description provided."}
                 </p>
               </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
-                <div style={{
-                  fontFamily: "'DM Sans', sans-serif", fontSize: "0.6rem",
-                  letterSpacing: "0.2em", textTransform: "uppercase",
-                  color: "#aaa", marginBottom: "0.2rem",
-                }}>Tools</div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.35rem",
+                }}
+              >
+                <div
+                  style={{
+                    fontFamily: "'DM Sans',sans-serif",
+                    fontSize: "0.6rem",
+                    letterSpacing: "0.2em",
+                    textTransform: "uppercase",
+                    color: "#aaa",
+                    marginBottom: "0.2rem",
+                  }}
+                >
+                  Tools
+                </div>
                 {(p.tags.length > 0 ? p.tags.slice(0, 3) : ["—"]).map((tag) => (
-                  <span key={tag} style={{
-                    fontFamily: "'DM Sans', sans-serif", fontSize: "0.65rem",
-                    letterSpacing: "0.08em", color: "#666",
-                    border: "1px solid #e0ddd8", padding: "0.25rem 0.65rem",
-                    borderRadius: "2px", background: "#fff", width: "fit-content",
-                  }}>{tag}</span>
+                  <span
+                    key={tag}
+                    style={{
+                      fontFamily: "'DM Sans',sans-serif",
+                      fontSize: "0.65rem",
+                      letterSpacing: "0.08em",
+                      color: "#666",
+                      border: "1px solid #e0ddd8",
+                      padding: "0.25rem 0.65rem",
+                      borderRadius: "2px",
+                      background: "#fff",
+                      width: "fit-content",
+                    }}
+                  >
+                    {tag}
+                  </span>
                 ))}
               </div>
             </motion.div>
           </div>
 
-          {/* Footer */}
-          <div style={{
-            background: "#f8f8f6", padding: "0.85rem 2rem",
-            borderTop: "1px solid #e8e4dc",
-            display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap",
-          }}>
+          {/* Footer tags */}
+          <div
+            style={{
+              background: "#f8f8f6",
+              padding: "0.85rem 2rem",
+              borderTop: "1px solid #e8e4dc",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              flexWrap: "wrap",
+            }}
+          >
             {p.tags.slice(3).map((tag) => (
-              <span key={tag} style={{
-                fontFamily: "'DM Sans', sans-serif", fontSize: "0.65rem",
-                letterSpacing: "0.1em", color: "#888",
-                border: "1px solid #ddd", padding: "0.2rem 0.65rem",
-                borderRadius: "2px", background: "#fff",
-              }}>{tag}</span>
+              <span
+                key={tag}
+                style={{
+                  fontFamily: "'DM Sans',sans-serif",
+                  fontSize: "0.65rem",
+                  letterSpacing: "0.1em",
+                  color: "#888",
+                  border: "1px solid #ddd",
+                  padding: "0.2rem 0.65rem",
+                  borderRadius: "2px",
+                  background: "#fff",
+                }}
+              >
+                {tag}
+              </span>
             ))}
             {p.tags.length <= 3 && (
-              <span style={{
-                fontFamily: "'DM Sans', sans-serif", fontSize: "0.65rem",
-                color: "#bbb", fontStyle: "italic",
-              }}>No additional tags</span>
+              <span
+                style={{
+                  fontFamily: "'DM Sans',sans-serif",
+                  fontSize: "0.65rem",
+                  color: "#bbb",
+                  fontStyle: "italic",
+                }}
+              >
+                No additional tags
+              </span>
             )}
-            <div style={{
-              fontFamily: "'DM Sans', sans-serif", marginLeft: "auto",
-              fontSize: "0.68rem", color: p.color, letterSpacing: "0.1em", opacity: 0.7,
-            }}>{p.client || "Client Project"}</div>
+            <div
+              style={{
+                fontFamily: "'DM Sans',sans-serif",
+                marginLeft: "auto",
+                fontSize: "0.68rem",
+                color: p.color,
+                letterSpacing: "0.1em",
+                opacity: 0.7,
+              }}
+            >
+              {p.client || "Client Project"}
+            </div>
           </div>
         </motion.div>
       </EnterReveal>
 
       <AnimatePresence>
         {lightbox && (
-          <Lightbox img={p.image} title={p.title} onClose={() => setLightbox(false)} />
+          <Lightbox
+            img={p.image}
+            title={p.title}
+            onClose={() => setLightbox(false)}
+          />
         )}
       </AnimatePresence>
     </>
@@ -410,62 +615,116 @@ function ProjectCard({ p, i }) {
         initial={{ opacity: 0, scale: 0.92, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9 }}
-        transition={{ duration: 0.45, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
+        transition={{
+          duration: 0.45,
+          delay: i * 0.06,
+          ease: [0.22, 1, 0.36, 1],
+        }}
         whileHover={{ y: -7 }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         style={{
           background: "var(--card-bg)",
           border: `1px solid ${hovered ? p.color + "88" : "var(--border)"}`,
-          borderRadius: "8px", overflow: "hidden",
+          borderRadius: "8px",
+          overflow: "hidden",
           transition: "border-color 0.3s, box-shadow 0.3s",
           boxShadow: hovered ? `0 16px 60px ${p.color}28` : "none",
         }}
       >
-        <div style={{ height: 3, background: `linear-gradient(to right, ${p.color}, ${p.color}88)` }} />
+        <div
+          style={{
+            height: 3,
+            background: `linear-gradient(to right, ${p.color}, ${p.color}88)`,
+          }}
+        />
         <div style={{ padding: "1.8rem" }}>
-          <div style={{
-            display: "flex", justifyContent: "space-between",
-            alignItems: "flex-start", marginBottom: "1rem",
-          }}>
-            <div style={{
-              width: 40, height: 40, borderRadius: "50%",
-              background: p.color + "22", border: `1px solid ${p.color}44`,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: "1.1rem",
-            }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+              marginBottom: "1rem",
+            }}
+          >
+            <div
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: "50%",
+                background: p.color + "22",
+                border: `1px solid ${p.color}44`,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "1.1rem",
+              }}
+            >
               {p.cat === "UI/UX" ? "🖥" : p.cat === "Branding" ? "✦" : "📱"}
             </div>
-            <span style={{
-              fontFamily: "'DM Sans', sans-serif", fontSize: "0.65rem",
-              letterSpacing: "0.15em", textTransform: "uppercase",
-              color: p.color, background: p.color + "18",
-              padding: "0.25rem 0.7rem", borderRadius: "2px",
-            }}>{p.cat}</span>
+            <span
+              style={{
+                fontFamily: "'DM Sans',sans-serif",
+                fontSize: "0.65rem",
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                color: p.color,
+                background: p.color + "18",
+                padding: "0.25rem 0.7rem",
+                borderRadius: "2px",
+              }}
+            >
+              {p.cat}
+            </span>
           </div>
-          <h3 style={{
-            fontFamily: "'DM Sans', sans-serif", fontWeight: 700,
-            fontSize: "1.05rem", marginBottom: "0.65rem",
-          }}>{p.title}</h3>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif", color: "var(--muted)",
-            fontSize: "0.83rem", lineHeight: 1.8, marginBottom: "1.3rem",
-          }}>{p.desc}</p>
+          <h3
+            style={{
+              fontFamily: "'DM Sans',sans-serif",
+              fontWeight: 700,
+              fontSize: "1.05rem",
+              marginBottom: "0.65rem",
+            }}
+          >
+            {p.title}
+          </h3>
+          <p
+            style={{
+              fontFamily: "'DM Sans',sans-serif",
+              color: "var(--muted)",
+              fontSize: "0.83rem",
+              lineHeight: 1.8,
+              marginBottom: "1.3rem",
+            }}
+          >
+            {p.desc}
+          </p>
           <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
             {p.tags.map((tag) => (
-              <span key={tag} style={{
-                fontFamily: "'DM Sans', sans-serif", fontSize: "0.65rem",
-                letterSpacing: "0.1em", color: "var(--muted)",
-                border: "1px solid var(--border)", padding: "0.2rem 0.6rem",
-                borderRadius: "2px",
-              }}>{tag}</span>
+              <span
+                key={tag}
+                style={{
+                  fontFamily: "'DM Sans',sans-serif",
+                  fontSize: "0.65rem",
+                  letterSpacing: "0.1em",
+                  color: "var(--muted)",
+                  border: "1px solid var(--border)",
+                  padding: "0.2rem 0.6rem",
+                  borderRadius: "2px",
+                }}
+              >
+                {tag}
+              </span>
             ))}
           </div>
         </div>
       </motion.div>
       <AnimatePresence>
         {lightbox && (
-          <Lightbox img={p.image} title={p.title} onClose={() => setLightbox(false)} />
+          <Lightbox
+            img={p.image}
+            title={p.title}
+            onClose={() => setLightbox(false)}
+          />
         )}
       </AnimatePresence>
     </>
@@ -475,54 +734,94 @@ function ProjectCard({ p, i }) {
 /* ─────────────────── Main Section ─────────────────── */
 export default function Projects() {
   const [active, setActive] = useState("All");
-  const [allProjects, setAllProjects] = useState(hardcodedProjects);
-
-  useEffect(() => {
+  const [allProjects, setAllProjects] = useState(() => {
+    /* initialise synchronously so uploaded projects show immediately on first render */
     const uploaded = loadUploadedProjects();
-    if (uploaded.length > 0) {
-      setAllProjects([...hardcodedProjects, ...uploaded]);
-    }
-  }, []);
+    return uploaded.length > 0
+      ? [...hardcodedProjects, ...uploaded]
+      : hardcodedProjects;
+  });
 
+  /* re-sync whenever AdminPanel writes to localStorage */
   useEffect(() => {
-    const handleStorage = () => {
+    const sync = () => {
       const uploaded = loadUploadedProjects();
       setAllProjects([...hardcodedProjects, ...uploaded]);
     };
-    window.addEventListener("storage", handleStorage);
-    return () => window.removeEventListener("storage", handleStorage);
+    window.addEventListener("storage", sync);
+    return () => window.removeEventListener("storage", sync);
   }, []);
 
   const filtered =
-    active === "All" ? allProjects : allProjects.filter((p) => p.cat === active);
-
-  const dynamicCats = ["All", ...Array.from(new Set(allProjects.map((p) => p.cat)))];
+    active === "All"
+      ? allProjects
+      : allProjects.filter((p) => p.cat === active);
+  const dynamicCats = [
+    "All",
+    ...Array.from(new Set(allProjects.map((p) => p.cat))),
+  ];
 
   return (
-    <section id="projects" style={{
-      padding: "var(--pad-section)", borderTop: "1px solid var(--border)",
-      position: "relative", overflow: "hidden",
-    }}>
-      <div style={{
-        position: "absolute", top: "3rem", right: "2rem",
-        fontFamily: "'Coolvetica','DM Sans',sans-serif",
-        fontSize: "clamp(5rem, 16vw, 14rem)", color: "#ffffff03",
-        letterSpacing: "0.05em", userSelect: "none", pointerEvents: "none", lineHeight: 1,
-      }}>WORK</div>
+    <section
+      id="projects"
+      style={{
+        padding: "var(--pad-section)",
+        borderTop: "1px solid var(--border)",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          top: "3rem",
+          right: "2rem",
+          fontFamily: "'Coolvetica','DM Sans',sans-serif",
+          fontSize: "clamp(5rem,16vw,14rem)",
+          color: "#ffffff03",
+          letterSpacing: "0.05em",
+          userSelect: "none",
+          pointerEvents: "none",
+          lineHeight: 1,
+        }}
+      >
+        WORK
+      </div>
 
-      <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative", zIndex: 1 }}>
+      <div
+        style={{
+          maxWidth: 1200,
+          margin: "0 auto",
+          position: "relative",
+          zIndex: 1,
+        }}
+      >
         <ScrollReveal direction="up" delay={0}>
-          <div className="section-label" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+          <div
+            className="section-label"
+            style={{ fontFamily: "'DM Sans',sans-serif" }}
+          >
             Selected Work
           </div>
-          <div style={{
-            display: "flex", alignItems: "flex-end", justifyContent: "space-between",
-            marginBottom: "3rem", flexWrap: "wrap", gap: "1.5rem",
-          }}>
-            <h2 style={{
-              fontFamily: "'Coolvetica','DM Sans',sans-serif",
-              fontSize: "clamp(2.5rem, 5vw, 4rem)", letterSpacing: "0.04em",
-            }}>My Projects</h2>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "space-between",
+              marginBottom: "3rem",
+              flexWrap: "wrap",
+              gap: "1.5rem",
+            }}
+          >
+            <h2
+              style={{
+                fontFamily: "'Coolvetica','DM Sans',sans-serif",
+                fontSize: "clamp(2.5rem,5vw,4rem)",
+                letterSpacing: "0.04em",
+              }}
+            >
+              My Projects
+            </h2>
             <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
               {dynamicCats.map((cat) => (
                 <motion.button
@@ -531,25 +830,33 @@ export default function Projects() {
                   whileTap={{ scale: 0.96 }}
                   data-cursor-hover
                   style={{
-                    fontFamily: "'DM Sans', sans-serif",
+                    fontFamily: "'DM Sans',sans-serif",
                     padding: "0.45rem 1.1rem",
                     border: `1px solid ${active === cat ? "var(--gold)" : "var(--border)"}`,
                     background: active === cat ? "var(--gold)" : "transparent",
                     color: active === cat ? "#000" : "var(--muted)",
-                    fontSize: "0.72rem", letterSpacing: "0.12em",
-                    textTransform: "uppercase", borderRadius: "2px", transition: "all 0.25s",
+                    fontSize: "0.72rem",
+                    letterSpacing: "0.12em",
+                    textTransform: "uppercase",
+                    borderRadius: "2px",
+                    transition: "all 0.25s",
                   }}
-                >{cat}</motion.button>
+                >
+                  {cat}
+                </motion.button>
               ))}
             </div>
           </div>
         </ScrollReveal>
 
-        <motion.div layout style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
-          gap: "1.5rem",
-        }}>
+        <motion.div
+          layout
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
+            gap: "1.5rem",
+          }}
+        >
           <AnimatePresence mode="popLayout">
             {filtered.map((p, i) => (
               <ProjectCard key={p.id} p={p} i={i} />
@@ -559,4 +866,4 @@ export default function Projects() {
       </div>
     </section>
   );
-} 
+}

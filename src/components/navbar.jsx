@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-scroll";
 
-const links = ["home", "about", "projects", "skills", "contact"];
+const links = ["home", "about", "experience", "projects", "skills", "contact"];
 
 export default function Navbar({ theme, toggleTheme, onAdminOpen }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [logoClicks, setLogoClicks] = useState(0);
+  const [rmClicks, setRmClicks] = useState(0);
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 40);
@@ -22,17 +22,7 @@ export default function Navbar({ theme, toggleTheme, onAdminOpen }) {
     };
   }, [menuOpen]);
 
-  const handleLogoClick = () => {
-    const next = logoClicks + 1;
-    if (next >= 3) {
-      onAdminOpen();
-      setLogoClicks(0);
-    } else {
-      setLogoClicks(next);
-    }
-  };
-
-  const navBg = scrolled || menuOpen ? "var(--bg)" : "transparent";
+  const navBg = scrolled || menuOpen ? "rgba(12,11,9,0.97)" : "transparent";
 
   return (
     <>
@@ -61,7 +51,17 @@ export default function Navbar({ theme, toggleTheme, onAdminOpen }) {
         {/* Logo */}
         <motion.div
           whileHover={{ scale: 1.04 }}
-          onClick={handleLogoClick}
+          onClick={() => {
+            const next = rmClicks + 1;
+            setRmClicks(next);
+            if (next >= 3) {
+              setRmClicks(0);
+              onAdminOpen?.();
+            } else {
+              clearTimeout(window._rmTimer);
+              window._rmTimer = setTimeout(() => setRmClicks(0), 1500);
+            }
+          }}
           style={{
             fontFamily: "'Coolvetica','DM Sans',sans-serif",
             fontSize: "1.65rem",
@@ -73,7 +73,7 @@ export default function Navbar({ theme, toggleTheme, onAdminOpen }) {
             userSelect: "none",
           }}
         >
-          RM
+          RM{rmClicks === 1 ? "·" : rmClicks === 2 ? "··" : ""}
         </motion.div>
 
         {/* Desktop nav */}
@@ -91,8 +91,8 @@ export default function Navbar({ theme, toggleTheme, onAdminOpen }) {
               <Link
                 to={l}
                 smooth
-                duration={300}
-                offset={-80}
+                duration={700}
+                offset={-70}
                 data-cursor-hover
                 style={{
                   fontFamily: "'DM Sans',sans-serif",
