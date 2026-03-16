@@ -231,9 +231,9 @@ const enterEffects = {
     transition: { duration: 0.95, ease: [0.16, 1, 0.3, 1] },
   },
   flipY: {
-    hidden: { opacity: 0, rotateY: 180, scale: 0.86, filter: "blur(14px)" },
-    show: { opacity: 1, rotateY: 360, scale: 1, filter: "blur(0px)" },
-    transition: { duration: 1.2, ease: [0.22, 1, 0.36, 1] },
+    hidden: { opacity: 0, y: 60, scale: 0.9, filter: "blur(12px)" },
+    show: { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" },
+    transition: { duration: 1.0, ease: [0.22, 1, 0.36, 1] },
   },
   riseUp: {
     hidden: {

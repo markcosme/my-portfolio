@@ -7,14 +7,7 @@ const DM = "'DM Sans',sans-serif";
 const CLOUD = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
 const APIKEY = process.env.REACT_APP_CLOUDINARY_API_KEY;
 const SECRET = process.env.REACT_APP_CLOUDINARY_API_SECRET;
-const PRESET =
-  process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET || "ron_portfolio_unsigned";
 const FOLDER = "ron-portfolio";
-
-if (!CLOUD) console.warn("⚠ REACT_APP_CLOUDINARY_CLOUD_NAME is not set");
-if (!APIKEY) console.warn("⚠ REACT_APP_CLOUDINARY_API_KEY is not set");
-if (!SECRET) console.warn("⚠ REACT_APP_CLOUDINARY_API_SECRET is not set");
-if (!PRESET) console.warn("⚠ REACT_APP_CLOUDINARY_UPLOAD_PRESET is not set");
 
 /* ══════════════════════════════════════════
    EXPERIENCE STORAGE KEY + DEFAULTS
@@ -142,8 +135,9 @@ async function sha1(str) {
 }
 
 async function uploadToCloudinary(file, folder) {
-  if (!CLOUD) throw new Error("Cloudinary cloud name is not configured.");
-  if (!PRESET) throw new Error("Cloudinary upload preset is not configured.");
+  /* Unsigned upload — no signature needed, uses upload_preset set in Cloudinary dashboard */
+  const PRESET =
+    process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET || "ron_portfolio_unsigned";
   const fd = new FormData();
   fd.append("file", file);
   fd.append("upload_preset", PRESET);
@@ -158,14 +152,13 @@ async function uploadToCloudinary(file, folder) {
     try {
       msg = JSON.parse(errBody)?.error?.message || errBody;
     } catch {}
+    console.error("Cloudinary upload error:", msg);
     throw new Error(msg);
   }
   return res.json();
 }
 
 async function deleteFromCloudinary(publicId) {
-  if (!CLOUD || !APIKEY || !SECRET)
-    throw new Error("Cloudinary credentials not configured.");
   const timestamp = Math.round(Date.now() / 1000);
   const signature = await sha1(
     `public_id=${publicId}&timestamp=${timestamp}${SECRET}`,
@@ -183,6 +176,7 @@ async function deleteFromCloudinary(publicId) {
   return res.json();
 }
 
+/* ── Image cache (localStorage) ── */
 const CACHE_KEY = "cloudinary_ron-portfolio";
 function saveCache(images) {
   try {
@@ -197,10 +191,15 @@ function readCache() {
     return [];
   }
 }
+
+/* NOTE: Cloudinary Admin API (/resources) blocks CORS from browsers.
+   The cache (localStorage) IS the source of truth — images are added
+   on upload and removed on delete. "Refresh" just re-reads the cache. */
 function fetchCloudinaryImages() {
   return readCache();
 }
 
+/* ── Shared input style ── */
 const inp = {
   width: "100%",
   padding: "0.75rem 1rem",
@@ -214,74 +213,6 @@ const inp = {
   boxSizing: "border-box",
   transition: "border-color 0.2s",
 };
-
-/* ══════════════════════════════════════════
-   EXPERIENCE FIELD — defined at module level
-   so it never gets recreated on re-render
-══════════════════════════════════════════ */
-function ExpField({
-  field,
-  label,
-  ph,
-  textarea,
-  select,
-  options,
-  form,
-  setForm,
-}) {
-  return (
-    <div>
-      <label
-        style={{
-          display: "block",
-          fontFamily: DM,
-          fontSize: "0.62rem",
-          letterSpacing: "0.18em",
-          textTransform: "uppercase",
-          color: "var(--text-sub)",
-          marginBottom: "0.35rem",
-        }}
-      >
-        {label}
-      </label>
-      {textarea ? (
-        <textarea
-          value={form[field]}
-          rows={4}
-          placeholder={ph}
-          onChange={(e) => setForm((f) => ({ ...f, [field]: e.target.value }))}
-          onFocus={(e) => (e.target.style.borderColor = "var(--gold)")}
-          onBlur={(e) => (e.target.style.borderColor = "var(--border)")}
-          style={{ ...inp, resize: "vertical", minHeight: 90 }}
-        />
-      ) : select ? (
-        <select
-          value={form[field]}
-          onChange={(e) => setForm((f) => ({ ...f, [field]: e.target.value }))}
-          onFocus={(e) => (e.target.style.borderColor = "var(--gold)")}
-          onBlur={(e) => (e.target.style.borderColor = "var(--border)")}
-          style={{ ...inp, cursor: "pointer" }}
-        >
-          {options.map((o) => (
-            <option key={o} value={o}>
-              {o}
-            </option>
-          ))}
-        </select>
-      ) : (
-        <input
-          type="text"
-          value={form[field]}
-          placeholder={ph}
-          onChange={(e) => setForm((f) => ({ ...f, [field]: e.target.value }))}
-          onFocus={(e) => (e.target.style.borderColor = "var(--gold)")}
-          onBlur={(e) => (e.target.style.borderColor = "var(--border)")}
-          style={inp}
-        />
-      )}
-    </div>
-  );
-}
 
 /* ══════════════════════════════════════════
    LOGIN FORM
@@ -475,7 +406,7 @@ function LoginForm({ onLogin }) {
 }
 
 /* ══════════════════════════════════════════
-   IMAGE CARD
+   IMAGE CARD (Projects tab)
 ══════════════════════════════════════════ */
 function ImageCard({ img, onDelete }) {
   const [deleting, setDeleting] = useState(false);
@@ -625,7 +556,7 @@ function ImageCard({ img, onDelete }) {
 }
 
 /* ══════════════════════════════════════════
-   UPLOAD ZONE
+   UPLOAD ZONE (Projects tab)
 ══════════════════════════════════════════ */
 function UploadZone({ onUploaded, onError }) {
   const inputRef = useRef(null);
@@ -650,6 +581,7 @@ function UploadZone({ onUploaded, onError }) {
         preview: URL.createObjectURL(f),
         title: "",
         subtitle: "",
+        client: "",
         desc: "",
         category: "Branding",
         tags: "",
@@ -677,6 +609,7 @@ function UploadZone({ onUploaded, onError }) {
           _meta: {
             title: queue[i].title || queue[i].file.name.replace(/\.[^.]+$/, ""),
             subtitle: queue[i].subtitle,
+            client: queue[i].client,
             desc: queue[i].desc,
             category: queue[i].category,
             tags: queue[i].tags
@@ -688,6 +621,7 @@ function UploadZone({ onUploaded, onError }) {
         setProgress((p) => ({ ...p, [i]: "done" }));
       } catch (uploadErr) {
         const errMsg = uploadErr?.message || "Upload failed";
+        console.error("Cloudinary upload error:", errMsg);
         setProgress((p) => ({ ...p, [i]: "error" }));
         if (onError) onError(errMsg);
       }
@@ -695,7 +629,7 @@ function UploadZone({ onUploaded, onError }) {
     setUploading(false);
     setQueue([]);
     setProgress({});
-    if (results.length > 0) onUploaded(results);
+    onUploaded(results);
   };
 
   const statusColor = (s) =>
@@ -791,6 +725,7 @@ function UploadZone({ onUploaded, onError }) {
               background: "var(--surface)",
             }}
           >
+            {/* File header row */}
             <div
               style={{
                 display: "grid",
@@ -854,6 +789,7 @@ function UploadZone({ onUploaded, onError }) {
                 </button>
               )}
             </div>
+            {/* Fields */}
             <div
               style={{
                 padding: "1rem",
@@ -869,7 +805,76 @@ function UploadZone({ onUploaded, onError }) {
                   gap: "0.75rem",
                 }}
               >
-                <div>
+                {[
+                  ["Project Title *", "text", "e.g. Brand Guidelines", "title"],
+                  ["", "select", "", "category"],
+                ].map(([label, type, ph, field], fi) => (
+                  <div key={fi}>
+                    <label
+                      style={{
+                        display: "block",
+                        fontFamily: DM,
+                        fontSize: "0.65rem",
+                        letterSpacing: "0.18em",
+                        textTransform: "uppercase",
+                        color: "var(--text-sub)",
+                        marginBottom: "0.35rem",
+                      }}
+                    >
+                      {label || "Category"}
+                    </label>
+                    {type === "select" ? (
+                      <select
+                        value={item.category}
+                        disabled={uploading}
+                        onChange={(e) =>
+                          updateField(i, "category", e.target.value)
+                        }
+                        onFocus={(e) =>
+                          (e.target.style.borderColor = "var(--gold)")
+                        }
+                        onBlur={(e) =>
+                          (e.target.style.borderColor = "var(--border)")
+                        }
+                        style={{ ...inp, cursor: "pointer" }}
+                      >
+                        {CATS.map((c) => (
+                          <option key={c} value={c}>
+                            {c}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      <input
+                        type="text"
+                        placeholder={ph}
+                        value={item.title}
+                        disabled={uploading}
+                        onChange={(e) =>
+                          updateField(i, "title", e.target.value)
+                        }
+                        onFocus={(e) =>
+                          (e.target.style.borderColor = "var(--gold)")
+                        }
+                        onBlur={(e) =>
+                          (e.target.style.borderColor = "var(--border)")
+                        }
+                        style={inp}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+              {[
+                [
+                  "Subtitle / Type",
+                  "text",
+                  "e.g. Logo · Typography · Colors",
+                  "subtitle",
+                ],
+                ["Client / Credit", "text", "e.g. Mission+ · SVP", "client"],
+              ].map(([label, , ph, field]) => (
+                <div key={field}>
                   <label
                     style={{
                       display: "block",
@@ -881,14 +886,14 @@ function UploadZone({ onUploaded, onError }) {
                       marginBottom: "0.35rem",
                     }}
                   >
-                    Project Title *
+                    {label}
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g. Brand Guidelines"
-                    value={item.title}
+                    placeholder={ph}
+                    value={item[field]}
                     disabled={uploading}
-                    onChange={(e) => updateField(i, "title", e.target.value)}
+                    onChange={(e) => updateField(i, field, e.target.value)}
                     onFocus={(e) =>
                       (e.target.style.borderColor = "var(--gold)")
                     }
@@ -898,65 +903,7 @@ function UploadZone({ onUploaded, onError }) {
                     style={inp}
                   />
                 </div>
-                <div>
-                  <label
-                    style={{
-                      display: "block",
-                      fontFamily: DM,
-                      fontSize: "0.65rem",
-                      letterSpacing: "0.18em",
-                      textTransform: "uppercase",
-                      color: "var(--text-sub)",
-                      marginBottom: "0.35rem",
-                    }}
-                  >
-                    Category
-                  </label>
-                  <select
-                    value={item.category}
-                    disabled={uploading}
-                    onChange={(e) => updateField(i, "category", e.target.value)}
-                    onFocus={(e) =>
-                      (e.target.style.borderColor = "var(--gold)")
-                    }
-                    onBlur={(e) =>
-                      (e.target.style.borderColor = "var(--border)")
-                    }
-                    style={{ ...inp, cursor: "pointer" }}
-                  >
-                    {CATS.map((c) => (
-                      <option key={c} value={c}>
-                        {c}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div>
-                <label
-                  style={{
-                    display: "block",
-                    fontFamily: DM,
-                    fontSize: "0.65rem",
-                    letterSpacing: "0.18em",
-                    textTransform: "uppercase",
-                    color: "var(--text-sub)",
-                    marginBottom: "0.35rem",
-                  }}
-                >
-                  Subtitle / Type
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Logo · Typography · Colors"
-                  value={item.subtitle}
-                  disabled={uploading}
-                  onChange={(e) => updateField(i, "subtitle", e.target.value)}
-                  onFocus={(e) => (e.target.style.borderColor = "var(--gold)")}
-                  onBlur={(e) => (e.target.style.borderColor = "var(--border)")}
-                  style={inp}
-                />
-              </div>
+              ))}
               <div>
                 <label
                   style={{
@@ -1053,7 +1000,7 @@ function UploadZone({ onUploaded, onError }) {
 }
 
 /* ══════════════════════════════════════════
-   EXPERIENCE MANAGER
+   EXPERIENCE MANAGER (Experience tab)
 ══════════════════════════════════════════ */
 const EMPLOYMENT_TYPES = [
   "Full-time",
@@ -1063,6 +1010,7 @@ const EMPLOYMENT_TYPES = [
   "Internship",
   "Self-employed",
 ];
+
 const EMPTY_JOB = {
   id: "",
   role: "",
@@ -1078,7 +1026,8 @@ const EMPTY_JOB = {
 
 function ExperienceManager({ showToast }) {
   const [jobs, setJobs] = useState(loadExperience);
-  const [editing, setEditing] = useState(null);
+  const [editing, setEditing] =
+    useState(null); /* null = list, "new" = new form, id = edit form */
   const [form, setForm] = useState(EMPTY_JOB);
   const [delConfirm, setDelConfirm] = useState(null);
 
@@ -1118,10 +1067,12 @@ function ExperienceManager({ showToast }) {
         .map((s) => s.trim())
         .filter(Boolean),
     };
-    const updated =
-      editing === "new"
-        ? [job, ...jobs]
-        : jobs.map((j) => (j.id === editing ? job : j));
+    let updated;
+    if (editing === "new") {
+      updated = [job, ...jobs];
+    } else {
+      updated = jobs.map((j) => (j.id === editing ? job : j));
+    }
     saveJobs(updated);
     showToast("✓ Experience saved!");
     cancelEdit();
@@ -1132,6 +1083,7 @@ function ExperienceManager({ showToast }) {
     setDelConfirm(null);
     showToast("✓ Entry deleted.");
   };
+
   const moveUp = (i) => {
     if (i === 0) return;
     const a = [...jobs];
@@ -1144,11 +1096,66 @@ function ExperienceManager({ showToast }) {
     [a[i], a[i + 1]] = [a[i + 1], a[i]];
     saveJobs(a);
   };
+
   const resetToDefault = () => {
     saveJobs(DEFAULT_JOBS);
     showToast("✓ Reset to defaults.");
   };
 
+  const F = (field, label, ph, opts = {}) => (
+    <div>
+      <label
+        style={{
+          display: "block",
+          fontFamily: DM,
+          fontSize: "0.62rem",
+          letterSpacing: "0.18em",
+          textTransform: "uppercase",
+          color: "var(--text-sub)",
+          marginBottom: "0.35rem",
+        }}
+      >
+        {label}
+      </label>
+      {opts.textarea ? (
+        <textarea
+          value={form[field]}
+          rows={4}
+          placeholder={ph}
+          onChange={(e) => setForm((f) => ({ ...f, [field]: e.target.value }))}
+          onFocus={(e) => (e.target.style.borderColor = "var(--gold)")}
+          onBlur={(e) => (e.target.style.borderColor = "var(--border)")}
+          style={{ ...inp, resize: "vertical", minHeight: 90 }}
+        />
+      ) : opts.select ? (
+        <select
+          value={form[field]}
+          onChange={(e) => setForm((f) => ({ ...f, [field]: e.target.value }))}
+          onFocus={(e) => (e.target.style.borderColor = "var(--gold)")}
+          onBlur={(e) => (e.target.style.borderColor = "var(--border)")}
+          style={{ ...inp, cursor: "pointer" }}
+        >
+          {opts.options.map((o) => (
+            <option key={o} value={o}>
+              {o}
+            </option>
+          ))}
+        </select>
+      ) : (
+        <input
+          type="text"
+          value={form[field]}
+          placeholder={ph}
+          onChange={(e) => setForm((f) => ({ ...f, [field]: e.target.value }))}
+          onFocus={(e) => (e.target.style.borderColor = "var(--gold)")}
+          onBlur={(e) => (e.target.style.borderColor = "var(--border)")}
+          style={inp}
+        />
+      )}
+    </div>
+  );
+
+  /* ── Edit / New form ── */
   if (editing !== null) {
     return (
       <motion.div
@@ -1186,6 +1193,7 @@ function ExperienceManager({ showToast }) {
             {editing === "new" ? "Add New Experience" : "Edit Experience"}
           </div>
         </div>
+
         <div
           style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}
         >
@@ -1196,20 +1204,8 @@ function ExperienceManager({ showToast }) {
               gap: "0.85rem",
             }}
           >
-            <ExpField
-              field="role"
-              label="Job Title *"
-              ph="e.g. Senior Graphic Designer"
-              form={form}
-              setForm={setForm}
-            />
-            <ExpField
-              field="company"
-              label="Company *"
-              ph="e.g. The Brandit Agency"
-              form={form}
-              setForm={setForm}
-            />
+            {F("role", "Job Title *", "e.g. Senior Graphic Designer")}
+            {F("company", "Company *", "e.g. The Brandit Agency")}
           </div>
           <div
             style={{
@@ -1218,52 +1214,27 @@ function ExperienceManager({ showToast }) {
               gap: "0.85rem",
             }}
           >
-            <ExpField
-              field="type"
-              label="Employment Type"
-              select
-              options={EMPLOYMENT_TYPES}
-              form={form}
-              setForm={setForm}
-            />
-            <ExpField
-              field="period"
-              label="Period"
-              ph="e.g. Dec 2025 – Present"
-              form={form}
-              setForm={setForm}
-            />
-            <ExpField
-              field="duration"
-              label="Duration"
-              ph="e.g. 4 mos"
-              form={form}
-              setForm={setForm}
-            />
+            {F("type", "Employment Type", "", {
+              select: true,
+              options: EMPLOYMENT_TYPES,
+            })}
+            {F("period", "Period", "e.g. Dec 2025 – Present")}
+            {F("duration", "Duration", "e.g. 4 mos")}
           </div>
-          <ExpField
-            field="location"
-            label="Location"
-            ph="e.g. Philippines · Remote"
-            form={form}
-            setForm={setForm}
-          />
-          <ExpField
-            field="desc"
-            label="Description"
-            ph="Describe your responsibilities…"
-            textarea
-            form={form}
-            setForm={setForm}
-          />
-          <ExpField
-            field="skills"
-            label="Skills"
-            ph="e.g. Branding, Illustrator (comma separated)"
-            form={form}
-            setForm={setForm}
-          />
+          {F("location", "Location", "e.g. Philippines · Remote")}
+          {F(
+            "desc",
+            "Description",
+            "Describe your responsibilities and achievements…",
+            { textarea: true },
+          )}
+          {F(
+            "skills",
+            "Skills",
+            "e.g. Branding, Illustrator, Typography (comma separated)",
+          )}
 
+          {/* Current toggle */}
           <div
             style={{
               display: "flex",
@@ -1346,8 +1317,10 @@ function ExperienceManager({ showToast }) {
     );
   }
 
+  /* ── Job list ── */
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      {/* Toolbar */}
       <div
         style={{
           display: "flex",
@@ -1365,7 +1338,8 @@ function ExperienceManager({ showToast }) {
             color: "var(--text-sub)",
           }}
         >
-          {jobs.length} experience entr{jobs.length === 1 ? "y" : "ies"}
+          {jobs.length} experience entr{jobs.length === 1 ? "y" : "ies"} · drag
+          to reorder or use arrows
         </div>
         <div style={{ display: "flex", gap: "0.5rem" }}>
           <button
@@ -1408,6 +1382,7 @@ function ExperienceManager({ showToast }) {
         </div>
       </div>
 
+      {/* List */}
       <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
         <AnimatePresence>
           {jobs.map((job, i) => (
@@ -1427,6 +1402,7 @@ function ExperienceManager({ showToast }) {
                 alignItems: "flex-start",
               }}
             >
+              {/* Order arrows */}
               <div
                 style={{
                   display: "flex",
@@ -1471,6 +1447,8 @@ function ExperienceManager({ showToast }) {
                   ↓
                 </button>
               </div>
+
+              {/* Content */}
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div
                   style={{
@@ -1533,6 +1511,8 @@ function ExperienceManager({ showToast }) {
                   {job.location ? ` · ${job.location}` : ""}
                 </div>
               </div>
+
+              {/* Actions */}
               <div style={{ display: "flex", gap: "0.4rem", flexShrink: 0 }}>
                 <button
                   onClick={() => openEdit(job)}
@@ -1589,6 +1569,7 @@ function ExperienceManager({ showToast }) {
             </motion.div>
           ))}
         </AnimatePresence>
+
         {jobs.length === 0 && (
           <div
             style={{
@@ -1620,7 +1601,7 @@ function ExperienceManager({ showToast }) {
 ══════════════════════════════════════════ */
 export default function AdminPanel({ onClose }) {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [tab, setTab] = useState("projects");
+  const [tab, setTab] = useState("projects"); /* "projects" | "experience" */
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState("");
@@ -1628,7 +1609,7 @@ export default function AdminPanel({ onClose }) {
 
   const showToast = useCallback((msg) => {
     setToast(msg);
-    setTimeout(() => setToast(""), 3500);
+    setTimeout(() => setToast(""), 3000);
   }, []);
 
   const loadImages = useCallback(() => {
@@ -1640,10 +1621,9 @@ export default function AdminPanel({ onClose }) {
 
   useEffect(() => {
     if (loggedIn) loadImages();
-  }, [loggedIn, loadImages]);
+  }, [loggedIn, loadImages]); /* cache-only, no network call */
 
   const handleUploaded = (results) => {
-    if (!results.length) return;
     setImages((prev) => {
       const updated = [...results, ...prev];
       saveCache(updated);
@@ -1703,7 +1683,7 @@ export default function AdminPanel({ onClose }) {
           overflow: "hidden",
         }}
       >
-        {/* Header */}
+        {/* ── Header ── */}
         <div
           style={{
             display: "flex",
@@ -1804,7 +1784,7 @@ export default function AdminPanel({ onClose }) {
           </div>
         </div>
 
-        {/* Tabs */}
+        {/* ── Tabs (only when logged in) ── */}
         {loggedIn && (
           <div
             style={{
@@ -1839,7 +1819,7 @@ export default function AdminPanel({ onClose }) {
           </div>
         )}
 
-        {/* Body */}
+        {/* ── Body ── */}
         <div style={{ padding: "2rem" }}>
           {!loggedIn ? (
             <LoginForm onLogin={() => setLoggedIn(true)} />
@@ -1849,8 +1829,10 @@ export default function AdminPanel({ onClose }) {
             <>
               <UploadZone
                 onUploaded={handleUploaded}
-                onError={(msg) => showToast("✕ " + msg.slice(0, 80))}
+                onError={(msg) => showToast("✕ " + msg.slice(0, 60))}
               />
+
+              {/* How to use tip */}
               <div
                 style={{
                   padding: "0.9rem 1.1rem",
@@ -1885,7 +1867,8 @@ export default function AdminPanel({ onClose }) {
                   <strong style={{ color: "var(--text)" }}>
                     Upload to Cloudinary
                   </strong>{" "}
-                  → the project card appears automatically on the site.
+                  → copy the URL from the card below → the project appears
+                  automatically on the site.
                 </div>
               </div>
 
