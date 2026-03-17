@@ -752,10 +752,16 @@ export default function Projects() {
     return () => window.removeEventListener("storage", sync);
   }, []);
 
-  const filtered =
+  /* UI/UX projects always appear at the very bottom regardless of upload order */
+  const sortUIUXLast = (arr) => [
+    ...arr.filter((p) => p.cat !== "UI/UX"),
+    ...arr.filter((p) => p.cat === "UI/UX"),
+  ];
+  const filtered = sortUIUXLast(
     active === "All"
       ? allProjects
-      : allProjects.filter((p) => p.cat === active);
+      : allProjects.filter((p) => p.cat === active),
+  );
   const dynamicCats = [
     "All",
     ...Array.from(new Set(allProjects.map((p) => p.cat))),

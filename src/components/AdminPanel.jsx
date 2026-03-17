@@ -1625,7 +1625,8 @@ export default function AdminPanel({ onClose }) {
 
   const handleUploaded = (results) => {
     setImages((prev) => {
-      const updated = [...results, ...prev];
+      /* append at END so uploaded projects appear last */
+      const updated = [...prev, ...results];
       saveCache(updated);
       return updated;
     });
