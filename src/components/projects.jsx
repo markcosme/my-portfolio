@@ -21,7 +21,7 @@ const hardcodedProjects = [
   {
     id: 4,
     cat: "Branding",
-    title: "SVP Brand Guidelines",
+    title: "Brand Guides",
     subtitle: "Logo / Typography / Swatches",
     desc: "Full brand identity for Southern Veterinary Partners — logo usage rules, typography system, primary/accent color swatches, digital combinations, and print-ready files.",
     tags: ["Brand", "Typography", "Identity", "Print"],
