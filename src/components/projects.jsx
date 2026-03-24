@@ -27,16 +27,15 @@ function buildUrl(publicId) {
   return `https://res.cloudinary.com/${CLOUD}/image/upload/${cleanId}`;
 }
 
-/* ─── Load from localStorage cache (written by AdminPanel on every upload) ───
-   The Cloudinary unsigned list endpoint (/image/list/folder.json) requires
-   "Resource list" to be enabled in Cloudinary dashboard — it's OFF by default
-   and returns 404 without it. Since AdminPanel already persists every upload
-   to localStorage, we use that as the single source of truth; no network
-   calls needed here.                                                          */
-function fetchFromCloudinary() {
-  const cached = readCache();
-  if (!cached.length) throw new Error("No cached images found");
-  return cached.map((img) => {
+/* ─── Fetch from Cloudinary (network-first, localStorage fallback) ───────────
+   Requires "Resource list" enabled in Cloudinary dashboard:
+   Settings → Security → uncheck "Resource list" restriction → Save          */
+async function fetchFromCloudinary() {
+  const url = `https://res.cloudinary.com/${CLOUD}/image/list/${FOLDER}.json`;
+  const res = await fetch(url + "?_=" + Date.now());
+  if (!res.ok) throw new Error(`Cloudinary list failed: ${res.status}`);
+  const data = await res.json();
+  return (data.resources || []).map((img) => {
     const pid = img.public_id.startsWith(FOLDER + "/")
       ? img.public_id
       : `${FOLDER}/${img.public_id}`;
@@ -44,12 +43,18 @@ function fetchFromCloudinary() {
       ...img,
       public_id: pid,
       secure_url: buildUrl(pid),
-      created_at: img.created_at || new Date().toISOString(),
+      created_at: img.created_at || img.uploaded_at || new Date().toISOString(),
       bytes: img.bytes || 0,
       width: img.width || 0,
       height: img.height || 0,
     };
   });
+}
+
+function saveCache(images) {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify(images));
+  } catch {}
 }
 function readCache() {
   try {
@@ -760,20 +765,39 @@ export default function Projects() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchProjects = useCallback(() => {
+  const fetchProjects = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      // fetchFromCloudinary reads from localStorage (written by AdminPanel on upload)
-      const resources = fetchFromCloudinary();
+      // Try Cloudinary network fetch first (visible to ALL users/devices)
+      const resources = await fetchFromCloudinary();
       const sorted = [...resources].sort(
         (a, b) => new Date(a.created_at) - new Date(b.created_at),
       );
-      const flat = sorted.map((img, idx) => resourceToProject(img, idx));
+      // Merge with localStorage metadata (_meta: title, desc, tags, etc.)
+      const prevCache = readCache();
+      const merged = sorted.map((img) => {
+        const hit = prevCache.find((c) => c.public_id === img.public_id);
+        return hit ? { ...img, _meta: hit._meta || {} } : img;
+      });
+      saveCache(merged);
+      const flat = merged.map((img, idx) => resourceToProject(img, idx));
       setProjects(groupProjects(flat));
     } catch (err) {
-      // Cache is empty — user hasn't uploaded anything yet
-      setProjects([]);
+      // Cloudinary list failed — fall back to localStorage cache
+      console.warn("Cloudinary fetch failed, using cache:", err.message);
+      const cached = readCache();
+      if (cached.length > 0) {
+        const sorted = [...cached].sort(
+          (a, b) => new Date(a.created_at) - new Date(b.created_at),
+        );
+        const flat = sorted.map((img, idx) => resourceToProject(img, idx));
+        setProjects(groupProjects(flat));
+      } else {
+        setError(
+          "Could not load projects. Enable 'Resource list' in Cloudinary settings.",
+        );
+      }
     }
     setLoading(false);
   }, []);

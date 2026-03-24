@@ -421,7 +421,7 @@ export default function Experience() {
                     marginTop: "0.2rem",
                   }}
                 >
-                  Years
+                  Year
                 </div>
               </div>
               <div
