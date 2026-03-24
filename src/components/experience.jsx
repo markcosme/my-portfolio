@@ -5,104 +5,48 @@ import { ScrollReveal } from "./scrollreveal";
 const CV = "'Coolvetica','DM Sans',sans-serif";
 const DM = "'DM Sans',sans-serif";
 const EXP_KEY = "ron-portfolio-experience";
-const GOLD = "var(--gold)";
-const GOLD_HEX = "#c9952a";
 
+/* Default data — matches AdminPanel DEFAULT_JOBS schema:
+   { id, role, company, type, period, duration, location, desc, skills[], current } */
 const DEFAULT_JOBS = [
   {
     id: "exp1",
-    role: "Senior Graphic Designer",
-    company: "Skills Unlimited Digital Printing Services",
-    type: "Freelance",
-    period: "Dec 2025 – Present",
-    duration: "4 mos",
-    location: "Philippines · Remote",
-    desc: "Led end-to-end design production for large- and small-format digital printing projects, including banners, stickers, DTF, sublimation, signage, packaging, and marketing collaterals. Prepared press-ready files with accurate color profiles, bleed, trapping, and imposition while managing pre-press workflows to ensure production efficiency and minimal material waste. Coordinated with production teams and clients to deliver on-time, production-feasible designs, supervised print quality control to maintain high standards, and mentored junior designers on workflow and print best practices.",
+    role: "Intern — Digital Marketing & Graphic Design",
+    company: "P&S Clothing",
+    type: "Internship",
+    period: "Jan 2022 – Feb 2022",
+    duration: "2 mos",
+    location: "Philippines",
+    desc: "Assisted in digital marketing and social media management including posting updates, product photos, and basic graphic design. Edited images and created visual content using Adobe Photoshop. Managed inventory and sales data using Microsoft Excel and other digital tools.",
     skills: [
-      "Corporate Branding",
-      "Branding & Identity",
-      "Print Production",
-      "Pre-press",
-      "Color Management",
-      "DTF/Sublimation",
-      "Project Coordination",
+      "Adobe Photoshop",
+      "Social Media Management",
+      "Graphic Design",
+      "Microsoft Excel",
+      "Digital Marketing",
+      "Content Creation",
     ],
-    current: true,
+    current: false,
   },
   {
     id: "exp2",
-    role: "Graphic Designer",
-    company: "The Brandit Agency",
-    type: "Full-time",
-    period: "Nov 2024 – Oct 2025",
-    duration: "1 yr",
-    location: "Florida, United States · Remote",
-    desc: "Design impactful brand identities and marketing materials that clearly convey the client's message and maintain consistency across all platforms. Collaborate with clients and teams to meet project goals and deadlines while staying current with design trends to ensure high-quality, creative outcomes.",
+    role: "Capstone Developer — SchedSync",
+    company: "Pampanga State University Porac",
+    type: "Academic Project",
+    period: "Mar 2025 – Nov 2025",
+    duration: "9 mos",
+    location: "Porac, Pampanga, PH",
+    desc: "Developed SchedSync — a web-based automated scheduling system generating smart, seamless, and conflict-free class timetables for Pampanga State University Porac. Built using PHP, HTML, CSS, Bootstrap, and JavaScript for responsive design. Implemented conflict detection and validation to prevent overlapping subjects, rooms, and faculty assignments.",
     skills: [
-      "Corporate Branding",
-      "Branding & Identity",
-      "Brand Strategy",
-      "Marketing Materials",
-      "Client Collaboration",
-      "Design Trends",
-    ],
-    current: false,
-  },
-  {
-    id: "exp3",
-    role: "Web Designer",
-    company: "3LC Corporation",
-    type: "Freelance",
-    period: "Jun 2020 – Nov 2024",
-    duration: "4 yrs 6 mos",
-    location: "Remote",
-    desc: "Designed and maintained conversion-focused e-commerce websites for a drop shipping business, ensuring strong user experience, mobile responsiveness, and brand consistency. Managed product listings, pricing updates, and inventory synchronization while developing customized landing pages and promotional campaigns. Integrated payment gateways, order tracking systems, and third-party applications to streamline checkout and fulfillment processes. Monitored website analytics, applied basic SEO strategies, and optimized site performance to improve traffic, customer engagement, and overall conversion rates.",
-    skills: [
-      "Corporate Branding",
-      "Graphic Design",
-      "E-commerce",
+      "PHP",
+      "HTML/CSS",
+      "Bootstrap",
+      "JavaScript",
+      "Database Design",
       "UI/UX",
-      "SEO",
-      "Landing Pages",
+      "Algorithm Design",
     ],
-    current: false,
-  },
-  {
-    id: "exp4",
-    role: "Graphic Designer",
-    company: "Skills Unlimited Digital Printing Services",
-    type: "Full-time",
-    period: "Jan 2015 – May 2020",
-    duration: "5 yrs 5 mos",
-    location: "Philippines · On-site",
-    desc: "Designed and prepared print-ready artwork for banners, tarpaulins, flyers, stickers, and apparel (DTF/sublimation), ensuring high-quality and production-ready outputs. Converted client-provided files into accurate production formats and supported pre-press processes, including file checking, resizing, imposition, and RIP software preparation. Coordinated with senior designers and production staff to maintain print accuracy and on-time delivery, while assisting walk-in clients with layout revisions and quick-turnaround print requirements.",
-    skills: [
-      "Corporate Branding",
-      "Branding & Identity",
-      "Print Design",
-      "Pre-press",
-      "Apparel Design",
-      "Client Service",
-    ],
-    current: false,
-  },
-  {
-    id: "exp5",
-    role: "Information Technology Manager",
-    company: "Holy Trinity School",
-    type: "Full-time",
-    period: "Jun 2013 – Oct 2014",
-    duration: "1 yr 5 mos",
-    location: "Philippines · On-site",
-    desc: "Oversaw the school's IT infrastructure, including networks, servers, computer labs, and internet systems, while administering the Management Information System (MIS) for enrollment, grading, attendance, billing, and academic records. Led digital transformation initiatives by streamlining workflows, automating processes, and integrating technology across academic and administrative departments. Provided technical support and troubleshooting for faculty, staff, and students, implemented data security and backup protocols, and developed analytical reporting tools to support data-driven decision-making and optimize institutional performance.",
-    skills: [
-      "Technology Management",
-      "Project Management",
-      "IT Infrastructure",
-      "MIS Administration",
-      "Digital Transformation",
-    ],
-    current: false,
+    current: true,
   },
 ];
 
@@ -115,11 +59,21 @@ function loadExperiences() {
   }
 }
 
+const typeColor = {
+  "Full-time": "#1a6fa8",
+  Freelance: "#c9952a",
+  "Part-time": "#2a7a4e",
+  Contract: "#6c5aee",
+  Internship: "#d4420a",
+  "Self-employed": "#a84a1a",
+};
+
 /* ── Single card ── */
 function ExpCard({ job, index, isLast }) {
   const [expanded, setExpanded] = useState(false);
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, amount: 0.15 });
+  const color = typeColor[job.type] || "#c9952a";
 
   return (
     <motion.div
@@ -160,9 +114,9 @@ function ExpCard({ job, index, isLast }) {
             borderRadius: "50%",
             flexShrink: 0,
             marginTop: "0.38rem",
-            background: job.current ? GOLD : "var(--surface)",
-            border: `2px solid ${GOLD}`,
-            boxShadow: job.current ? `0 0 16px ${GOLD_HEX}aa` : "none",
+            background: job.current ? color : "var(--surface)",
+            border: `2px solid ${color}`,
+            boxShadow: job.current ? `0 0 16px ${color}aa` : "none",
             position: "relative",
             zIndex: 1,
           }}
@@ -231,7 +185,7 @@ function ExpCard({ job, index, isLast }) {
                       fontSize: "0.55rem",
                       letterSpacing: "0.16em",
                       textTransform: "uppercase",
-                      background: GOLD,
+                      background: "var(--gold)",
                       color: "#0a0a08",
                       padding: "0.15rem 0.6rem",
                       borderRadius: "99px",
@@ -246,7 +200,7 @@ function ExpCard({ job, index, isLast }) {
                 style={{
                   fontFamily: DM,
                   fontSize: "0.82rem",
-                  color: GOLD,
+                  color: color,
                   fontWeight: 600,
                   marginTop: "0.2rem",
                 }}
@@ -264,7 +218,7 @@ function ExpCard({ job, index, isLast }) {
                   fontFamily: DM,
                   fontSize: "0.7rem",
                   letterSpacing: "0.08em",
-                  color: job.current ? GOLD : "var(--text-sub)",
+                  color: job.current ? color : "var(--text-sub)",
                   fontWeight: job.current ? 700 : 400,
                 }}
               >
@@ -294,7 +248,7 @@ function ExpCard({ job, index, isLast }) {
               fontSize: "0.62rem",
               letterSpacing: "0.14em",
               textTransform: "uppercase",
-              color: GOLD,
+              color: color,
               opacity: 0.8,
             }}
           >
@@ -316,7 +270,7 @@ function ExpCard({ job, index, isLast }) {
               <div
                 style={{
                   paddingTop: "0.9rem",
-                  borderTop: `1px solid ${GOLD_HEX}22`,
+                  borderTop: `1px solid ${color}22`,
                   marginTop: "0.5rem",
                 }}
               >
@@ -342,9 +296,9 @@ function ExpCard({ job, index, isLast }) {
                           fontFamily: DM,
                           fontSize: "0.62rem",
                           letterSpacing: "0.08em",
-                          color: GOLD,
-                          background: `${GOLD_HEX}12`,
-                          border: `1px solid ${GOLD_HEX}30`,
+                          color: color,
+                          background: color + "12",
+                          border: `1px solid ${color}30`,
                           padding: "0.2rem 0.65rem",
                           borderRadius: "2px",
                         }}
@@ -367,6 +321,7 @@ function ExpCard({ job, index, isLast }) {
 export default function Experience() {
   const [jobs, setJobs] = useState(() => loadExperiences());
 
+  /* live sync when AdminPanel saves */
   useEffect(() => {
     const sync = () => setJobs(loadExperiences());
     window.addEventListener("storage", sync);
@@ -450,7 +405,7 @@ export default function Experience() {
                   style={{
                     fontFamily: CV,
                     fontSize: "1.6rem",
-                    color: GOLD,
+                    color: "var(--gold)",
                     lineHeight: 1,
                   }}
                 >
@@ -477,7 +432,7 @@ export default function Experience() {
                   style={{
                     fontFamily: CV,
                     fontSize: "1.6rem",
-                    color: GOLD,
+                    color: "var(--gold)",
                     lineHeight: 1,
                   }}
                 >

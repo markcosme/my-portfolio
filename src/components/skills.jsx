@@ -6,20 +6,83 @@ const DM = "'DM Sans',sans-serif";
 const CV = "'Coolvetica','DM Sans',sans-serif";
 
 const tools = [
+  /* ── Languages ── */
+  {
+    name: "HTML",
+    color: "#E34F26",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg",
+  },
+  {
+    name: "CSS",
+    color: "#1572B6",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg",
+  },
+  {
+    name: "JavaScript",
+    color: "#F7DF1E",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg",
+  },
+  {
+    name: "PHP",
+    color: "#777BB4",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/php/php-original.svg",
+  },
+  {
+    name: "Java",
+    color: "#ED8B00",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg",
+  },
+  {
+    name: "SQL",
+    color: "#4479A1",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg",
+  },
+  /* ── Frameworks ── */
+  {
+    name: "ReactJS",
+    color: "#61DAFB",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg",
+  },
+  {
+    name: "Node.js",
+    color: "#339933",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg",
+  },
+  {
+    name: "Express.js",
+    color: "#ffffff",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/express/express-original.svg",
+  },
+  {
+    name: "Angular",
+    color: "#DD0031",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/angularjs/angularjs-original.svg",
+  },
+  /* ── Tools & IDEs ── */
+  {
+    name: "VS Code",
+    color: "#007ACC",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg",
+  },
+  {
+    name: "Figma",
+    color: "#F24E1E",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg",
+  },
   {
     name: "Photoshop",
     color: "#31A8FF",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/photoshop/photoshop-original.svg",
   },
   {
+    name: "Canva",
+    color: "#00C4CC",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/canva/canva-original.svg",
+  },
+  {
     name: "Illustrator",
     color: "#FF9A00",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/illustrator/illustrator-plain.svg",
-  },
-  {
-    name: "InDesign",
-    color: "#FF3366",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/indesign/indesign-plain.svg",
   },
   {
     name: "After Effects",
@@ -32,55 +95,43 @@ const tools = [
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/premierepro/premierepro-original.svg",
   },
   {
-    name: "Adobe XD",
-    color: "#FF61F6",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/xd/xd-plain.svg",
-  },
-  {
-    name: "Lightroom",
-    color: "#31A8FF",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/lightroom/lightroom-original.svg",
-  },
-  {
-    name: "Audition",
-    color: "#00E4BB",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/audition/audition-original.svg",
-  },
-  {
-    name: "Acrobat",
-    color: "#EC1C24",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/acrobatreader/acrobatreader-original.svg",
-  },
-  {
-    name: "Figma",
-    color: "#F24E1E",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg",
-  },
-  {
-    name: "Canva",
-    color: "#00C4CC",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/canva/canva-original.svg",
-  },
-  {
-    name: "HTML/CSS",
-    color: "#E34F26",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg",
-  },
-  {
-    name: "JavaScript",
-    color: "#F7DF1E",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg",
-  },
-  {
-    name: "React",
-    color: "#61DAFB",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg",
+    name: "CapCut",
+    color: "#000000",
+    icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/CapCut_logo.svg/512px-CapCut_logo.svg.png",
   },
   {
     name: "Google Workspace",
     color: "#4285F4",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/google/google-original.svg",
   },
+  {
+    name: "Bootstrap",
+    color: "#7952B3",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/bootstrap/bootstrap-original.svg",
+  },
+];
+
+/* Skill category pills */
+const softSkills = [
+  "Problem-solving",
+  "Attention to Detail",
+  "Time Management",
+  "Teamwork",
+  "Effective Communication",
+  "Self-Discipline",
+  "Fast Learner",
+  "Adaptable",
+];
+
+const techAreas = [
+  "Programming Fundamentals",
+  "Full Stack Web Development",
+  "Database Management",
+  "Basic Networking",
+  "Graphic Design",
+  "Troubleshooting",
+  "Digital Tools & Office Productivity",
+  "Video Editing",
 ];
 
 function ToolChip({ tool, index }) {
@@ -90,7 +141,7 @@ function ToolChip({ tool, index }) {
       whileInView={{ opacity: 1, scale: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{
-        delay: index * 0.045,
+        delay: index * 0.04,
         duration: 0.45,
         ease: [0.22, 1, 0.36, 1],
       }}
@@ -117,7 +168,7 @@ function ToolChip({ tool, index }) {
           width: 32,
           height: 32,
           borderRadius: "7px",
-          background: "#ffffff",
+          background: tool.name === "Express.js" ? "#1a1a1a" : "#ffffff",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -231,6 +282,7 @@ export default function Skills() {
           </h2>
         </Reveal>
 
+        {/* Tool chips grid */}
         <Reveal delay={0.1}>
           <div
             style={{
@@ -238,12 +290,110 @@ export default function Skills() {
               flexWrap: "wrap",
               gap: "0.6rem",
               justifyContent: "center",
+              marginBottom: "3rem",
             }}
           >
             {tools.map((t, i) => (
               <Magnetic key={t.name} strength={0.2}>
                 <ToolChip tool={t} index={i} />
               </Magnetic>
+            ))}
+          </div>
+        </Reveal>
+
+        {/* Technical expertise areas */}
+        <Reveal delay={0.15}>
+          <div
+            style={{
+              fontFamily: CV,
+              fontSize: "var(--fs-h3)",
+              color: "var(--text)",
+              marginBottom: "1.2rem",
+              fontWeight: 400,
+              letterSpacing: "0.03em",
+            }}
+          >
+            Technical Expertise
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "0.5rem",
+              marginBottom: "3rem",
+            }}
+          >
+            {techAreas.map((s, i) => (
+              <motion.span
+                key={s}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.05, duration: 0.4 }}
+                whileHover={{
+                  borderColor: "var(--gold)",
+                  color: "var(--gold)",
+                }}
+                style={{
+                  fontFamily: DM,
+                  fontSize: "0.72rem",
+                  letterSpacing: "0.1em",
+                  color: "var(--text-sub)",
+                  border: "1px solid var(--border)",
+                  padding: "0.35rem 0.9rem",
+                  borderRadius: "4px",
+                  background: "var(--surface)",
+                  transition: "all 0.25s",
+                  cursor: "default",
+                }}
+              >
+                {s}
+              </motion.span>
+            ))}
+          </div>
+        </Reveal>
+
+        {/* Soft skills */}
+        <Reveal delay={0.2}>
+          <div
+            style={{
+              fontFamily: CV,
+              fontSize: "var(--fs-h3)",
+              color: "var(--text)",
+              marginBottom: "1.2rem",
+              fontWeight: 400,
+              letterSpacing: "0.03em",
+            }}
+          >
+            Soft Skills
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+            {softSkills.map((s, i) => (
+              <motion.span
+                key={s}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.06, duration: 0.4 }}
+                whileHover={{
+                  borderColor: "var(--gold)",
+                  color: "var(--gold)",
+                }}
+                style={{
+                  fontFamily: DM,
+                  fontSize: "0.72rem",
+                  letterSpacing: "0.1em",
+                  color: "var(--text-sub)",
+                  border: "1px solid var(--border)",
+                  padding: "0.35rem 0.9rem",
+                  borderRadius: "4px",
+                  background: "var(--surface)",
+                  transition: "all 0.25s",
+                  cursor: "default",
+                }}
+              >
+                {s}
+              </motion.span>
             ))}
           </div>
         </Reveal>

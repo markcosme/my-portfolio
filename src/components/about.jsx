@@ -20,7 +20,6 @@ export default function About() {
         borderTop: "1px solid var(--border)",
       }}
     >
-      {/* Bg word */}
       <Parallax
         speed={0.15}
         style={{
@@ -52,7 +51,6 @@ export default function About() {
           zIndex: 1,
         }}
       >
-        {/* Header */}
         <ScrollReveal direction="up" delay={0}>
           <div className="section-label">About Me</div>
           <h2
@@ -69,7 +67,6 @@ export default function About() {
           </h2>
         </ScrollReveal>
 
-        {/* Grid */}
         <div
           className="about-grid"
           style={{
@@ -91,10 +88,11 @@ export default function About() {
                   marginBottom: "1.3rem",
                 }}
               >
-                I'm a creative and technically skilled professional with a
-                passion for blending design, technology, and strategy — bringing
-                artistic vision and analytical thinking to purposeful, efficient
-                work.
+                Highly motivated and detail-oriented BSIT student seeking a
+                challenging opportunity to apply and further develop my
+                technical skills in a real-world setting — eager to gain
+                hands-on experience, contribute meaningfully to projects, and
+                grow professionally in the IT field.
               </p>
               <p
                 style={{
@@ -105,8 +103,9 @@ export default function About() {
                   marginBottom: "2.2rem",
                 }}
               >
-                I believe simplicity and clarity drive the best results —
-                whether in design, systems, or collaboration.
+                I blend design intuition with technical depth — from full-stack
+                web development and database management to graphic design and
+                networking.
               </p>
             </ScrollReveal>
 
@@ -122,10 +121,9 @@ export default function About() {
                   fontWeight: 400,
                 }}
               >
-                Big or small projects,
+                Core strengths I bring
                 <br />
-                Two things I always promise.{" "}
-                <span style={{ fontSize: "0.8em" }}>🙏</span>
+                to every project. <span style={{ fontSize: "0.8em" }}>🙏</span>
               </h3>
             </ScrollReveal>
 
@@ -141,12 +139,20 @@ export default function About() {
             >
               {[
                 [
-                  "Designs you'll love",
-                  "Making sure you're happy with the results — because great teamwork always brings ideas to life.",
+                  "Fast Learner",
+                  "Quickly adapts to new tools, frameworks, and workflows — always ready to tackle unfamiliar challenges.",
                 ],
                 [
-                  "Stress-free relationship",
-                  "No stress, no drama — just focused solutions and results that help your business move forward.",
+                  "Detail Oriented",
+                  "Meticulous attention to code quality, design consistency, and project requirements from start to finish.",
+                ],
+                [
+                  "Team Player",
+                  "Thrives in collaborative environments, communicating clearly and supporting team goals effectively.",
+                ],
+                [
+                  "Problem Solver",
+                  "Analytical mindset focused on finding efficient, creative solutions to complex technical problems.",
                 ],
               ].map(([title, desc]) => (
                 <motion.div
@@ -206,7 +212,7 @@ export default function About() {
 
           {/* ── RIGHT ── */}
           <div>
-            {/* Work Experience */}
+            {/* Work / Internship Experience */}
             <ScrollReveal direction="up" delay={0.2}>
               <motion.div
                 whileHover={{
@@ -236,24 +242,9 @@ export default function About() {
                 <ScrollStagger delay={0} stagger={0.09}>
                   {[
                     [
-                      "Graphic Designer / Project Manager",
-                      "The Brandit Agency",
-                      "Nov 2024 – Oct 2025",
-                    ],
-                    [
-                      "Program Coordinator / MIS / IT Instructor",
-                      "Pampanga State University",
-                      "Jun 2015 – Oct 2024",
-                    ],
-                    [
-                      "Customer Service Rep",
-                      "T-Mobile Startek Philippines",
-                      "Sep 2014 – Jun 2015",
-                    ],
-                    [
-                      "Technical Support Rep",
-                      "Sutherland Global Services",
-                      "May 2013 – Sep 2014",
+                      "Intern — Digital Marketing & Design",
+                      "P&S Clothing",
+                      "Jan 2022 – Feb 2022",
                     ],
                   ].map(([role, co, period]) => (
                     <motion.div
@@ -304,9 +295,78 @@ export default function About() {
                       >
                         {period}
                       </div>
+                      <div
+                        style={{
+                          fontFamily: DM,
+                          color: "var(--text-sub)",
+                          fontSize: "var(--fs-xs)",
+                          lineHeight: 1.7,
+                          marginTop: "0.4rem",
+                        }}
+                      >
+                        Assisted in social media management, edited images and
+                        created visual content using Adobe Photoshop, and
+                        managed inventory data using Microsoft Excel.
+                      </div>
                     </motion.div>
                   ))}
                 </ScrollStagger>
+
+                {/* Capstone */}
+                <div
+                  style={{
+                    marginTop: "1.2rem",
+                    paddingTop: "1.2rem",
+                    borderTop: "1px solid var(--border)",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontFamily: DM,
+                      fontWeight: 700,
+                      fontSize: "var(--fs-sm)",
+                      color: "var(--text)",
+                      marginBottom: "0.2rem",
+                    }}
+                  >
+                    Capstone Project
+                  </div>
+                  <div
+                    style={{
+                      fontFamily: DM,
+                      color: "var(--gold)",
+                      fontSize: "var(--fs-xs)",
+                      fontWeight: 600,
+                      marginBottom: "0.15rem",
+                    }}
+                  >
+                    SchedSync — Web-Based Smart Scheduler
+                  </div>
+                  <div
+                    style={{
+                      fontFamily: DM,
+                      color: "var(--text-sub)",
+                      fontSize: "var(--fs-xs)",
+                      letterSpacing: "0.04em",
+                      marginBottom: "0.4rem",
+                    }}
+                  >
+                    Mar 2025 – Nov 2025 · Pampanga State University Porac
+                  </div>
+                  <div
+                    style={{
+                      fontFamily: DM,
+                      color: "var(--text-sub)",
+                      fontSize: "var(--fs-xs)",
+                      lineHeight: 1.7,
+                    }}
+                  >
+                    Developed a web-based automated scheduling system generating
+                    conflict-free class timetables using PHP, HTML, CSS,
+                    Bootstrap, and JavaScript. Implemented schedule conflict
+                    detection for subjects, rooms, and faculty.
+                  </div>
+                </div>
               </motion.div>
             </ScrollReveal>
 
@@ -339,14 +399,9 @@ export default function About() {
                 <ScrollStagger delay={0} stagger={0.12}>
                   {[
                     [
-                      "Masters in Information Technology",
-                      "Systems Plus College Foundation",
-                      "Jun 2021 – Dec 2022",
-                    ],
-                    [
-                      "Bachelor of Information Technology",
-                      "Holy Angel University",
-                      "Jun 2008 – Apr 2013",
+                      "Bachelor of Science in Information Technology",
+                      "Pampanga State University",
+                      "2022 – 2026",
                     ],
                   ].map(([deg, school, yr]) => (
                     <motion.div

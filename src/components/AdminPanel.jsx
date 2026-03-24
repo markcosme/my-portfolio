@@ -4,10 +4,17 @@ import { motion, AnimatePresence } from "framer-motion";
 const CV = "'Coolvetica','DM Sans',sans-serif";
 const DM = "'DM Sans',sans-serif";
 
-const CLOUD = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
-const APIKEY = process.env.REACT_APP_CLOUDINARY_API_KEY;
-const SECRET = process.env.REACT_APP_CLOUDINARY_API_SECRET;
+const CLOUD = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME || "dfco0tldt";
+const APIKEY = process.env.REACT_APP_CLOUDINARY_API_KEY || "586869122654753";
+const SECRET =
+  process.env.REACT_APP_CLOUDINARY_API_SECRET || "5DittUP40fYW4ypEL3tMZLJU5wU";
+const PRESET =
+  process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET || "ron_portfolio_unsigned";
 const FOLDER = "ron-portfolio";
+
+/* ── Admin credentials (override via .env, then restart dev server) ── */
+const ADMIN_USER = process.env.REACT_APP_ADMIN_USERNAME || "marklouie";
+const ADMIN_PASS = process.env.REACT_APP_ADMIN_PASSWORD || "marklouie2026";
 
 /* ══════════════════════════════════════════
    EXPERIENCE STORAGE KEY + DEFAULTS
@@ -17,98 +24,42 @@ const EXP_KEY = "ron-portfolio-experience";
 const DEFAULT_JOBS = [
   {
     id: "exp1",
-    role: "Senior Graphic Designer",
-    company: "Skills Unlimited Digital Printing Services",
-    type: "Freelance",
-    period: "Dec 2025 – Present",
-    duration: "4 mos",
-    location: "Philippines · Remote",
-    desc: "Led end-to-end design production for large- and small-format digital printing projects, including banners, stickers, DTF, sublimation, signage, packaging, and marketing collaterals. Prepared press-ready files with accurate color profiles, bleed, trapping, and imposition while managing pre-press workflows to ensure production efficiency and minimal material waste. Coordinated with production teams and clients to deliver on-time, production-feasible designs, supervised print quality control to maintain high standards, and mentored junior designers on workflow and print best practices.",
+    role: "Intern — Digital Marketing & Graphic Design",
+    company: "P&S Clothing",
+    type: "Internship",
+    period: "Jan 2022 – Feb 2022",
+    duration: "2 mos",
+    location: "Philippines",
+    desc: "Assisted in digital marketing and social media management including posting updates, product photos, and basic graphic design. Edited images and created visual content using Adobe Photoshop. Managed inventory and sales data using Microsoft Excel and other digital tools.",
     skills: [
-      "Corporate Branding",
-      "Branding & Identity",
-      "Print Production",
-      "Pre-press",
-      "Color Management",
-      "DTF/Sublimation",
-      "Project Coordination",
+      "Adobe Photoshop",
+      "Social Media Management",
+      "Graphic Design",
+      "Microsoft Excel",
+      "Digital Marketing",
+      "Content Creation",
     ],
-    current: true,
+    current: false,
   },
   {
     id: "exp2",
-    role: "Graphic Designer",
-    company: "The Brandit Agency",
-    type: "Full-time",
-    period: "Nov 2024 – Oct 2025",
-    duration: "1 yr",
-    location: "Florida, United States · Remote",
-    desc: "Design impactful brand identities and marketing materials that clearly convey the client's message and maintain consistency across all platforms. Collaborate with clients and teams to meet project goals and deadlines while staying current with design trends to ensure high-quality, creative outcomes.",
+    role: "Capstone Developer — SchedSync",
+    company: "Pampanga State University Porac",
+    type: "Academic Project",
+    period: "Mar 2025 – Nov 2025",
+    duration: "9 mos",
+    location: "Porac, Pampanga, PH",
+    desc: "Developed SchedSync — a web-based automated scheduling system generating smart, seamless, and conflict-free class timetables. Built using PHP, HTML, CSS, Bootstrap, and JavaScript. Implemented conflict detection and validation to prevent overlapping subjects, rooms, and faculty assignments.",
     skills: [
-      "Corporate Branding",
-      "Branding & Identity",
-      "Brand Strategy",
-      "Marketing Materials",
-      "Client Collaboration",
-      "Design Trends",
-    ],
-    current: false,
-  },
-  {
-    id: "exp3",
-    role: "Web Designer",
-    company: "3LC Corporation",
-    type: "Freelance",
-    period: "Jun 2020 – Nov 2024",
-    duration: "4 yrs 6 mos",
-    location: "Remote",
-    desc: "Designed and maintained conversion-focused e-commerce websites for a drop shipping business, ensuring strong user experience, mobile responsiveness, and brand consistency. Managed product listings, pricing updates, and inventory synchronization while developing customized landing pages and promotional campaigns. Integrated payment gateways, order tracking systems, and third-party applications to streamline checkout and fulfillment processes. Monitored website analytics, applied basic SEO strategies, and optimized site performance to improve traffic, customer engagement, and overall conversion rates.",
-    skills: [
-      "Corporate Branding",
-      "Graphic Design",
-      "E-commerce",
+      "PHP",
+      "HTML/CSS",
+      "Bootstrap",
+      "JavaScript",
+      "Database Design",
       "UI/UX",
-      "SEO",
-      "Landing Pages",
+      "Algorithm Design",
     ],
-    current: false,
-  },
-  {
-    id: "exp4",
-    role: "Graphic Designer",
-    company: "Skills Unlimited Digital Printing Services",
-    type: "Full-time",
-    period: "Jan 2015 – May 2020",
-    duration: "5 yrs 5 mos",
-    location: "Philippines · On-site",
-    desc: "Designed and prepared print-ready artwork for banners, tarpaulins, flyers, stickers, and apparel (DTF/sublimation), ensuring high-quality and production-ready outputs. Converted client-provided files into accurate production formats and supported pre-press processes, including file checking, resizing, imposition, and RIP software preparation. Coordinated with senior designers and production staff to maintain print accuracy and on-time delivery, while assisting walk-in clients with layout revisions and quick-turnaround print requirements.",
-    skills: [
-      "Corporate Branding",
-      "Branding & Identity",
-      "Print Design",
-      "Pre-press",
-      "Apparel Design",
-      "Client Service",
-    ],
-    current: false,
-  },
-  {
-    id: "exp5",
-    role: "Information Technology Manager",
-    company: "Holy Trinity School",
-    type: "Full-time",
-    period: "Jun 2013 – Oct 2014",
-    duration: "1 yr 5 mos",
-    location: "Philippines · On-site",
-    desc: "Oversaw the school's IT infrastructure, including networks, servers, computer labs, and internet systems, while administering the Management Information System (MIS) for enrollment, grading, attendance, billing, and academic records. Led digital transformation initiatives by streamlining workflows, automating processes, and integrating technology across academic and administrative departments. Provided technical support and troubleshooting for faculty, staff, and students, implemented data security and backup protocols, and developed analytical reporting tools to support data-driven decision-making and optimize institutional performance.",
-    skills: [
-      "Technology Management",
-      "Project Management",
-      "IT Infrastructure",
-      "MIS Administration",
-      "Digital Transformation",
-    ],
-    current: false,
+    current: true,
   },
 ];
 
@@ -134,10 +85,15 @@ async function sha1(str) {
     .join("");
 }
 
+/* Build correct URL from public_id — always include cloud and full path */
+function buildUrl(publicId) {
+  const cleanId = publicId.startsWith(FOLDER + "/")
+    ? publicId
+    : `${FOLDER}/${publicId}`;
+  return `https://res.cloudinary.com/${CLOUD}/image/upload/${cleanId}`;
+}
+
 async function uploadToCloudinary(file, folder) {
-  /* Unsigned upload — no signature needed, uses upload_preset set in Cloudinary dashboard */
-  const PRESET =
-    process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET || "ron_portfolio_unsigned";
   const fd = new FormData();
   fd.append("file", file);
   fd.append("upload_preset", PRESET);
@@ -155,7 +111,18 @@ async function uploadToCloudinary(file, folder) {
     console.error("Cloudinary upload error:", msg);
     throw new Error(msg);
   }
-  return res.json();
+  const data = await res.json();
+
+  // Normalize: ensure public_id has folder prefix, fix secure_url
+  const pid = data.public_id.startsWith(folder + "/")
+    ? data.public_id
+    : `${folder}/${data.public_id}`;
+
+  return {
+    ...data,
+    public_id: pid,
+    secure_url: buildUrl(pid),
+  };
 }
 
 async function deleteFromCloudinary(publicId) {
@@ -192,11 +159,18 @@ function readCache() {
   }
 }
 
-/* NOTE: Cloudinary Admin API (/resources) blocks CORS from browsers.
-   The cache (localStorage) IS the source of truth — images are added
-   on upload and removed on delete. "Refresh" just re-reads the cache. */
 function fetchCloudinaryImages() {
-  return readCache();
+  // Normalize cached items so URLs are always correct
+  return readCache().map((img) => {
+    const pid = img.public_id.startsWith(FOLDER + "/")
+      ? img.public_id
+      : `${FOLDER}/${img.public_id}`;
+    return {
+      ...img,
+      public_id: pid,
+      secure_url: buildUrl(pid),
+    };
+  });
 }
 
 /* ── Shared input style ── */
@@ -222,12 +196,9 @@ function LoginForm({ onLogin }) {
   const [pw, setPw] = useState("");
   const [err, setErr] = useState("");
   const [show, setShow] = useState(false);
-  const USER = process.env.REACT_APP_ADMIN_USERNAME || "ronmedina";
-  const PASS = process.env.REACT_APP_ADMIN_PASSWORD || "ronmedina2026";
-
   const handle = (e) => {
     e.preventDefault();
-    if (user === USER && pw === PASS) {
+    if (user === ADMIN_USER && pw === ADMIN_PASS) {
       onLogin();
     } else {
       setErr("Incorrect username or password.");
@@ -604,6 +575,7 @@ function UploadZone({ onUploaded, onError }) {
       setProgress((p) => ({ ...p, [i]: "uploading" }));
       try {
         const res = await uploadToCloudinary(queue[i].file, FOLDER);
+        // res.public_id is already normalized with folder prefix from uploadToCloudinary
         results.push({
           ...res,
           _meta: {
@@ -1026,8 +998,7 @@ const EMPTY_JOB = {
 
 function ExperienceManager({ showToast }) {
   const [jobs, setJobs] = useState(loadExperience);
-  const [editing, setEditing] =
-    useState(null); /* null = list, "new" = new form, id = edit form */
+  const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(EMPTY_JOB);
   const [delConfirm, setDelConfirm] = useState(null);
 
@@ -1155,7 +1126,6 @@ function ExperienceManager({ showToast }) {
     </div>
   );
 
-  /* ── Edit / New form ── */
   if (editing !== null) {
     return (
       <motion.div
@@ -1234,7 +1204,6 @@ function ExperienceManager({ showToast }) {
             "e.g. Branding, Illustrator, Typography (comma separated)",
           )}
 
-          {/* Current toggle */}
           <div
             style={{
               display: "flex",
@@ -1317,10 +1286,8 @@ function ExperienceManager({ showToast }) {
     );
   }
 
-  /* ── Job list ── */
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-      {/* Toolbar */}
       <div
         style={{
           display: "flex",
@@ -1382,7 +1349,6 @@ function ExperienceManager({ showToast }) {
         </div>
       </div>
 
-      {/* List */}
       <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
         <AnimatePresence>
           {jobs.map((job, i) => (
@@ -1402,7 +1368,6 @@ function ExperienceManager({ showToast }) {
                 alignItems: "flex-start",
               }}
             >
-              {/* Order arrows */}
               <div
                 style={{
                   display: "flex",
@@ -1448,7 +1413,6 @@ function ExperienceManager({ showToast }) {
                 </button>
               </div>
 
-              {/* Content */}
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div
                   style={{
@@ -1512,7 +1476,6 @@ function ExperienceManager({ showToast }) {
                 </div>
               </div>
 
-              {/* Actions */}
               <div style={{ display: "flex", gap: "0.4rem", flexShrink: 0 }}>
                 <button
                   onClick={() => openEdit(job)}
@@ -1601,7 +1564,7 @@ function ExperienceManager({ showToast }) {
 ══════════════════════════════════════════ */
 export default function AdminPanel({ onClose }) {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [tab, setTab] = useState("projects"); /* "projects" | "experience" */
+  const [tab, setTab] = useState("projects");
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState("");
@@ -1621,15 +1584,16 @@ export default function AdminPanel({ onClose }) {
 
   useEffect(() => {
     if (loggedIn) loadImages();
-  }, [loggedIn, loadImages]); /* cache-only, no network call */
+  }, [loggedIn, loadImages]);
 
   const handleUploaded = (results) => {
+    if (!results.length) return;
     setImages((prev) => {
-      const updated = [...results, ...prev];
+      const updated = [...prev, ...results];
       saveCache(updated);
       return updated;
     });
-    setTimeout(() => window.dispatchEvent(new Event("storage")), 0);
+    setTimeout(() => window.dispatchEvent(new Event("storage")), 300);
     showToast(
       `✓ ${results.length} image${results.length > 1 ? "s" : ""} uploaded!`,
     );
@@ -1683,7 +1647,7 @@ export default function AdminPanel({ onClose }) {
           overflow: "hidden",
         }}
       >
-        {/* ── Header ── */}
+        {/* Header */}
         <div
           style={{
             display: "flex",
@@ -1784,7 +1748,7 @@ export default function AdminPanel({ onClose }) {
           </div>
         </div>
 
-        {/* ── Tabs (only when logged in) ── */}
+        {/* Tabs */}
         {loggedIn && (
           <div
             style={{
@@ -1819,7 +1783,7 @@ export default function AdminPanel({ onClose }) {
           </div>
         )}
 
-        {/* ── Body ── */}
+        {/* Body */}
         <div style={{ padding: "2rem" }}>
           {!loggedIn ? (
             <LoginForm onLogin={() => setLoggedIn(true)} />
@@ -1832,7 +1796,6 @@ export default function AdminPanel({ onClose }) {
                 onError={(msg) => showToast("✕ " + msg.slice(0, 60))}
               />
 
-              {/* How to use tip */}
               <div
                 style={{
                   padding: "0.9rem 1.1rem",
@@ -1863,12 +1826,13 @@ export default function AdminPanel({ onClose }) {
                     lineHeight: 1.75,
                   }}
                 >
-                  Upload an image → fill in its details → click{" "}
+                  Upload images with the{" "}
                   <strong style={{ color: "var(--text)" }}>
-                    Upload to Cloudinary
+                    same Project Title
                   </strong>{" "}
-                  → copy the URL from the card below → the project appears
-                  automatically on the site.
+                  to group them into one card on the portfolio. Each title
+                  becomes a single project with a thumbnail strip and gallery
+                  lightbox.
                 </div>
               </div>
 

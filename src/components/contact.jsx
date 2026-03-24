@@ -8,29 +8,41 @@ const CV = "'Coolvetica','DM Sans',sans-serif";
 const contacts = [
   {
     label: "Phone",
-    value: "+63 951 977 6912",
-    icon: "📞",
-    href: "tel:+639519776912",
+    value: "+63 954 421 4173",
+    icon: null,
+    emoji: "📞",
+    href: "tel:+639544214173",
     external: false,
   },
   {
     label: "Email",
-    value: "ronaldramirezmedina@gmail.com",
-    icon: "✉",
-    href: "mailto:ronaldramirezmedina@gmail.com",
+    value: "cosmemarklouie19@gmail.com",
+    icon: null,
+    emoji: "✉",
+    href: "mailto:cosmemarklouie19@gmail.com",
     external: false,
   },
   {
     label: "LinkedIn",
-    value: "linkedin.com/in/ronmedina777",
-    icon: "💼",
-    href: "https://www.linkedin.com/in/ronmedina777/",
+    value: "Mark Louie P. Cosme",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linkedin/linkedin-original.svg",
+    emoji: null,
+    href: "https://www.linkedin.com/in/mark-louie-p-cosme-3b07153a5/",
+    external: true,
+  },
+  {
+    label: "GitHub",
+    value: "github.com/marklouie",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg",
+    emoji: null,
+    href: "https://github.com/marklouie",
     external: true,
   },
   {
     label: "Location",
-    value: "Porac, Pampanga, PH",
-    icon: "📍",
+    value: "Sinura, Porac, Pampanga, PH",
+    icon: null,
+    emoji: "📍",
     href: null,
     external: false,
   },
@@ -58,7 +70,6 @@ export default function Contact({ onAdminOpen }) {
         overflow: "hidden",
       }}
     >
-      {/* Glow */}
       <div
         style={{
           position: "absolute",
@@ -116,18 +127,18 @@ export default function Contact({ onAdminOpen }) {
               lineHeight: 1.85,
             }}
           >
-            Big or small projects — two things I always promise: designs you'll
-            love, and a stress-free relationship.
+            Open for internship opportunities, collaborations, and freelance
+            projects. Let's build something great together.
           </p>
         </ScrollReveal>
 
         <ScrollStagger
           delay={0.15}
-          stagger={0.1}
+          stagger={0.08}
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(200px,1fr))",
-            gap: "1.1rem",
+            gridTemplateColumns: "repeat(auto-fit, minmax(160px,1fr))",
+            gap: "1rem",
             marginBottom: "3.5rem",
           }}
           className="contact-grid"
@@ -145,21 +156,63 @@ export default function Contact({ onAdminOpen }) {
                 boxShadow: "0 12px 36px rgba(201,149,42,0.12)",
               }}
               transition={{ duration: 0.25 }}
-              data-cursor-hover
               style={{
                 display: "block",
-                padding: "1.8rem 1.4rem",
+                padding: "1.6rem 1.2rem",
                 background: "var(--surface)",
                 border: "1px solid var(--border)",
-                borderRadius: "6px",
+                borderRadius: "8px",
                 textDecoration: "none",
-                cursor: c.href ? "pointer" : "default",
                 transition:
                   "border-color 0.3s, box-shadow 0.3s, transform 0.3s",
+                cursor: c.href ? "pointer" : "default",
               }}
             >
-              <div style={{ fontSize: "1.5rem", marginBottom: "0.7rem" }}>
-                {c.icon}
+              {/* Icon — either SVG logo or emoji */}
+              <div
+                style={{
+                  width: 40,
+                  height: 40,
+                  margin: "0 auto 0.8rem",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {c.icon ? (
+                  <div
+                    style={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: "8px",
+                      background: c.label === "GitHub" ? "#1a1a1a" : "#fff",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+                      padding: "5px",
+                    }}
+                  >
+                    <img
+                      src={c.icon}
+                      alt={c.label}
+                      width={26}
+                      height={26}
+                      style={{
+                        display: "block",
+                        objectFit: "contain",
+                        width: "100%",
+                        height: "100%",
+                        filter: c.label === "GitHub" ? "invert(1)" : "none",
+                      }}
+                      onError={(e) => {
+                        e.target.style.display = "none";
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <span style={{ fontSize: "1.6rem" }}>{c.emoji}</span>
+                )}
               </div>
               <div
                 style={{
@@ -176,9 +229,10 @@ export default function Contact({ onAdminOpen }) {
               <div
                 style={{
                   fontFamily: DM,
-                  fontSize: "var(--fs-sm)",
+                  fontSize: "0.78rem",
                   color: "var(--text)",
                   wordBreak: "break-all",
+                  lineHeight: 1.4,
                 }}
               >
                 {c.value}
@@ -221,7 +275,7 @@ export default function Contact({ onAdminOpen }) {
                 fontWeight: 400,
               }}
             >
-              Ron Medina
+              Mark Louie Cosme
             </div>
 
             <div
@@ -235,7 +289,7 @@ export default function Contact({ onAdminOpen }) {
                 transition: "color 0.2s",
               }}
             >
-              © 2026 Ron Medina · All Rights Reserved
+              © 2026 Mark Louie Cosme · All Rights Reserved
               {clicks > 0 && (
                 <span
                   style={{

@@ -81,7 +81,7 @@ export default function Navbar({ theme, toggleTheme, onAdminOpen }) {
             userSelect: "none",
           }}
         >
-          RM{rmClicks === 1 ? "·" : rmClicks === 2 ? "··" : ""}
+          MLC{rmClicks === 1 ? "·" : rmClicks === 2 ? "··" : ""}
         </motion.div>
 
         {/* Desktop nav */}

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { CountUp, Magnetic } from "./scrollreveal";
-import ronPhoto from "../assets/Ron-Profile.png";
+import ronPhoto from "../assets/2x2.png";
 
 const CV = "'Coolvetica','DM Sans',sans-serif";
 const DM = "'DM Sans',sans-serif";
@@ -21,7 +21,6 @@ export default function Hero() {
           transition: "background 0.4s ease",
         }}
       >
-        {/* Breathing glow */}
         <motion.div
           animate={{ opacity: [0.5, 0.85, 0.5], scale: [1, 1.06, 1] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
@@ -33,8 +32,6 @@ export default function Hero() {
               "radial-gradient(ellipse 70% 55% at 50% 48%, rgba(201,149,42,0.1), transparent 70%)",
           }}
         />
-
-        {/* Edge vignette */}
         <div
           style={{
             position: "absolute",
@@ -44,8 +41,6 @@ export default function Hero() {
               "radial-gradient(ellipse 120% 100% at 50% 50%, transparent 40%, var(--hero-s1-vignette, rgba(3,3,3,0.8)) 100%)",
           }}
         />
-
-        {/* Gold shimmer line */}
         <motion.div
           initial={{ scaleX: 0, opacity: 0 }}
           animate={{ scaleX: 1, opacity: 1 }}
@@ -62,8 +57,6 @@ export default function Hero() {
               "linear-gradient(to right, transparent 0%, rgba(201,149,42,0.12) 25%, rgba(201,149,42,0.28) 50%, rgba(201,149,42,0.12) 75%, transparent 100%)",
           }}
         />
-
-        {/* Grain texture */}
         <div
           style={{
             position: "absolute",
@@ -75,7 +68,6 @@ export default function Hero() {
           }}
         />
 
-        {/* Text content */}
         <div
           style={{
             position: "relative",
@@ -87,23 +79,6 @@ export default function Hero() {
             textAlign: "center",
           }}
         >
-          {/* Portfolio label */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
-            style={{
-              fontFamily: DM,
-              fontSize: "var(--fs-xs)",
-              letterSpacing: "0.4em",
-              textTransform: "uppercase",
-              color: "var(--hero-s1-muted, rgba(245,240,232,0.22))",
-              marginBottom: "2rem",
-            }}
-          >
-          </motion.div>
-
-          {/* SIMPLICITY */}
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -124,8 +99,6 @@ export default function Hero() {
               Simplicity
             </h1>
           </motion.div>
-
-          {/* Tagline */}
           <motion.p
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
@@ -144,7 +117,6 @@ export default function Hero() {
           </motion.p>
         </div>
 
-        {/* Scroll indicator */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -176,24 +148,6 @@ export default function Hero() {
           />
           Scroll
         </motion.div>
-
-        {/* Coordinates */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.8 }}
-          style={{
-            position: "absolute",
-            bottom: "2.2rem",
-            right: "clamp(1.5rem,5vw,5rem)",
-            fontSize: "var(--fs-xs)",
-            letterSpacing: "0.18em",
-            color: "var(--hero-s1-muted, rgba(245,240,232,0.12))",
-            fontFamily: DM,
-            zIndex: 2,
-          }}
-        >
-        </motion.div>
       </section>
 
       {/* ══ SECTION 2 — INTRO ══ */}
@@ -206,7 +160,6 @@ export default function Hero() {
           borderTop: "1px solid var(--border)",
         }}
       >
-        {/* Watermark */}
         <div
           style={{
             position: "absolute",
@@ -221,7 +174,7 @@ export default function Hero() {
             letterSpacing: "0.02em",
           }}
         >
-          RM
+          ML
         </div>
 
         <div
@@ -263,7 +216,7 @@ export default function Hero() {
             />
             <img
               src={ronPhoto}
-              alt="Ron Medina"
+              alt="Mark Louie Cosme"
               style={{
                 position: "absolute",
                 inset: 0,
@@ -293,7 +246,7 @@ export default function Hero() {
                 marginBottom: "0.7rem",
               }}
             >
-              — Based in Pampanga, PH
+              — Based in Porac, Pampanga, PH
             </div>
             <h2
               style={{
@@ -306,7 +259,7 @@ export default function Hero() {
                 fontWeight: 400,
               }}
             >
-              I'm Ron Medina
+              I'm Mark Louie Cosme
             </h2>
             <p
               style={{
@@ -318,9 +271,10 @@ export default function Hero() {
                 margin: "0 0 2.2rem",
               }}
             >
-              A multi-disciplinary creative — crafting purposeful brand
-              identities, clean digital experiences, and the systems that run
-              them. 10+ years turning ideas into work that matters.
+              A detail-oriented BSIT student and developer with hands-on
+              experience in full-stack web development, UI/UX design, and
+              graphic design — turning ideas into clean, functional, and
+              purposeful digital work.
             </p>
             <div style={{ display: "flex", gap: "0.9rem", flexWrap: "wrap" }}>
               <Magnetic strength={0.2}>
@@ -397,9 +351,9 @@ export default function Hero() {
           }}
         >
           {[
-            { num: "10", suf: "+", label: "Years Experience" },
-            { num: "50", suf: "+", label: "Projects Completed" },
-            { num: "3", suf: "", label: "Core Roles" },
+            { num: "3", suf: "+", label: "Years Dev Experience" },
+            { num: "10", suf: "+", label: "Tech Skills & Tools" },
+            { num: "1", suf: "", label: "Capstone Project" },
           ].map(({ num, suf, label }) => (
             <div key={label}>
               <div
