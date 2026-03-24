@@ -409,7 +409,7 @@ export default function Experience() {
                     lineHeight: 1,
                   }}
                 >
-                  10+
+                  1
                 </div>
                 <div
                   style={{
