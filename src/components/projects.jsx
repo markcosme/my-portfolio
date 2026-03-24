@@ -19,22 +19,91 @@ const COLORS = [
 
 /* ─── Build correct Cloudinary URL from public_id ─── */
 function buildUrl(publicId) {
-  // public_id may or may not include folder prefix
-  // Always build a full URL from scratch
   const cleanId = publicId.startsWith(FOLDER + "/")
     ? publicId
     : `${FOLDER}/${publicId}`;
   return `https://res.cloudinary.com/${CLOUD}/image/upload/${cleanId}`;
 }
 
-/* ─── Fetch from Cloudinary (network-first, localStorage fallback) ───────────
-   Uses tag-based list: /image/list/TAG.json
-   Requires TWO things in Cloudinary dashboard:
-   1. Settings → Security → "Resource list" must be UNCHECKED (allowed)
-   2. Images must be uploaded with a tag (AdminPanel now adds tag automatically)
-   New uploads will work immediately. Re-upload old images to add the tag.    */
+/* ══════════════════════════════════════════
+   EXTRACT METADATA
+   Priority order:
+   1. Cloudinary context field (server-side — works in ALL sessions/devices)
+   2. localStorage _meta (fallback for images uploaded before the fix)
+   3. Raw public_id as last resort
+
+   Cloudinary's context field returns as:
+     img.context?.custom  → { caption, subtitle, credit, description, category, tags }
+   (keys match what AdminPanel encodes via encodeURIComponent)
+══════════════════════════════════════════ */
+function decodeCtx(val) {
+  if (!val) return "";
+  try {
+    return decodeURIComponent(val);
+  } catch {
+    return val;
+  }
+}
+
+function extractMeta(img) {
+  // 1. Cloudinary server-side context (always available, cross-device)
+  const ctx = img.context?.custom || {};
+  if (Object.keys(ctx).length > 0) {
+    const tagsRaw = decodeCtx(ctx.tags || "");
+    return {
+      title: decodeCtx(ctx.caption || ""),
+      subtitle: decodeCtx(ctx.subtitle || ""),
+      client: decodeCtx(ctx.credit || ""),
+      desc: decodeCtx(ctx.description || ""),
+      category: decodeCtx(ctx.category || "Other"),
+      tags: tagsRaw
+        ? tagsRaw
+            .split(",")
+            .map((t) => t.trim())
+            .filter(Boolean)
+        : [],
+    };
+  }
+
+  // 2. localStorage _meta (legacy — images uploaded before the fix)
+  let cacheMeta = img._meta || {};
+  if (!Object.keys(cacheMeta).length) {
+    try {
+      const hit = readCache().find((c) => c.public_id === img.public_id);
+      if (hit?._meta) cacheMeta = hit._meta;
+    } catch {}
+  }
+  if (Object.keys(cacheMeta).length > 0) {
+    return {
+      title: cacheMeta.title || "",
+      subtitle: cacheMeta.subtitle || "",
+      client: cacheMeta.client || "",
+      desc: cacheMeta.desc || "",
+      category: cacheMeta.category || "Other",
+      tags: Array.isArray(cacheMeta.tags)
+        ? cacheMeta.tags
+        : cacheMeta.tags
+          ? String(cacheMeta.tags)
+              .split(",")
+              .map((t) => t.trim())
+              .filter(Boolean)
+          : [],
+    };
+  }
+
+  // 3. Nothing — return empty meta (title will be hidden if it's a numeric ID)
+  return {
+    title: "",
+    subtitle: "",
+    client: "",
+    desc: "",
+    category: "Other",
+    tags: [],
+  };
+}
+
+/* ─── Fetch from Cloudinary (network-first, localStorage fallback) ─── */
 async function fetchFromCloudinary() {
-  // TAG-based list endpoint — images must have the tag "ron-portfolio"
   const url = `https://res.cloudinary.com/${CLOUD}/image/list/${FOLDER}.json`;
   const res = await fetch(url + "?_=" + Date.now());
   if (!res.ok) throw new Error(`Cloudinary list failed: ${res.status}`);
@@ -51,6 +120,7 @@ async function fetchFromCloudinary() {
       bytes: img.bytes || 0,
       width: img.width || 0,
       height: img.height || 0,
+      // context is returned by Cloudinary's list endpoint automatically
     };
   });
 }
@@ -69,20 +139,9 @@ function readCache() {
   }
 }
 
-function getMeta(img) {
-  let meta = img._meta || {};
-  if (!Object.keys(meta).length) {
-    try {
-      const hit = readCache().find((c) => c.public_id === img.public_id);
-      if (hit?._meta) meta = hit._meta;
-    } catch {}
-  }
-  return meta;
-}
-
 function resourceToProject(img, idx) {
-  const meta = getMeta(img);
-  // Fix secure_url in case it came from cache without proper domain
+  const meta = extractMeta(img);
+
   const secure_url =
     img.secure_url && img.secure_url.startsWith("http")
       ? img.secure_url
@@ -94,19 +153,12 @@ function resourceToProject(img, idx) {
     title: (() => {
       if (meta.title) return meta.title;
       const raw = img.public_id.split("/").pop().replace(/[-_]/g, " ");
-      // Hide raw Cloudinary numeric IDs (e.g. "1000014176") — show nothing instead
+      // Hide raw Cloudinary numeric IDs
       return /^\d+$/.test(raw.replace(/ /g, "")) ? "" : raw;
     })(),
     subtitle: meta.subtitle || "",
     desc: meta.desc || "",
-    tags: Array.isArray(meta.tags)
-      ? meta.tags
-      : meta.tags
-        ? String(meta.tags)
-            .split(",")
-            .map((t) => t.trim())
-            .filter(Boolean)
-        : [],
+    tags: meta.tags || [],
     color: COLORS[idx % COLORS.length],
     image: secure_url,
     client: meta.client || "",
@@ -773,22 +825,26 @@ export default function Projects() {
     setLoading(true);
     setError(null);
     try {
-      // Try Cloudinary network fetch first (visible to ALL users/devices)
       const resources = await fetchFromCloudinary();
       const sorted = [...resources].sort(
         (a, b) => new Date(a.created_at) - new Date(b.created_at),
       );
-      // Merge with localStorage metadata (_meta: title, desc, tags, etc.)
+      // Merge with localStorage _meta for legacy images (uploaded before the fix)
       const prevCache = readCache();
       const merged = sorted.map((img) => {
         const hit = prevCache.find((c) => c.public_id === img.public_id);
-        return hit ? { ...img, _meta: hit._meta || {} } : img;
+        // Prefer server context; only fall back to cache _meta if no context
+        const hasServerCtx = Object.keys(img.context?.custom || {}).length > 0;
+        return hasServerCtx
+          ? img
+          : hit
+            ? { ...img, _meta: hit._meta || {} }
+            : img;
       });
       saveCache(merged);
       const flat = merged.map((img, idx) => resourceToProject(img, idx));
       setProjects(groupProjects(flat));
     } catch (err) {
-      // Cloudinary list failed — fall back to localStorage cache
       console.warn("Cloudinary fetch failed, using cache:", err.message);
       const cached = readCache();
       if (cached.length > 0) {

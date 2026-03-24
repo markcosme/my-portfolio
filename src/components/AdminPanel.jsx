@@ -93,12 +93,38 @@ function buildUrl(publicId) {
   return `https://res.cloudinary.com/${CLOUD}/image/upload/${cleanId}`;
 }
 
-async function uploadToCloudinary(file, folder) {
+/* ══════════════════════════════════════════
+   UPLOAD — embeds _meta into Cloudinary context
+   so title/category/etc. are stored server-side
+   and visible in ALL sessions (incognito, other devices)
+══════════════════════════════════════════ */
+async function uploadToCloudinary(file, folder, meta = {}) {
   const fd = new FormData();
   fd.append("file", file);
   fd.append("upload_preset", PRESET);
   fd.append("folder", folder);
   fd.append("tags", folder); // tag with folder name so /image/list/TAG.json works
+
+  // ── KEY FIX: store metadata in Cloudinary's context field ──
+  // context is a pipe-separated key=value string
+  // This makes metadata accessible server-side for ALL users/devices/sessions
+  const contextParts = [];
+  if (meta.title)
+    contextParts.push(`caption=${encodeURIComponent(meta.title)}`);
+  if (meta.subtitle)
+    contextParts.push(`subtitle=${encodeURIComponent(meta.subtitle)}`);
+  if (meta.client)
+    contextParts.push(`credit=${encodeURIComponent(meta.client)}`);
+  if (meta.desc)
+    contextParts.push(`description=${encodeURIComponent(meta.desc)}`);
+  if (meta.category)
+    contextParts.push(`category=${encodeURIComponent(meta.category)}`);
+  if (meta.tags) contextParts.push(`tags=${encodeURIComponent(meta.tags)}`);
+
+  if (contextParts.length > 0) {
+    fd.append("context", contextParts.join("|"));
+  }
+
   const res = await fetch(
     `https://api.cloudinary.com/v1_1/${CLOUD}/image/upload`,
     { method: "POST", body: fd },
@@ -119,10 +145,26 @@ async function uploadToCloudinary(file, folder) {
     ? data.public_id
     : `${folder}/${data.public_id}`;
 
+  // Re-build _meta from what we sent so localStorage stays consistent
+  const _meta = {
+    title: meta.title || "",
+    subtitle: meta.subtitle || "",
+    client: meta.client || "",
+    desc: meta.desc || "",
+    category: meta.category || "Other",
+    tags: meta.tags
+      ? meta.tags
+          .split(",")
+          .map((t) => t.trim())
+          .filter(Boolean)
+      : [],
+  };
+
   return {
     ...data,
     public_id: pid,
     secure_url: buildUrl(pid),
+    _meta,
   };
 }
 
@@ -448,7 +490,7 @@ function ImageCard({ img, onDelete }) {
             whiteSpace: "nowrap",
           }}
         >
-          {name}
+          {img._meta?.title || name}
         </div>
         <div
           style={{
@@ -536,14 +578,39 @@ function UploadZone({ onUploaded, onError }) {
   const [queue, setQueue] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState({});
-  const CATS = [
+  // Custom categories added by the user — persisted in state so they appear
+  // across all queue items immediately after being confirmed
+  const [customCats, setCustomCats] = useState([]);
+  // Tracks the in-progress custom text per queue item index
+  const [customInputs, setCustomInputs] = useState({});
+
+  const BASE_CATS = [
     "Branding",
     "UI/UX",
     "Social Media",
     "Print",
     "Photography",
-    "Other",
   ];
+  // Full list: base + any confirmed custom ones + sentinel "Other"
+  const CATS = [...BASE_CATS, ...customCats, "Other"];
+
+  // Called when user finishes typing a custom category (Enter or blur)
+  const confirmCustomCat = (i, val) => {
+    const trimmed = val.trim();
+    if (!trimmed || trimmed.toLowerCase() === "other") return;
+    // Add to global custom list if not already there
+    if (!CATS.includes(trimmed)) {
+      setCustomCats((prev) => [...prev, trimmed]);
+    }
+    // Set this item's category to the confirmed value
+    updateField(i, "category", trimmed);
+    // Clear the custom input for this item
+    setCustomInputs((prev) => {
+      const n = { ...prev };
+      delete n[i];
+      return n;
+    });
+  };
 
   const addFiles = (fileList) => {
     const items = Array.from(fileList)
@@ -575,22 +642,18 @@ function UploadZone({ onUploaded, onError }) {
     for (let i = 0; i < queue.length; i++) {
       setProgress((p) => ({ ...p, [i]: "uploading" }));
       try {
-        const res = await uploadToCloudinary(queue[i].file, FOLDER);
-        // res.public_id is already normalized with folder prefix from uploadToCloudinary
-        results.push({
-          ...res,
-          _meta: {
-            title: queue[i].title || queue[i].file.name.replace(/\.[^.]+$/, ""),
-            subtitle: queue[i].subtitle,
-            client: queue[i].client,
-            desc: queue[i].desc,
-            category: queue[i].category,
-            tags: queue[i].tags
-              .split(",")
-              .map((t) => t.trim())
-              .filter(Boolean),
-          },
-        });
+        // ── Pass the full meta object to uploadToCloudinary ──
+        // It will encode these into Cloudinary's context field
+        const meta = {
+          title: queue[i].title || queue[i].file.name.replace(/\.[^.]+$/, ""),
+          subtitle: queue[i].subtitle,
+          client: queue[i].client,
+          desc: queue[i].desc,
+          category: queue[i].category,
+          tags: queue[i].tags,
+        };
+        const res = await uploadToCloudinary(queue[i].file, FOLDER, meta);
+        results.push(res);
         setProgress((p) => ({ ...p, [i]: "done" }));
       } catch (uploadErr) {
         const errMsg = uploadErr?.message || "Upload failed";
@@ -776,67 +839,179 @@ function UploadZone({ onUploaded, onError }) {
                   display: "grid",
                   gridTemplateColumns: "1fr 160px",
                   gap: "0.75rem",
+                  alignItems: "start",
                 }}
               >
-                {[
-                  ["Project Title *", "text", "e.g. Brand Guidelines", "title"],
-                  ["", "select", "", "category"],
-                ].map(([label, type, ph, field], fi) => (
-                  <div key={fi}>
-                    <label
-                      style={{
-                        display: "block",
-                        fontFamily: DM,
-                        fontSize: "0.65rem",
-                        letterSpacing: "0.18em",
-                        textTransform: "uppercase",
-                        color: "var(--text-sub)",
-                        marginBottom: "0.35rem",
-                      }}
-                    >
-                      {label || "Category"}
-                    </label>
-                    {type === "select" ? (
-                      <select
-                        value={item.category}
-                        disabled={uploading}
-                        onChange={(e) =>
-                          updateField(i, "category", e.target.value)
-                        }
-                        onFocus={(e) =>
-                          (e.target.style.borderColor = "var(--gold)")
-                        }
-                        onBlur={(e) =>
-                          (e.target.style.borderColor = "var(--border)")
-                        }
-                        style={{ ...inp, cursor: "pointer" }}
+                {/* Project Title */}
+                <div>
+                  <label
+                    style={{
+                      display: "block",
+                      fontFamily: DM,
+                      fontSize: "0.65rem",
+                      letterSpacing: "0.18em",
+                      textTransform: "uppercase",
+                      color: "var(--text-sub)",
+                      marginBottom: "0.35rem",
+                    }}
+                  >
+                    Project Title *
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Brand Guidelines"
+                    value={item.title}
+                    disabled={uploading}
+                    onChange={(e) => updateField(i, "title", e.target.value)}
+                    onFocus={(e) =>
+                      (e.target.style.borderColor = "var(--gold)")
+                    }
+                    onBlur={(e) =>
+                      (e.target.style.borderColor = "var(--border)")
+                    }
+                    style={inp}
+                  />
+                </div>
+
+                {/* Category */}
+                <div>
+                  <label
+                    style={{
+                      display: "block",
+                      fontFamily: DM,
+                      fontSize: "0.65rem",
+                      letterSpacing: "0.18em",
+                      textTransform: "uppercase",
+                      color: "var(--text-sub)",
+                      marginBottom: "0.35rem",
+                    }}
+                  >
+                    Category
+                  </label>
+                  <select
+                    value={
+                      // If category is a custom/unknown value not in base list,
+                      // keep select showing that value (it's been added to CATS)
+                      CATS.includes(item.category) ? item.category : "Other"
+                    }
+                    disabled={uploading}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (val === "Other") {
+                        // Show the custom input, keep category as "Other" until confirmed
+                        setCustomInputs((prev) => ({ ...prev, [i]: "" }));
+                        updateField(i, "category", "Other");
+                      } else {
+                        // Hide any custom input, set the selected category directly
+                        setCustomInputs((prev) => {
+                          const n = { ...prev };
+                          delete n[i];
+                          return n;
+                        });
+                        updateField(i, "category", val);
+                      }
+                    }}
+                    onFocus={(e) =>
+                      (e.target.style.borderColor = "var(--gold)")
+                    }
+                    onBlur={(e) =>
+                      (e.target.style.borderColor = "var(--border)")
+                    }
+                    style={{ ...inp, cursor: "pointer" }}
+                  >
+                    {CATS.map((c) => (
+                      <option key={c} value={c}>
+                        {c}
+                      </option>
+                    ))}
+                  </select>
+
+                  {/* Custom category text field — shown only when "Other" is selected */}
+                  <AnimatePresence>
+                    {(item.category === "Other" || i in customInputs) && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                        animate={{
+                          opacity: 1,
+                          height: "auto",
+                          marginTop: "0.5rem",
+                        }}
+                        exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                        style={{ overflow: "hidden" }}
                       >
-                        {CATS.map((c) => (
-                          <option key={c} value={c}>
-                            {c}
-                          </option>
-                        ))}
-                      </select>
-                    ) : (
-                      <input
-                        type="text"
-                        placeholder={ph}
-                        value={item.title}
-                        disabled={uploading}
-                        onChange={(e) =>
-                          updateField(i, "title", e.target.value)
-                        }
-                        onFocus={(e) =>
-                          (e.target.style.borderColor = "var(--gold)")
-                        }
-                        onBlur={(e) =>
-                          (e.target.style.borderColor = "var(--border)")
-                        }
-                        style={inp}
-                      />
+                        <div style={{ position: "relative" }}>
+                          <input
+                            type="text"
+                            placeholder="Type custom category…"
+                            value={customInputs[i] ?? ""}
+                            disabled={uploading}
+                            autoFocus
+                            onChange={(e) =>
+                              setCustomInputs((prev) => ({
+                                ...prev,
+                                [i]: e.target.value,
+                              }))
+                            }
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                e.preventDefault();
+                                confirmCustomCat(i, customInputs[i] ?? "");
+                              }
+                              if (e.key === "Escape") {
+                                setCustomInputs((prev) => {
+                                  const n = { ...prev };
+                                  delete n[i];
+                                  return n;
+                                });
+                                updateField(i, "category", BASE_CATS[0]);
+                              }
+                            }}
+                            onBlur={() =>
+                              confirmCustomCat(i, customInputs[i] ?? "")
+                            }
+                            onFocus={(e) =>
+                              (e.target.style.borderColor = "var(--gold)")
+                            }
+                            style={{
+                              ...inp,
+                              paddingRight: "2.4rem",
+                              borderColor: "var(--gold)",
+                              fontSize: "0.8rem",
+                            }}
+                          />
+                          {/* Press Enter hint */}
+                          <div
+                            style={{
+                              position: "absolute",
+                              right: "0.7rem",
+                              top: "50%",
+                              transform: "translateY(-50%)",
+                              fontFamily: DM,
+                              fontSize: "0.55rem",
+                              color: "var(--gold)",
+                              opacity: 0.7,
+                              pointerEvents: "none",
+                              letterSpacing: "0.06em",
+                            }}
+                          >
+                            ↵
+                          </div>
+                        </div>
+                        <div
+                          style={{
+                            fontFamily: DM,
+                            fontSize: "0.6rem",
+                            color: "var(--text-sub)",
+                            marginTop: "0.3rem",
+                            opacity: 0.7,
+                          }}
+                        >
+                          Press Enter or click away to confirm
+                        </div>
+                      </motion.div>
                     )}
-                  </div>
-                ))}
+                  </AnimatePresence>
+                </div>
               </div>
               {[
                 [
