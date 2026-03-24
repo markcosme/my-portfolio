@@ -28,9 +28,13 @@ function buildUrl(publicId) {
 }
 
 /* ─── Fetch from Cloudinary (network-first, localStorage fallback) ───────────
-   Requires "Resource list" enabled in Cloudinary dashboard:
-   Settings → Security → uncheck "Resource list" restriction → Save          */
+   Uses tag-based list: /image/list/TAG.json
+   Requires TWO things in Cloudinary dashboard:
+   1. Settings → Security → "Resource list" must be UNCHECKED (allowed)
+   2. Images must be uploaded with a tag (AdminPanel now adds tag automatically)
+   New uploads will work immediately. Re-upload old images to add the tag.    */
 async function fetchFromCloudinary() {
+  // TAG-based list endpoint — images must have the tag "ron-portfolio"
   const url = `https://res.cloudinary.com/${CLOUD}/image/list/${FOLDER}.json`;
   const res = await fetch(url + "?_=" + Date.now());
   if (!res.ok) throw new Error(`Cloudinary list failed: ${res.status}`);
@@ -795,7 +799,7 @@ export default function Projects() {
         setProjects(groupProjects(flat));
       } else {
         setError(
-          "Could not load projects. Enable 'Resource list' in Cloudinary settings.",
+          "No projects yet — upload images via the Admin Panel to get started.",
         );
       }
     }

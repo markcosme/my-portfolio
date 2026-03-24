@@ -98,6 +98,7 @@ async function uploadToCloudinary(file, folder) {
   fd.append("file", file);
   fd.append("upload_preset", PRESET);
   fd.append("folder", folder);
+  fd.append("tags", folder); // tag with folder name so /image/list/TAG.json works
   const res = await fetch(
     `https://api.cloudinary.com/v1_1/${CLOUD}/image/upload`,
     { method: "POST", body: fd },
