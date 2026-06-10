@@ -88,11 +88,13 @@ export default function About() {
                   marginBottom: "1.3rem",
                 }}
               >
-                Highly motivated and detail-oriented BSIT student seeking a
-                challenging opportunity to apply and further develop my
-                technical skills in a real-world setting — eager to gain
-                hands-on experience, contribute meaningfully to projects, and
-                grow professionally in the IT field.
+                Skilled in developing web-based systems, managing databases, and
+                creating visually compelling digital content through both
+                academic and independent projects. Adept at applying technical
+                expertise and creative problem-solving skills to deliver
+                efficient and innovative solutions. Passionate about continuous
+                learning, professional growth, and contributing to impactful
+                projects within the IT industry.
               </p>
               <p
                 style={{

@@ -271,10 +271,10 @@ export default function Hero() {
                 margin: "0 0 2.2rem",
               }}
             >
-              A detail-oriented BSIT student and developer with hands-on
-              experience in full-stack web development, UI/UX design, and
-              graphic design — turning ideas into clean, functional, and
-              purposeful digital work.
+              Highly motivated and detail-oriented Information Technology
+              professional with a strong foundation in full-stack web
+              development, database management, software development, and
+              graphic design.
             </p>
             <div style={{ display: "flex", gap: "0.9rem", flexWrap: "wrap" }}>
               <Magnetic strength={0.2}>
