@@ -7,14 +7,14 @@ const FOLDER = "ron-portfolio";
 const CACHE_KEY = "cloudinary_ron-portfolio";
 
 const COLORS = [
-  "#1a6fa8",
-  "#2a7a4e",
-  "#d4420a",
-  "#6c5aee",
-  "#c9952a",
-  "#a84a1a",
-  "#7a2a4e",
-  "#2a5a7a",
+  "#000000",
+  "#ffffff",
+  "#333333",
+  "#666666",
+  "#999999",
+  "#cccccc",
+  "#1a1a1a",
+  "#e5e5e5",
 ];
 
 /* ─── Build correct Cloudinary URL from public_id ─── */
@@ -457,6 +457,7 @@ function ProjectCard({ p, i }) {
   return (
     <>
       <motion.div
+        className="project-card"
         ref={ref}
         initial={{ opacity: 0, y: 40 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -467,6 +468,7 @@ function ProjectCard({ p, i }) {
         }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
+        whileHover={{ y: -7 }}
         style={{
           borderRadius: "14px",
           overflow: "hidden",
@@ -960,15 +962,15 @@ export default function Projects() {
                 dynamicCats.map((cat) => (
                   <motion.button
                     key={cat}
+                    className={active === cat ? "project-filter-active" : ""}
                     onClick={() => setActive(cat)}
                     whileTap={{ scale: 0.95 }}
                     style={{
                       fontFamily: "'DM Sans',sans-serif",
                       padding: "0.4rem 1rem",
                       border: `1px solid ${active === cat ? "var(--gold)" : "var(--border)"}`,
-                      background:
-                        active === cat ? "var(--gold)" : "transparent",
-                      color: active === cat ? "#000" : "var(--muted)",
+                      background: active === cat ? "var(--projects-button-bg)" : "transparent",
+                      color: active === cat ? "var(--projects-button-text)" : "var(--muted)",
                       fontSize: "0.68rem",
                       letterSpacing: "0.12em",
                       textTransform: "uppercase",
@@ -1063,7 +1065,7 @@ export default function Projects() {
                 fontFamily: "'DM Sans',sans-serif",
                 padding: "0.65rem 1.5rem",
                 background: "var(--gold)",
-                color: "#0a0a08",
+                color: "var(--button-text)",
                 border: "none",
                 borderRadius: "6px",
                 cursor: "pointer",

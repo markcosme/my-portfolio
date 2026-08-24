@@ -174,8 +174,8 @@ function ToolChip({ tool, index }) {
       }}
       whileHover={{
         scale: 1.06,
-        borderColor: tool.color,
-        boxShadow: `0 6px 26px ${tool.color}33`,
+        borderColor: "var(--gold)",
+        boxShadow: "0 6px 26px rgba(0,0,0,0.16)",
         y: -3,
       }}
       style={{
@@ -184,7 +184,7 @@ function ToolChip({ tool, index }) {
         gap: "0.6rem",
         padding: "0.5rem 1rem 0.5rem 0.5rem",
         border: "1px solid var(--border)",
-        borderRadius: "10px",
+        borderRadius: "3px",
         background: "var(--surface)",
         transition: "border-color 0.3s, box-shadow 0.3s",
         userSelect: "none",
@@ -277,7 +277,7 @@ export default function Skills() {
           style={{
             fontFamily: CV,
             fontSize: "clamp(5rem,15vw,13rem)",
-            color: "rgba(201,149,42,0.03)",
+            color: "rgba(255,255,255,0.03)",
             lineHeight: 1,
           }}
         >

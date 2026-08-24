@@ -29,7 +29,7 @@ export default function Hero() {
             inset: 0,
             pointerEvents: "none",
             background:
-              "radial-gradient(ellipse 70% 55% at 50% 48%, rgba(201,149,42,0.1), transparent 70%)",
+              "radial-gradient(ellipse 70% 55% at 50% 48%, rgba(255,255,255,0.08), transparent 70%)",
           }}
         />
         <div
@@ -54,7 +54,7 @@ export default function Hero() {
             transformOrigin: "center",
             pointerEvents: "none",
             background:
-              "linear-gradient(to right, transparent 0%, rgba(201,149,42,0.12) 25%, rgba(201,149,42,0.28) 50%, rgba(201,149,42,0.12) 75%, transparent 100%)",
+              "linear-gradient(to right, transparent 0%, rgba(255,255,255,0.08) 25%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.08) 75%, transparent 100%)",
           }}
         />
         <div
@@ -73,7 +73,7 @@ export default function Hero() {
             position: "relative",
             zIndex: 2,
             padding: "0 clamp(1.5rem,5vw,5rem)",
-            maxWidth: 1280,
+            maxWidth: 900,
             margin: "0 auto",
             width: "100%",
             textAlign: "center",
@@ -91,30 +91,14 @@ export default function Hero() {
                 lineHeight: 0.9,
                 letterSpacing: "0.01em",
                 color: "var(--hero-s1-text, #f5f0e8)",
-                margin: "0 0 2.8rem",
+                margin: "0 0 2.2rem",
                 fontWeight: 400,
                 transition: "color 0.4s ease",
               }}
             >
-              Simplicity
+              Build Better
             </h1>
           </motion.div>
-          <motion.p
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 0.9 }}
-            style={{
-              fontFamily: DM,
-              fontSize: "clamp(0.75rem,1.4vw,1rem)",
-              letterSpacing: "0.35em",
-              textTransform: "uppercase",
-              color: "var(--hero-s1-sub, rgba(245,240,232,0.4))",
-              margin: 0,
-              transition: "color 0.4s ease",
-            }}
-          >
-            Pure&nbsp;&nbsp;&nbsp;&nbsp;Precise&nbsp;&nbsp;&nbsp;&nbsp;Purposeful
-          </motion.p>
         </div>
 
         <motion.div
@@ -146,7 +130,7 @@ export default function Hero() {
                 "linear-gradient(to bottom, var(--gold), transparent)",
             }}
           />
-          Scroll
+          Explore
         </motion.div>
       </section>
 
@@ -183,7 +167,7 @@ export default function Hero() {
             maxWidth: "var(--max-w)",
             margin: "0 auto",
             display: "grid",
-            gridTemplateColumns: "auto 1fr",
+            gridTemplateColumns: "1fr auto",
             alignItems: "center",
             gap: "clamp(2rem,5vw,5rem)",
           }}
@@ -201,7 +185,7 @@ export default function Hero() {
               height: "clamp(220px,26vw,340px)",
               flexShrink: 0,
               overflow: "hidden",
-              borderRadius: "12px",
+              borderRadius: "2px",
             }}
           >
             <div
@@ -209,9 +193,8 @@ export default function Hero() {
                 position: "absolute",
                 inset: 0,
                 borderRadius: "12px",
-                background:
-                  "radial-gradient(circle at 40% 35%, #e8a820, #c47d10 60%, #8a5a08)",
-                boxShadow: "0 24px 70px rgba(201,149,42,0.4)",
+                background: "#ffffff",
+                boxShadow: "0 24px 70px rgba(0,0,0,0.28)",
               }}
             />
             <img
@@ -224,13 +207,14 @@ export default function Hero() {
                 height: "100%",
                 objectFit: "cover",
                 objectPosition: "center 30%",
-                borderRadius: "12px",
+                borderRadius: "2px",
               }}
             />
           </motion.div>
 
           {/* Text */}
           <motion.div
+            className="hero-copy"
             initial={{ opacity: 0, x: 28 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.4 }}
@@ -271,11 +255,10 @@ export default function Hero() {
                 margin: "0 0 2.2rem",
               }}
             >
-              Highly motivated and detail-oriented Information Technology
-              professional with a strong foundation in full-stack web
-              development, database management, software development, and
-              graphic design. I apply technical expertise and creative
-              problem-solving to deliver efficient and innovative solutions.
+              I build clear, capable digital experiences and visual systems.
+              My practice combines full-stack development, database thinking,
+              and graphic design to turn complex requirements into work that
+              feels considered and works beautifully.
             </p>
             <div style={{ display: "flex", gap: "0.9rem", flexWrap: "wrap" }}>
               <Magnetic strength={0.2}>
@@ -284,7 +267,7 @@ export default function Hero() {
                   data-cursor-hover
                   whileHover={{
                     scale: 1.03,
-                    boxShadow: "0 0 36px rgba(201,149,42,0.3)",
+                    boxShadow: "0 0 36px rgba(255,255,255,0.18)",
                   }}
                   whileTap={{ scale: 0.97 }}
                   style={{
@@ -292,8 +275,8 @@ export default function Hero() {
                     alignItems: "center",
                     gap: "0.4rem",
                     padding: "0.85rem 2rem",
-                    background: "var(--gold)",
-                    color: "#0a0a08",
+                    background: "#000000",
+                    color: "#ffffff",
                     fontWeight: 700,
                     fontSize: "var(--fs-xs)",
                     letterSpacing: "0.2em",

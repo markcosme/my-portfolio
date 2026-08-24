@@ -23,37 +23,28 @@ export default function Navbar({ theme, toggleTheme, onAdminOpen }) {
   }, [menuOpen]);
 
   const navBg =
-    scrolled || menuOpen
-      ? theme === "dark"
-        ? "rgba(10,10,8,0.97)"
-        : "rgba(250,250,248,0.97)"
-      : "transparent";
+    theme === "dark" ? "rgba(0,0,0,0.96)" : "rgba(255,255,255,0.96)";
 
   const mobileMenuBg =
-    theme === "dark" ? "rgba(10,10,8,0.98)" : "rgba(250,250,248,0.98)";
+    theme === "dark" ? "rgba(0,0,0,0.98)" : "rgba(255,255,255,0.98)";
 
   return (
     <>
       <motion.nav
-        initial={{ y: -70, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         style={{
           position: "fixed",
           top: 0,
           left: 0,
           right: 0,
           zIndex: 1000,
-          padding: "1.1rem 3rem",
+          padding: "1rem clamp(1.4rem,4vw,4rem)",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
           background: navBg,
-          backdropFilter: scrolled || menuOpen ? "blur(20px)" : "none",
-          borderBottom: scrolled
-            ? "1px solid var(--border)"
-            : "1px solid transparent",
-          transition: "all 0.4s ease",
+          backdropFilter: scrolled || menuOpen ? "blur(18px)" : "none",
+          borderBottom: "1px solid var(--border)",
+          transition: "background 0.25s ease",
         }}
       >
         {/* Logo */}

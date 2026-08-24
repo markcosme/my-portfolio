@@ -258,7 +258,7 @@ function SplitReveal({ children, inView, delay, style }) {
           inset: 0,
           zIndex: 2,
           background:
-            "linear-gradient(135deg, var(--gold), rgba(201,149,42,0.6))",
+            "linear-gradient(135deg, var(--gold), rgba(255,255,255,0.6))",
           transformOrigin: "top",
         }}
       />
@@ -543,7 +543,7 @@ export function ScrollProgress() {
         left: 0,
         right: 0,
         height: "2px",
-        background: "linear-gradient(to right, #c9952a, #e8c547)",
+            background: "linear-gradient(to right, #000000, #ffffff)",
         transformOrigin: "0%",
         scaleX,
         zIndex: 9999,

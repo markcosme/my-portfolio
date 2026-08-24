@@ -81,7 +81,7 @@ function loadExperiences() {
 
 const typeColor = {
   "Full-time": "#1a6fa8",
-  Freelance: "#c9952a",
+  Freelance: "#ffffff",
   "Part-time": "#2a7a4e",
   Contract: "#6c5aee",
   Internship: "#d4420a",
@@ -93,7 +93,7 @@ function ExpCard({ job, index, isLast }) {
   const [expanded, setExpanded] = useState(false);
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, amount: 0.15 });
-  const color = typeColor[job.type] || "#c9952a";
+  const color = typeColor[job.type] || "#ffffff";
 
   return (
     <motion.div
@@ -206,7 +206,7 @@ function ExpCard({ job, index, isLast }) {
                       letterSpacing: "0.16em",
                       textTransform: "uppercase",
                       background: "var(--gold)",
-                      color: "#0a0a08",
+                      color: "var(--button-text)",
                       padding: "0.15rem 0.6rem",
                       borderRadius: "99px",
                       fontWeight: 700,

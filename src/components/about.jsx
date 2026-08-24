@@ -34,7 +34,7 @@ export default function About() {
           style={{
             fontFamily: CV,
             fontSize: "clamp(5rem,18vw,16rem)",
-            color: "rgba(201,149,42,0.03)",
+            color: "rgba(255,255,255,0.03)",
             letterSpacing: "0.05em",
             lineHeight: 1,
           }}
@@ -63,7 +63,7 @@ export default function About() {
               color: "var(--text)",
             }}
           >
-            Who I <span style={{ color: "var(--gold)" }}>Am.</span>
+            A thoughtful approach to <span style={{ color: "var(--gold)" }}>digital work.</span>
           </h2>
         </ScrollReveal>
 
@@ -88,13 +88,9 @@ export default function About() {
                   marginBottom: "1.3rem",
                 }}
               >
-                Skilled in developing web-based systems, managing databases, and
-                creating visually compelling digital content through both
-                academic and independent projects. Adept at applying technical
-                expertise and creative problem-solving skills to deliver
-                efficient and innovative solutions. Passionate about continuous
-                learning, professional growth, and contributing to impactful
-                projects within the IT industry.
+                I design and develop useful digital experiences where clear thinking
+                meets considered visual detail. My work spans web systems, databases,
+                brand materials, and production-ready content.
               </p>
               <p
                 style={{
@@ -105,11 +101,9 @@ export default function About() {
                   marginBottom: "2.2rem",
                 }}
               >
-                My technical foundation includes programming fundamentals,
-                full-stack web development, database management, basic
-                networking, troubleshooting, and digital tools for office
-                productivity. I also bring experience in graphic design and
-                video editing.
+                With a foundation in full-stack development and graphic design, I bring
+                structure to complex ideas and care to the final detail. I am ready to
+                contribute to ambitious teams, meaningful products, and well-made work.
               </p>
             </ScrollReveal>
 
@@ -125,9 +119,9 @@ export default function About() {
                   fontWeight: 400,
                 }}
               >
-                Core strengths I bring
+                The qualities behind
                 <br />
-                to every project. <span style={{ fontSize: "0.8em" }}>🙏</span>
+                the work.
               </h3>
             </ScrollReveal>
 
@@ -165,7 +159,7 @@ export default function About() {
                   whileHover={{
                     borderColor: "var(--gold)",
                     y: -4,
-                    boxShadow: "0 8px 28px rgba(201,149,42,0.1)",
+                    boxShadow: "0 8px 28px rgba(255,255,255,0.1)",
                   }}
                   style={{
                     padding: "1.4rem",
@@ -221,7 +215,7 @@ export default function About() {
               <motion.div
                 whileHover={{
                   borderColor: "var(--gold)",
-                  boxShadow: "0 0 36px rgba(201,149,42,0.08)",
+                  boxShadow: "0 0 36px rgba(255,255,255,0.08)",
                 }}
                 style={{
                   background: "var(--surface)",
@@ -384,7 +378,7 @@ export default function About() {
               <motion.div
                 whileHover={{
                   borderColor: "var(--gold)",
-                  boxShadow: "0 0 36px rgba(201,149,42,0.08)",
+                  boxShadow: "0 0 36px rgba(255,255,255,0.08)",
                 }}
                 style={{
                   background: "var(--surface)",

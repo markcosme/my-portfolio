@@ -50,35 +50,23 @@ export default function App() {
       my = mouse.current.y * dpr;
     const lx = lag.current.x * dpr,
       ly = lag.current.y * dpr;
-    const C = "#C9952A";
+    const C =
+      document.documentElement.getAttribute("data-theme") === "dark"
+        ? "#FFFFFF"
+        : "#000000";
 
-    /* diamond dot */
-    ctx.save();
-    ctx.translate(mx, my);
-    ctx.rotate(Math.PI / 4);
+    /* Minimal dot and tracking ring */
     ctx.fillStyle = C;
-    const d = (clkRef.current ? 2 : 4) * dpr;
-    ctx.fillRect(-d / 2, -d / 2, d, d);
-    ctx.restore();
-
-    /* brackets */
-    const off = (clkRef.current ? 4 : hovRef.current ? 2 : 8) * dpr;
-    const len = (hovRef.current ? 8 : 4) * dpr;
+    ctx.beginPath();
+    ctx.arc(mx, my, (clkRef.current ? 2 : 3) * dpr, 0, Math.PI * 2);
+    ctx.fill();
     ctx.strokeStyle = C;
-    ctx.lineWidth = 1.5 * dpr;
-    ctx.shadowBlur = hovRef.current ? 10 : 0;
-    ctx.shadowColor = C;
-    [0, Math.PI / 2, Math.PI, -Math.PI / 2].forEach((r) => {
-      ctx.save();
-      ctx.translate(lx, ly);
-      ctx.rotate(r);
-      ctx.beginPath();
-      ctx.moveTo(off + len, off);
-      ctx.lineTo(off, off);
-      ctx.lineTo(off, off + len);
-      ctx.stroke();
-      ctx.restore();
-    });
+    ctx.lineWidth = dpr;
+    ctx.globalAlpha = hovRef.current ? 0.9 : 0.45;
+    ctx.beginPath();
+    ctx.arc(lx, ly, (hovRef.current ? 19 : 14) * dpr, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.globalAlpha = 1;
 
     /* speed trail */
     const sp = Math.hypot(
@@ -89,7 +77,9 @@ export default function App() {
       ctx.beginPath();
       ctx.moveTo(mx, my);
       ctx.lineTo(lx, ly);
-      ctx.strokeStyle = `rgba(201,149,42,${Math.min(sp / 100, 0.3)})`;
+      ctx.strokeStyle = `${C}${Math.round(Math.min(sp / 100, 0.22) * 255)
+        .toString(16)
+        .padStart(2, "0")}`;
       ctx.lineWidth = dpr;
       ctx.shadowBlur = 0;
       ctx.stroke();

@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Playfair+Display:ital,wght@0,400;0,500;1,500&display=swap");
 
 @font-face {
   font-family: "Coolvetica";
@@ -18,26 +18,34 @@
 
 /* ─── DARK THEME (default) ─── */
 :root {
-  --bg: #0c0b09;
-  --bg2: #111109;
-  --surface: #161510;
-  --border: #2a2518;
-  --text: #f5f0e8;
-  --text-sub: #7a7060;
-  --gold: #c9952a;
-  --gold-lite: #e8a820;
-  --gold-dim: rgba(201, 149, 42, 0.12);
-  --hero-intro-bg: #f5f0e8;
-  --hero-intro-text: #0c0b09;
+  --bg: #000000;
+  --bg2: #111111;
+  --surface: #1b1b1b;
+  --border: #363636;
+  --text: #ffffff;
+  --text-sub: #a8a8a8;
+  --gold: #ffffff;
+  --gold-lite: #ffffff;
+  --gold-dim: rgba(255, 255, 255, 0.12);
+  --button-text: #000000;
+  --hero-intro-bg: #ffffff;
+  --hero-intro-text: #000000;
+  --projects-bg: #000000;
+  --projects-card: #1b1b1b;
+  --projects-text: #ffffff;
+  --projects-sub: #b6b6b6;
+  --projects-border: #3a3a3a;
+  --projects-button-bg: #ffffff;
+  --projects-button-text: #000000;
 
-  --hero-s1-bg: #08080a;
-  --hero-s1-text: #f5f0e8;
-  --hero-s1-sub: rgba(245, 240, 232, 0.4);
-  --hero-s1-muted: rgba(245, 240, 232, 0.18);
-  --hero-s1-vignette: rgba(3, 3, 3, 0.8);
+  --hero-s1-bg: #000000;
+  --hero-s1-text: #ffffff;
+  --hero-s1-sub: rgba(255, 255, 255, 0.5);
+  --hero-s1-muted: rgba(255, 255, 255, 0.35);
+  --hero-s1-vignette: rgba(0, 0, 0, 0.72);
 
   /* fluid type */
-  --fs-hero: clamp(4.5rem, 14vw, 13rem);
+  --fs-hero: clamp(4rem, 12vw, 11rem);
   --fs-h1: clamp(2.2rem, 5vw, 4rem);
   --fs-h2: clamp(1.8rem, 3.5vw, 3rem);
   --fs-h3: clamp(1.1rem, 2vw, 1.6rem);
@@ -52,22 +60,30 @@
 
 /* ─── LIGHT THEME ─── */
 [data-theme="light"] {
-  --bg: #f5f0e8;
-  --bg2: #ece7de;
+  --bg: #ffffff;
+  --bg2: #ffffff;
   --surface: #ffffff;
-  --border: #ddd8ce;
-  --text: #0c0b09;
-  --text-sub: #6b5f50;
-  --gold: #b8821a;
-  --gold-lite: #d4960e;
-  --gold-dim: rgba(184, 130, 26, 0.1);
-  --hero-intro-bg: #0c0b09;
-  --hero-intro-text: #f5f0e8;
- --hero-s1-bg: #f0ebe2;
---hero-s1-text: #0c0b09;
---hero-s1-sub: rgba(12, 11, 9, 0.45);
---hero-s1-muted: rgba(12, 11, 9, 0.22);
---hero-s1-vignette: rgba(240, 235, 226, 0.7);
+  --border: #d0d0d0;
+  --text: #000000;
+  --text-sub: #555555;
+  --gold: #000000;
+  --gold-lite: #000000;
+  --gold-dim: rgba(0, 0, 0, 0.08);
+  --button-text: #ffffff;
+  --hero-intro-bg: #ffffff;
+  --hero-intro-text: #000000;
+  --projects-bg: #ffffff;
+  --projects-card: #ffffff;
+  --projects-text: #000000;
+  --projects-sub: #555555;
+  --projects-border: #d0d0d0;
+  --projects-button-bg: #000000;
+  --projects-button-text: #ffffff;
+  --hero-s1-bg: #ffffff;
+  --hero-s1-text: #000000;
+  --hero-s1-sub: rgba(0, 0, 0, 0.5);
+  --hero-s1-muted: rgba(0, 0, 0, 0.35);
+  --hero-s1-vignette: rgba(255, 255, 255, 0.72);
 }
 
 html {
@@ -86,6 +102,83 @@ body {
   transition:
     background 0.4s ease,
     color 0.4s ease;
+}
+
+main {
+  background: var(--bg);
+}
+
+main > section,
+main > div > section {
+  position: relative;
+}
+
+#about,
+#experience,
+#projects,
+#skills,
+#contact {
+  max-width: 1240px;
+  margin: 0 auto;
+  border-top: 0 !important;
+}
+
+#about,
+#projects,
+#contact {
+  background: var(--bg);
+}
+
+#projects {
+  --bg: var(--projects-bg);
+  --bg2: var(--projects-bg);
+  --surface: var(--projects-card);
+  --text: var(--projects-text);
+  --text-sub: var(--projects-sub);
+  --muted: var(--projects-sub);
+  --border: var(--projects-border);
+  --gold: var(--projects-text);
+  background: var(--projects-bg) !important;
+  color: var(--projects-text);
+}
+
+#projects .project-card {
+  border-radius: 3px !important;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.12) !important;
+}
+
+#projects .project-card:first-child {
+  grid-column: span 2;
+}
+
+#experience,
+#skills {
+  background: var(--bg2);
+}
+
+#about::after,
+#experience::after,
+#projects::after,
+#skills::after,
+#contact::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.3;
+  background-image: linear-gradient(
+    90deg,
+    transparent 0,
+    transparent calc(100% - 1px),
+    var(--border) calc(100% - 1px)
+  );
+  background-size: 25% 100%;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Playfair Display", Georgia, serif !important;
 }
 
 a {
@@ -116,7 +209,7 @@ button {
 .section-label {
   font-family: "DM Sans", sans-serif;
   font-size: var(--fs-xs);
-  letter-spacing: 0.28em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--gold);
   margin-bottom: 0.85rem;
@@ -137,7 +230,7 @@ button {
 .theme-btn {
   width: 34px;
   height: 34px;
-  border-radius: 50%;
+  border-radius: 4px;
   border: 1px solid var(--border);
   background: var(--surface);
   color: var(--gold);
@@ -166,7 +259,15 @@ button {
     display: flex !important;
   }
   nav {
-    padding: 1rem 1.4rem !important;
+    padding: 0.85rem 1.25rem !important;
+  }
+
+  #about,
+  #experience,
+  #projects,
+  #skills,
+  #contact {
+    width: 100%;
   }
 }
 
@@ -183,6 +284,11 @@ button {
     grid-template-columns: 1fr !important;
     gap: 2.5rem !important;
     text-align: center;
+  }
+  .hero-ron,
+  .hero-copy {
+    grid-column: 1 !important;
+    grid-row: auto !important;
   }
   .hero-ron {
     justify-self: center !important;
@@ -206,7 +312,7 @@ button {
 /* About */
 @media (max-width: 860px) {
   #about {
-    padding: 5rem 2rem !important;
+    padding: 5.5rem 2rem !important;
   }
   .about-grid {
     grid-template-columns: 1fr !important;
@@ -225,7 +331,7 @@ button {
 /* Projects */
 @media (max-width: 860px) {
   #projects {
-    padding: 5rem 2rem !important;
+    padding: 5.5rem 2rem !important;
   }
   .doc-body {
     grid-template-columns: 1fr !important;
@@ -238,6 +344,9 @@ button {
     align-items: flex-start !important;
     gap: 0.8rem !important;
   }
+  #projects .project-card:first-child {
+    grid-column: auto;
+  }
 }
 @media (max-width: 480px) {
   #projects {
@@ -248,7 +357,7 @@ button {
 /* Skills */
 @media (max-width: 860px) {
   #skills {
-    padding: 5rem 2rem !important;
+    padding: 5.5rem 2rem !important;
   }
 }
 @media (max-width: 480px) {

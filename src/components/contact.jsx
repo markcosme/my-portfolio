@@ -79,7 +79,7 @@ export default function Contact({ onAdminOpen }) {
           width: 560,
           height: 560,
           background:
-            "radial-gradient(circle, rgba(201,149,42,0.06), transparent 65%)",
+            "radial-gradient(circle, rgba(255,255,255,0.06), transparent 65%)",
           borderRadius: "50%",
           filter: "blur(40px)",
           pointerEvents: "none",
@@ -113,9 +113,9 @@ export default function Contact({ onAdminOpen }) {
               color: "var(--text)",
             }}
           >
-            Let's Work
+            Let's make
             <br />
-            <span style={{ color: "var(--gold)" }}>Together.</span>
+            <span style={{ color: "var(--gold)" }}>something valuable.</span>
           </h2>
           <p
             style={{
@@ -127,8 +127,8 @@ export default function Contact({ onAdminOpen }) {
               lineHeight: 1.85,
             }}
           >
-            Open for internship opportunities, collaborations, and freelance
-            projects. Let's build something great together.
+            Available for thoughtful collaborations, internships, and freelance
+            projects. Tell me what you are building.
           </p>
         </ScrollReveal>
 
@@ -153,7 +153,7 @@ export default function Contact({ onAdminOpen }) {
               whileHover={{
                 y: -5,
                 borderColor: "var(--gold)",
-                boxShadow: "0 12px 36px rgba(201,149,42,0.12)",
+                boxShadow: "0 12px 36px rgba(255,255,255,0.12)",
               }}
               transition={{ duration: 0.25 }}
               style={{
