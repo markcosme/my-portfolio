@@ -4,25 +4,25 @@ import { ScrollReveal } from "./scrollreveal";
 
 const CV = "'Coolvetica','DM Sans',sans-serif";
 const DM = "'DM Sans',sans-serif";
-const EXP_KEY = "ron-portfolio-experience";
+const EXP_KEY = "ron-portfolio-experience-v2";
 
 /* Default data — matches AdminPanel DEFAULT_JOBS schema:
    { id, role, company, type, period, duration, location, desc, skills[], current } */
 const DEFAULT_JOBS = [
   {
     id: "exp1",
-    role: "Intern — Digital Marketing & Graphic Design",
+    role: "Intern",
     company: "P&S Clothing",
     type: "Internship",
     period: "Jan 2022 – Feb 2022",
     duration: "2 mos",
-    location: "Philippines",
-    desc: "Assisted in digital marketing and social media management including posting updates, product photos, and basic graphic design. Edited images and created visual content using Adobe Photoshop. Managed inventory and sales data using Microsoft Excel and other digital tools.",
+    location: "Sinura, Porac, Pampanga",
+    desc: "Assisted in digital marketing and social media management by posting updates, product photos, and basic graphic design. Edited images and created visual content using Adobe Photoshop. Managed inventory and sales data using the Microsoft Office Suite and other digital tools.",
     skills: [
       "Adobe Photoshop",
       "Social Media Management",
       "Graphic Design",
-      "Microsoft Excel",
+      "Microsoft Office Suite",
       "Digital Marketing",
       "Content Creation",
     ],
@@ -30,13 +30,13 @@ const DEFAULT_JOBS = [
   },
   {
     id: "exp2",
-    role: "Capstone Developer — SchedSync",
+    role: "Capstone Project — SchedSync",
     company: "Pampanga State University Porac",
     type: "Academic Project",
-    period: "Mar 2025 – Nov 2025",
+    period: "March 2025 – November 2025",
     duration: "9 mos",
     location: "Porac, Pampanga, PH",
-    desc: "Developed SchedSync — a web-based automated scheduling system generating smart, seamless, and conflict-free class timetables for Pampanga State University Porac. Built using PHP, HTML, CSS, Bootstrap, and JavaScript for responsive design. Implemented conflict detection and validation to prevent overlapping subjects, rooms, and faculty assignments.",
+    desc: "Developed a web-based automated scheduling system to generate smart, seamless, and conflict-free class timetables for Pampanga State University Porac. Built the system interface and functionality using PHP, HTML, CSS, Bootstrap, and JavaScript. Implemented schedule conflict detection and validation to prevent overlapping subjects, rooms, and faculty assignments.",
     skills: [
       "PHP",
       "HTML/CSS",
@@ -46,7 +46,27 @@ const DEFAULT_JOBS = [
       "UI/UX",
       "Algorithm Design",
     ],
-    current: true,
+    current: false,
+  },
+  {
+    id: "exp3",
+    role: "Graphic Designer",
+    company: "Skills Unlimited Digital Printing Services",
+    type: "Internship",
+    period: "Feb 2026 – June 2026",
+    duration: "4 mos",
+    location: "Philippines · Remote",
+    desc: "Led end-to-end design production for large- and small-format digital printing projects, including banners, stickers, DTF, sublimation, signage, packaging, and marketing collaterals. Prepared press-ready files with accurate color profiles, bleed, trapping, and imposition while managing pre-press workflows to ensure production efficiency and minimal material waste. Coordinated with production teams and clients to deliver on-time, production-feasible designs, supervised print quality control to maintain high standards, and mentored junior designers on workflow and print best practices.",
+    skills: [
+      "Corporate Branding",
+      "Branding & Identity",
+      "Print Production",
+      "Pre-press",
+      "Color Management",
+      "DTF/Sublimation",
+      "Project Coordination",
+    ],
+    current: false,
   },
 ];
 
@@ -388,70 +408,6 @@ export default function Experience() {
               Experience
             </h2>
 
-            {/* Stats pill */}
-            <div
-              style={{
-                display: "flex",
-                gap: "1.5rem",
-                alignItems: "center",
-                background: "var(--surface)",
-                border: "1px solid var(--border)",
-                borderRadius: "8px",
-                padding: "0.7rem 1.4rem",
-              }}
-            >
-              <div style={{ textAlign: "center" }}>
-                <div
-                  style={{
-                    fontFamily: CV,
-                    fontSize: "1.6rem",
-                    color: "var(--gold)",
-                    lineHeight: 1,
-                  }}
-                >
-                  1
-                </div>
-                <div
-                  style={{
-                    fontFamily: DM,
-                    fontSize: "0.6rem",
-                    letterSpacing: "0.15em",
-                    textTransform: "uppercase",
-                    color: "var(--text-sub)",
-                    marginTop: "0.2rem",
-                  }}
-                >
-                  Year
-                </div>
-              </div>
-              <div
-                style={{ width: 1, height: 32, background: "var(--border)" }}
-              />
-              <div style={{ textAlign: "center" }}>
-                <div
-                  style={{
-                    fontFamily: CV,
-                    fontSize: "1.6rem",
-                    color: "var(--gold)",
-                    lineHeight: 1,
-                  }}
-                >
-                  {jobs.length}
-                </div>
-                <div
-                  style={{
-                    fontFamily: DM,
-                    fontSize: "0.6rem",
-                    letterSpacing: "0.15em",
-                    textTransform: "uppercase",
-                    color: "var(--text-sub)",
-                    marginTop: "0.2rem",
-                  }}
-                >
-                  Roles
-                </div>
-              </div>
-            </div>
           </div>
         </ScrollReveal>
 

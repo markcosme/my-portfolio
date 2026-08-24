@@ -105,9 +105,11 @@ export default function About() {
                   marginBottom: "2.2rem",
                 }}
               >
-                I blend design intuition with technical depth — from full-stack
-                web development and database management to graphic design and
-                networking.
+                My technical foundation includes programming fundamentals,
+                full-stack web development, database management, basic
+                networking, troubleshooting, and digital tools for office
+                productivity. I also bring experience in graphic design and
+                video editing.
               </p>
             </ScrollReveal>
 
@@ -244,9 +246,14 @@ export default function About() {
                 <ScrollStagger delay={0} stagger={0.09}>
                   {[
                     [
-                      "Intern — Digital Marketing & Design",
+                      "Intern — Digital Marketing & Graphic Design",
                       "P&S Clothing",
                       "Jan 2022 – Feb 2022",
+                    ],
+                    [
+                      "Graphic Designer",
+                      "Skills Unlimited Digital Printing Services · Internship",
+                      "Feb 2026 – June 2026",
                     ],
                   ].map(([role, co, period]) => (
                     <motion.div
@@ -306,9 +313,9 @@ export default function About() {
                           marginTop: "0.4rem",
                         }}
                       >
-                        Assisted in social media management, edited images and
-                        created visual content using Adobe Photoshop, and
-                        managed inventory data using Microsoft Excel.
+                        {role === "Graphic Designer"
+                          ? "Led end-to-end design production for banners, stickers, DTF, sublimation, signage, packaging, and marketing collaterals. Prepared press-ready files, managed pre-press workflows, coordinated with production teams and clients, supervised print quality control, and mentored junior designers."
+                          : "Assisted in digital marketing and social media management, edited images and created visual content using Adobe Photoshop, and managed inventory and sales data using the Microsoft Office Suite and other digital tools."}
                       </div>
                     </motion.div>
                   ))}

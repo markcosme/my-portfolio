@@ -274,7 +274,8 @@ export default function Hero() {
               Highly motivated and detail-oriented Information Technology
               professional with a strong foundation in full-stack web
               development, database management, software development, and
-              graphic design.
+              graphic design. I apply technical expertise and creative
+              problem-solving to deliver efficient and innovative solutions.
             </p>
             <div style={{ display: "flex", gap: "0.9rem", flexWrap: "wrap" }}>
               <Magnetic strength={0.2}>
@@ -351,8 +352,8 @@ export default function Hero() {
           }}
         >
           {[
-            { num: "3", suf: "+", label: "Years Dev Experience" },
-            { num: "10", suf: "+", label: "Tech Skills & Tools" },
+            { num: "2", suf: "", label: "Internship Experiences" },
+            { num: "18", suf: "+", label: "Tech Skills & Tools" },
             { num: "1", suf: "", label: "Capstone Project" },
           ].map(({ num, suf, label }) => (
             <div key={label}>

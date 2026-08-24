@@ -23,6 +23,11 @@ const tools = [
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg",
   },
   {
+    name: "TypeScript",
+    color: "#3178C6",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg",
+  },
+  {
     name: "PHP",
     color: "#777BB4",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/php/php-original.svg",
@@ -32,10 +37,21 @@ const tools = [
     color: "#ED8B00",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg",
   },
+  /* ── Databases ── */
   {
-    name: "SQL",
+    name: "MySQL",
     color: "#4479A1",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg",
+  },
+  {
+    name: "PostgreSQL",
+    color: "#4169E1",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg",
+  },
+  {
+    name: "MongoDB",
+    color: "#47A248",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original.svg",
   },
   /* ── Frameworks ── */
   {
@@ -58,6 +74,17 @@ const tools = [
     color: "#DD0031",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/angularjs/angularjs-original.svg",
   },
+  /* ── Backend & Platforms ── */
+  {
+    name: "Firebase",
+    color: "#FFCA28",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-plain.svg",
+  },
+  {
+    name: "Supabase",
+    color: "#3ECF8E",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/supabase/supabase-original.svg",
+  },
   /* ── Tools & IDEs ── */
   {
     name: "VS Code",
@@ -65,9 +92,19 @@ const tools = [
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg",
   },
   {
-    name: "Figma",
-    color: "#F24E1E",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg",
+    name: "Git",
+    color: "#F05032",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg",
+  },
+  {
+    name: "GitHub",
+    color: "#181717",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg",
+  },
+  {
+    name: "Jira",
+    color: "#0052CC",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jira/jira-original.svg",
   },
   {
     name: "Photoshop",
@@ -80,29 +117,19 @@ const tools = [
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/canva/canva-original.svg",
   },
   {
-    name: "Illustrator",
-    color: "#FF9A00",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/illustrator/illustrator-plain.svg",
-  },
-  {
-    name: "After Effects",
-    color: "#9999FF",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/aftereffects/aftereffects-original.svg",
-  },
-  {
-    name: "Premiere Pro",
-    color: "#ea77ff",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/premierepro/premierepro-original.svg",
-  },
-  {
     name: "CapCut",
     color: "#000000",
     icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/CapCut_logo.svg/512px-CapCut_logo.svg.png",
   },
   {
+    name: "Microsoft Office Suite",
+    color: "#D83B01",
+    icon: "https://cdn.simpleicons.org/microsoftoffice/D83B01",
+  },
+  {
     name: "Google Workspace",
     color: "#4285F4",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/google/google-original.svg",
+    icon: "https://cdn.simpleicons.org/google/4285F4",
   },
   {
     name: "Bootstrap",
