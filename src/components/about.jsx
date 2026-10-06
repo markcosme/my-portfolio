@@ -63,7 +63,7 @@ export default function About() {
               color: "var(--text)",
             }}
           >
-            A thoughtful approach to <span style={{ color: "var(--gold)" }}>digital work.</span>
+            Aspiring full-stack developer <span style={{ color: "var(--gold)" }}>& technical specialist.</span>
           </h2>
         </ScrollReveal>
 
@@ -88,9 +88,11 @@ export default function About() {
                   marginBottom: "1.3rem",
                 }}
               >
-                I design and develop useful digital experiences where clear thinking
-                meets considered visual detail. My work spans web systems, databases,
-                brand materials, and production-ready content.
+                I am an Information Technology professional and aspiring Full-Stack
+                Web Developer with a foundation in web development, database
+                management, programming, and software development. My project work
+                includes building a web-based automated scheduling system with
+                conflict detection and validation.
               </p>
               <p
                 style={{
@@ -101,9 +103,10 @@ export default function About() {
                   marginBottom: "2.2rem",
                 }}
               >
-                With a foundation in full-stack development and graphic design, I bring
-                structure to complex ideas and care to the final detail. I am ready to
-                contribute to ambitious teams, meaningful products, and well-made work.
+                I work with PHP, JavaScript, SQL, HTML5, CSS, and Bootstrap, with
+                familiarity in React, Node.js, Express.js, and Angular. My production
+                and marketing internships also strengthened my attention to detail,
+                adaptability, communication, and commitment to continuous learning.
               </p>
             </ScrollReveal>
 
@@ -141,16 +144,16 @@ export default function About() {
                   "Quickly adapts to new tools, frameworks, and workflows — always ready to tackle unfamiliar challenges.",
                 ],
                 [
-                  "Detail Oriented",
-                  "Meticulous attention to code quality, design consistency, and project requirements from start to finish.",
+                  "Attention to Detail",
+                  "Checks project requirements, design details, and production files carefully to deliver accurate, consistent results.",
                 ],
                 [
-                  "Team Player",
-                  "Thrives in collaborative environments, communicating clearly and supporting team goals effectively.",
+                  "Effective Communication",
+                  "Coordinates with clients and production staff to clarify requirements and keep work moving toward deadlines.",
                 ],
                 [
-                  "Problem Solver",
-                  "Analytical mindset focused on finding efficient, creative solutions to complex technical problems.",
+                  "Time Management",
+                  "Organizes tasks around project requirements and deadlines while balancing quality with efficient delivery.",
                 ],
               ].map(([title, desc]) => (
                 <motion.div
@@ -240,16 +243,18 @@ export default function About() {
                 <ScrollStagger delay={0} stagger={0.09}>
                   {[
                     [
-                      "Intern — Digital Marketing & Graphic Design",
-                      "P&S Clothing",
-                      "Jan 2022 – Feb 2022",
+                      "Intern",
+                      "Skills Unlimited Digital Printing Services",
+                      "Feb 2026 – Jul 2026",
+                      "Prepared digital production materials and technical files to project specifications, including color settings, bleed, and layout. Coordinated with clients and production staff, conducted quality checks, and helped improve production workflows.",
                     ],
                     [
-                      "Graphic Designer",
-                      "Skills Unlimited Digital Printing Services · Internship",
-                      "Feb 2026 – June 2026",
+                      "Intern — Digital Marketing & Social Media",
+                      "P&S Clothing",
+                      "Jan 2022 – May 2022",
+                      "Supported digital marketing and social media activities through content preparation, product photography, and basic graphic design. Edited images in Adobe Photoshop and managed inventory and sales data with Microsoft Excel and other digital tools.",
                     ],
-                  ].map(([role, co, period]) => (
+                  ].map(([role, co, period, description]) => (
                     <motion.div
                       key={role}
                       variants={staggerItem}
@@ -307,9 +312,7 @@ export default function About() {
                           marginTop: "0.4rem",
                         }}
                       >
-                        {role === "Graphic Designer"
-                          ? "Led end-to-end design production for banners, stickers, DTF, sublimation, signage, packaging, and marketing collaterals. Prepared press-ready files, managed pre-press workflows, coordinated with production teams and clients, supervised print quality control, and mentored junior designers."
-                          : "Assisted in digital marketing and social media management, edited images and created visual content using Adobe Photoshop, and managed inventory and sales data using the Microsoft Office Suite and other digital tools."}
+                        {description}
                       </div>
                     </motion.div>
                   ))}
@@ -343,7 +346,7 @@ export default function About() {
                       marginBottom: "0.15rem",
                     }}
                   >
-                    SchedSync — Web-Based Smart Scheduler
+                    SchedSync — Smart, Seamless, Conflict-Free Timetables
                   </div>
                   <div
                     style={{
@@ -354,7 +357,7 @@ export default function About() {
                       marginBottom: "0.4rem",
                     }}
                   >
-                    Mar 2025 – Nov 2025 · Pampanga State University Porac
+                    Mar 2025 – Nov 2025 · Pampanga State University – Porac
                   </div>
                   <div
                     style={{
@@ -364,10 +367,10 @@ export default function About() {
                       lineHeight: 1.7,
                     }}
                   >
-                    Developed a web-based automated scheduling system generating
-                    conflict-free class timetables using PHP, HTML, CSS,
-                    Bootstrap, and JavaScript. Implemented schedule conflict
-                    detection for subjects, rooms, and faculty.
+                    Developed a responsive web-based scheduler using PHP, HTML,
+                    CSS, Bootstrap, and JavaScript. Implemented validation and
+                    conflict detection to prevent overlapping subject, room, and
+                    faculty assignments.
                   </div>
                 </div>
               </motion.div>
@@ -404,7 +407,7 @@ export default function About() {
                     [
                       "Bachelor of Science in Information Technology",
                       "Pampanga State University",
-                      "2022 – 2026",
+                      "August 2022 – September 2026",
                     ],
                   ].map(([deg, school, yr]) => (
                     <motion.div
