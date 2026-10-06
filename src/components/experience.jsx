@@ -14,9 +14,9 @@ const DEFAULT_JOBS = [
     role: "Intern",
     company: "P&S Clothing",
     type: "Internship",
-    period: "Jan 2022 – Feb 2022",
-    duration: "2 mos",
-    location: "Sinura, Porac, Pampanga",
+    period: "Jan 2022 – May 2022",
+    duration: "4 mos",
+    location: "Angeles City, Pampanga, PH",
     desc: "Assisted in digital marketing and social media management by posting updates, product photos, and basic graphic design. Edited images and created visual content using Adobe Photoshop. Managed inventory and sales data using the Microsoft Office Suite and other digital tools.",
     skills: [
       "Adobe Photoshop",
